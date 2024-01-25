@@ -1,0 +1,39 @@
+const message = require("../models/Message");
+
+exports.findUserMessage = async (req, res, next) => {
+  try {
+    const data = await message.findUserMessage({
+      user: req.user,
+      target: req.query.user,
+      page: req.query.page,
+    });
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(500).send(err.mesaage);
+  }
+};
+
+exports.upload = async (req, res, next) => {
+  try {
+    const file = {
+      name: req.file.filename,
+      original_name: req.file.originalname,
+      size: req.file.size,
+      type: req.query.type,
+      info: req.query.info,
+    };
+    const data = await message.upload(file);
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(500).send(err.mesaage);
+  }
+};
+
+exports.download = async (req, res, next) => {
+  try {
+    const url = "upload/" + req.query.filename;
+    res.download(url);
+  } catch (err) {
+    res.status(500).send(err.mesaage);
+  }
+};
