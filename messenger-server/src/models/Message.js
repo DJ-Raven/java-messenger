@@ -109,6 +109,21 @@ message.getFile = (id, type) => {
   });
 };
 
+message.checkPermission = (user, file) => {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "select files.info from message join files on reference_id=files.file_id where files.`name`=? and message.`status`='1' and (from_user=? or to_user=?) limit 1";
+    db.execute(sql, [file, user.id, user.id], (err, result) => {
+      if (err) return reject(err);
+      if (result.length === 1) {
+        resolve("OK");
+      } else {
+        resolve(null);
+      }
+    });
+  });
+};
+
 function toList(result) {
   const list = result.map((e) => {
     return {
