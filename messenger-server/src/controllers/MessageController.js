@@ -32,7 +32,9 @@ exports.upload = async (req, res, next) => {
 exports.download = async (req, res, next) => {
   try {
     const filename = req.query.filename;
-    const permission = await message.checkPermission(req.user, filename);
+    const permission =
+      (await message.checkIsProfile(req.user, filename)) ||
+      (await message.checkPermission(req.user, filename));
     if (permission) {
       const url = "upload/" + filename;
       res.download(url);
@@ -40,6 +42,7 @@ exports.download = async (req, res, next) => {
       res.status(404).send("File not found");
     }
   } catch (err) {
+    console.log(err);
     res.status(500).send(err.mesaage);
   }
 };

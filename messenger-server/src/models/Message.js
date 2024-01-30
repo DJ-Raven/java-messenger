@@ -116,11 +116,22 @@ message.checkPermission = (user, file) => {
     db.execute(sql, [file, user.id, user.id], (err, result) => {
       if (err) return reject(err);
       if (result.length === 1) {
-        resolve("OK");
+        resolve(true);
       } else {
-        resolve(null);
+        resolve(false);
       }
     });
+  });
+};
+
+message.checkIsProfile = (user, file) => {
+  return new Promise((resolve, reject) => {
+    if (file.startsWith("profile/")) {
+      resolve(true);
+    } else {
+      resolve(false);
+      // can check profile permission here
+    }
   });
 };
 
