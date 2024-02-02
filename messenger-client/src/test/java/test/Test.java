@@ -5,6 +5,8 @@ import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.MigLayout;
+import raven.messenger.component.StringIcon;
+import raven.messenger.component.chat.ChatProfile;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,6 +25,10 @@ public class Test extends JFrame {
             // panelTimePicker.set24HourView(!panelTimePicker.is24HourView());
         });
         add(change);
+        Icon icon=new StringIcon("RV", Color.decode("#40AD18"), 35, 35);
+        ChatProfile p=new ChatProfile();
+        p.setImage(icon);
+        add(p,"width 35!,height 35::");
     }
 
     public static void main(String[] args) {

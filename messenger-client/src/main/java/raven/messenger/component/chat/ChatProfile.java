@@ -1,5 +1,7 @@
 package raven.messenger.component.chat;
 
+import raven.messenger.component.StringIcon;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
@@ -54,7 +56,7 @@ public class ChatProfile extends JPanel {
     }
 
     private Image createImage(int size) {
-        Image scaleImage = getScaleImage((ImageIcon) image, size);
+        Image scaleImage = getScaleImage(image, size);
         BufferedImage buff = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = buff.createGraphics();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -69,13 +71,17 @@ public class ChatProfile extends JPanel {
         return buff;
     }
 
-    private Image getScaleImage(ImageIcon icon, int size) {
+    private Image getScaleImage(Icon icon, int size) {
+        if (icon instanceof StringIcon) {
+            return ((StringIcon) icon).getImage(this);
+        }
         int iconWidth = icon.getIconWidth();
         int iconHeight = icon.getIconHeight();
+        Image image = ((ImageIcon) icon).getImage();
         if (iconWidth > iconHeight) {
-            return new ImageIcon(icon.getImage().getScaledInstance(-1, size, Image.SCALE_SMOOTH)).getImage();
+            return new ImageIcon(image.getScaledInstance(-1, size, Image.SCALE_SMOOTH)).getImage();
         } else {
-            return new ImageIcon(icon.getImage().getScaledInstance(size, -1, Image.SCALE_SMOOTH)).getImage();
+            return new ImageIcon(image.getScaledInstance(size, -1, Image.SCALE_SMOOTH)).getImage();
         }
     }
 
