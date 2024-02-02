@@ -90,12 +90,7 @@ public class SocketService {
 
     public void sendMessage(ModelSendMessage message, MessageCallback callback) {
         try {
-            socket.emit("message", message.toJsonObject(), new Ack() {
-                @Override
-                public void call(Object... objects) {
-                    callback.onSuccess(objects);
-                }
-            });
+            socket.emit("message", message.toJsonObject(), (Ack) objects -> callback.onSuccess(objects));
         } catch (Exception e) {
             System.err.println(e);
         }

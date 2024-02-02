@@ -134,6 +134,15 @@ public class MethodUtil {
         return icon;
     }
 
+    public static String getProfileString(String name) {
+        int indexSpace = name.indexOf(" ");
+        if (indexSpace == -1) {
+            return name.substring(0, Math.min(2, name.length())).toUpperCase();
+        } else {
+            return (name.charAt(0) + "" + name.charAt(indexSpace + 1)).toUpperCase();
+        }
+    }
+
     public static void runWithThread(Runnable runnable) {
         new Thread(runnable).start();
     }

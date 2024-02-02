@@ -6,8 +6,14 @@ const message = function () {};
 
 message.create = (data) => {
   return new Promise((resolve, reject) => {
-    const sql =
-      "insert into message (message_uuid, from_user, to_user, message_type, reference_id, message, create_date) values (?,?,?,?,?,?,?)";
+    let sql = "";
+    if (data.type === "group") {
+      sql =
+        "insert into message (message_uuid, from_user, to_group, message_type, reference_id, message, create_date) values (?,?,?,?,?,?,?)";
+    } else if (data.type === "user") {
+      sql =
+        "insert into message (message_uuid, from_user, to_user, message_type, reference_id, message, create_date) values (?,?,?,?,?,?,?)";
+    }
     const uuid = v4();
     const reference_id = data.reference_id ? data.reference_id : null;
     const date = new Date();
@@ -16,7 +22,7 @@ message.create = (data) => {
       [
         uuid,
         data.from_user,
-        data.to_user,
+        data.target,
         data.message_type,
         reference_id,
         data.message,
@@ -27,8 +33,9 @@ message.create = (data) => {
         const res = {
           id: result.insertId,
           uuid: uuid,
-          from_user: data.from_user,
-          type: data.message_type,
+          from_user: data.type === "user" ? data.from_user : data.target,
+          message_type: data.message_type,
+          type: data.type,
           message: data.message,
           create_date: date,
         };
@@ -60,9 +67,23 @@ message.findUserMessage = (data) => {
       [from, to, to, from, start.toString(), limit.toString()],
       (err, result) => {
         if (err) return reject(err);
-        resolve(toList(result));
+        resolve(toList(result, "user"));
       }
     );
+  });
+};
+
+message.findGroupMessage = (data) => {
+  return new Promise((resolve, reject) => {
+    const limit = 20;
+    const sql =
+      "select message_id, message_uuid, from_user, message_type, message, create_date, update_date, file_id, files.`name`, files.original_name, files.size, files.type, files.info from message left join files on (reference_id=file_id) where message.`status`='1' and to_group=? order by message_id desc limit ?,?";
+    const to = data.target;
+    const start = (data.page - 1) * limit;
+    db.execute(sql, [to, start.toString(), limit.toString()], (err, result) => {
+      if (err) return reject(err);
+      resolve(toList(result, "group"));
+    });
   });
 };
 
@@ -112,7 +133,7 @@ message.getFile = (id, type) => {
 message.checkPermission = (user, file) => {
   return new Promise((resolve, reject) => {
     const sql =
-      "select files.info from message join files on reference_id=files.file_id where files.`name`=? and message.`status`='1' and (from_user=? or to_user=?) limit 1";
+      "select files.info from message join files on reference_id=files.file_id where files.`name`=? and message.`status`='1' and (to_group is not null or from_user=? or to_user=?) limit 1";
     db.execute(sql, [file, user.id, user.id], (err, result) => {
       if (err) return reject(err);
       if (result.length === 1) {
@@ -135,13 +156,14 @@ message.checkIsProfile = (user, file) => {
   });
 };
 
-function toList(result) {
+function toList(result, type) {
   const list = result.map((e) => {
     return {
       id: e.message_id,
       uuid: e.message_uuid,
       from_user: e.from_user,
-      type: e.message_type,
+      message_type: e.message_type,
+      type: type,
       message: e.message,
       create_date: e.create_date,
       ...e?.update_date,

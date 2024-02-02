@@ -30,13 +30,19 @@ public class ChatPanel extends JPanel {
                 "background:$Chat.background");
         scrollAnimation = new ScrollAnimation();
         panel = new JPanel(new MigLayout("insets 0,wrap,fillx"));
+        panelBottom = new JPanel(new BorderLayout());
         createEmptyDataLabel();
         messageInput = new MessageInput(event);
+        joinGroupButton = new JoinGroupButton(e -> {
+            event.onJoinGroup();
+        });
 
         scroll = new ScrollRefresh(scrollRefreshModel, panel);
         scroll.getViewport().setLayout(new ChatViewportLayout());
         panel.putClientProperty(FlatClientProperties.STYLE, "" +
                 "border:3,0,3,0;" +
+                "background:$Chat.background");
+        panelBottom.putClientProperty(FlatClientProperties.STYLE, "" +
                 "background:$Chat.background");
         scroll.getVerticalScrollBar().putClientProperty(FlatClientProperties.STYLE, "" +
                 "background:$Chat.background;");
@@ -47,7 +53,7 @@ public class ChatPanel extends JPanel {
         chatComponentBuilder = new DefaultChatComponentBuilder();
         chatModel = new ChatModel(this);
         add(scroll);
-        add(messageInput);
+        add(panelBottom);
         initScrollEvent();
     }
 
@@ -144,9 +150,25 @@ public class ChatPanel extends JPanel {
         });
     }
 
+    public void useJoinButton() {
+        panelBottom.removeAll();
+        panelBottom.add(joinGroupButton);
+        panelBottom.repaint();
+        panelBottom.revalidate();
+    }
+
+    public void userMessageInput() {
+        panelBottom.removeAll();
+        panelBottom.add(messageInput);
+        panelBottom.repaint();
+        panelBottom.revalidate();
+    }
+
     private ChatComponentBuilder chatComponentBuilder;
     private ChatModel chatModel;
     private ScrollRefresh scroll;
     private JPanel panel;
+    private JPanel panelBottom;
     private MessageInput messageInput;
+    private JoinGroupButton joinGroupButton;
 }

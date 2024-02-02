@@ -1,13 +1,23 @@
 const message = require("../models/Message");
 
-exports.findUserMessage = async (req, res, next) => {
+exports.findMessage = async (req, res, next) => {
   try {
-    const data = await message.findUserMessage({
-      user: req.user,
-      target: req.query.user,
-      page: req.query.page,
-    });
-    res.status(200).json(data);
+    const type = req.query.type;
+    if (type === "user") {
+      const data = await message.findUserMessage({
+        user: req.user,
+        target: req.query.target,
+        page: req.query.page,
+      });
+      res.status(200).json(data);
+    } else {
+      const data = await message.findGroupMessage({
+        user: req.user,
+        target: req.query.target,
+        page: req.query.page,
+      });
+      res.status(200).json(data);
+    }
   } catch (err) {
     res.status(500).send(err.mesaage);
   }

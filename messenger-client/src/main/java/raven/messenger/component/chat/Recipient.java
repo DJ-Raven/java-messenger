@@ -49,7 +49,7 @@ public class Recipient extends ChatItemOption {
     private ChatFileData file;
     private boolean seen;
 
-    public String getConstraints(){
+    public String getConstraints() {
         return "width 150::400,gapright 50";
     }
 
@@ -68,7 +68,9 @@ public class Recipient extends ChatItemOption {
     }
 
     public Recipient setProfile(Icon profile) {
-        this.profile = profile;
+        if (profile != null) {
+            this.profile = profile;
+        }
         return this;
     }
 

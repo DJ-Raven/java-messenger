@@ -1,7 +1,7 @@
 package raven.messenger.component.left;
 
-import raven.messenger.models.response.ModelUser;
+import raven.messenger.models.response.ModelChatListItem;
 
 public interface LeftActionListener {
-    public void onUserSelected(ModelUser user);
+    public void onUserSelected(ModelChatListItem user);
 }

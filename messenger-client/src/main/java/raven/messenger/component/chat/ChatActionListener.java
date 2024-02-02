@@ -12,4 +12,6 @@ public interface ChatActionListener {
     public void onSendFileMessage(ModelFileWithType files[], String text);
 
     public void onMicrophoneCapture(CaptureData captureData);
+
+    public void onJoinGroup();
 }

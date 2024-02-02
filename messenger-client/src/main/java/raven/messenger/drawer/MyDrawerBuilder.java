@@ -37,6 +37,7 @@ public class MyDrawerBuilder extends SimpleDrawerBuilder {
     public SimpleMenuOption getSimpleMenuOption() {
 
         MenuItem[] menus = new MenuItem[]{
+                new Item("New group", "group.svg"),
                 new Item("Account", "account.svg"),
                 new Item("Local storage", "storage.svg")
         };
@@ -48,9 +49,12 @@ public class MyDrawerBuilder extends SimpleDrawerBuilder {
         menuOption.addMenuEvent((menuAction, index) -> {
             if (index.length == 1) {
                 if (index[0] == 0) {
-                    OptionManager.getInstance().showProfile();
+                    OptionManager.getInstance().newGroup();
                     MenuDrawer.getInstance().closeDrawer();
                 } else if (index[0] == 1) {
+                    OptionManager.getInstance().showProfile();
+                    MenuDrawer.getInstance().closeDrawer();
+                } else if (index[0] == 2) {
                     OptionManager.getInstance().showStorage();
                     MenuDrawer.getInstance().closeDrawer();
                 }

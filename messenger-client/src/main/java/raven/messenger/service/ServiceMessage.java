@@ -9,8 +9,10 @@ import org.json.JSONObject;
 import raven.messenger.api.exception.ResponseException;
 import raven.messenger.api.request.RequestFileMonitor;
 import raven.messenger.models.file.ModelFile;
+import raven.messenger.models.response.ModelGroup;
 import raven.messenger.models.response.ModelMessage;
 import raven.messenger.models.file.ModelFileInfo;
+import raven.messenger.socket.ChatType;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -18,9 +20,10 @@ import java.util.List;
 
 public class ServiceMessage {
 
-    public synchronized List<ModelMessage> findMessageUser(int user, int page) throws ResponseException {
+    public synchronized List<ModelMessage> findMessageUser(ChatType chatType, int target, int page) throws ResponseException {
         Response response = RestAssured.given()
-                .queryParam("user", user)
+                .queryParam("type", chatType.toString())
+                .queryParam("target", target)
                 .queryParam("page", page)
                 .get("message/message");
         if (response.getStatusCode() == 200) {
@@ -58,6 +61,30 @@ public class ServiceMessage {
         if (response.getStatusCode() == 200) {
             long length = Long.parseLong(response.getHeaders().get("Content-Length").getValue());
             req.save(response.asInputStream(), length);
+        } else {
+            throw new ResponseException(response.getStatusCode(), response.asString());
+        }
+    }
+
+    public synchronized ModelGroup checkGroup(String uuid) throws ResponseException {
+        String url = "group/check";
+        Response response = RestAssured.given()
+                .queryParam("group", uuid)
+                .get(url);
+        if (response.getStatusCode() == 200) {
+            return new ModelGroup(new JSONObject(response.getBody().asString()));
+        } else {
+            throw new ResponseException(response.getStatusCode(), response.asString());
+        }
+    }
+
+    public synchronized ModelGroup joinGroup(int id) throws ResponseException {
+        String url = "group/join";
+        Response response = RestAssured.given()
+                .queryParam("group", id)
+                .post(url);
+        if (response.getStatusCode() == 200) {
+            return new ModelGroup(new JSONObject(response.getBody().asString()));
         } else {
             throw new ResponseException(response.getStatusCode(), response.asString());
         }

@@ -1,6 +1,8 @@
 package raven.messenger.home;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import raven.messenger.api.exception.ResponseException;
+import raven.messenger.component.StringIcon;
 import raven.messenger.component.chat.Myself;
 import raven.messenger.component.chat.model.ChatFileData;
 import raven.messenger.component.chat.model.ChatPhotoData;
@@ -14,9 +16,10 @@ import raven.messenger.component.chat.ChatPanel;
 import raven.messenger.component.left.LeftActionListener;
 import raven.messenger.component.left.LeftPanel;
 import raven.messenger.component.right.RightPanel;
+import raven.messenger.models.response.ModelChatListItem;
+import raven.messenger.models.response.ModelGroup;
 import raven.messenger.models.response.ModelLastMessage;
 import raven.messenger.models.response.ModelMessage;
-import raven.messenger.models.response.ModelUser;
 import raven.messenger.plugin.sound.AudioUtil;
 import raven.messenger.plugin.sound.CaptureData;
 import raven.messenger.plugin.sound.WaveFormData;
@@ -41,7 +44,7 @@ public class Home extends JPanel {
     private ChatActionListener eventChat;
     private ScrollRefreshModel scrollRefreshModel;
     private LeftActionListener eventLeft;
-    private ModelUser user;
+    private ModelChatListItem user;
 
     public Home() {
         initEvent();
@@ -72,11 +75,13 @@ public class Home extends JPanel {
 
     private boolean loadData() {
         try {
-            int userId = user.getUserId();
+            int userId = ProfileManager.getInstance().getProfile().getUserId();
+            boolean isGroup = user.isGroup();
+            int target = user.getId();
             ChatModel chatModel = chatPanel.getChatModel();
-            List<ModelMessage> data = SocketService.getInstance().getServiceMessage().findMessageUser(userId, scrollRefreshModel.getPage());
+            List<ModelMessage> data = SocketService.getInstance().getServiceMessage().findMessageUser(user.getChatType(), target, scrollRefreshModel.getPage());
             for (ModelMessage d : data) {
-                if (userId != d.getFromUser()) {
+                if (userId == d.getFromUser()) {
                     if (d.getType() == MessageType.TEXT) {
                         chatModel.myself()
                                 .setMessage(d.getMessage())
@@ -118,7 +123,8 @@ public class Home extends JPanel {
                     if (d.getType() == MessageType.TEXT) {
                         chatModel.recipient()
                                 .setId(d.getFromUser())
-                                .setUsername(user.getName().getFullName())
+                                .setUsername(user.getName())
+                                .setProfile(getProfile(isGroup))
                                 .setMessage(d.getMessage())
                                 .setDate(d.getCreateDate())
                                 .setTop(true)
@@ -127,7 +133,8 @@ public class Home extends JPanel {
                     } else if (d.getType() == MessageType.VOICE) {
                         chatModel.recipient()
                                 .setId(d.getFromUser())
-                                .setUsername(user.getName().getFullName())
+                                .setUsername(user.getName())
+                                .setProfile(getProfile(isGroup))
                                 .setVoice(new ChatVoiceData(d.getFile()))
                                 .setDate(d.getCreateDate())
                                 .setTop(true)
@@ -136,7 +143,8 @@ public class Home extends JPanel {
                     } else if (d.getType() == MessageType.PHOTO) {
                         chatModel.recipient()
                                 .setId(d.getFromUser())
-                                .setUsername(user.getName().getFullName())
+                                .setUsername(user.getName())
+                                .setProfile(getProfile(isGroup))
                                 .setPhotoData(new ChatPhotoData(d.getFile()))
                                 .setDate(d.getCreateDate())
                                 .setTop(true)
@@ -145,7 +153,8 @@ public class Home extends JPanel {
                     } else if (d.getType() == MessageType.FILE) {
                         chatModel.recipient()
                                 .setId(d.getFromUser())
-                                .setUsername(user.getName().getFullName())
+                                .setUsername(user.getName())
+                                .setProfile(getProfile(isGroup))
                                 .setFileData(new ChatFileData(d.getFile()))
                                 .setDate(d.getCreateDate())
                                 .setTop(true)
@@ -170,6 +179,14 @@ public class Home extends JPanel {
         leftPanel.initData();
     }
 
+    private Icon getProfile(boolean group) {
+        if (group) {
+            return new StringIcon("RV", Color.decode("#41AED7"), 35, 35);
+        } else {
+            return null;
+        }
+    }
+
     /*
         Call back for seen status after emit to server by socket
      */
@@ -192,8 +209,8 @@ public class Home extends JPanel {
                         .setSeen(true)
                         .build();
                 chatPanel.scrollToBottomWithAnimation();
-                ModelSendMessage message = new ModelSendMessage(user.getUserId(), MessageType.TEXT, text);
-                leftPanel.userMessage(message.getToUser(), new ModelLastMessage(message));
+                ModelSendMessage message = new ModelSendMessage(user.getChatType(), user.getId(), MessageType.TEXT, text);
+                leftPanel.userMessage(user.getChatType(), message.getTarget(), new ModelLastMessage(message));
                 SocketService.getInstance().sendMessage(message, objects -> {
                     callBack(myself, objects);
                 });
@@ -227,12 +244,12 @@ public class Home extends JPanel {
                                 .build();
                     }
                     myselfMap.put(file, m);
-                    leftPanel.userMessage(user.getUserId(), new ModelLastMessage(file.getType()));
+                    leftPanel.userMessage(user.getChatType(), user.getId(), new ModelLastMessage(file.getType()));
                 }
                 chatPanel.scrollToBottomWithAnimation();
                 if (myself != null) {
                     //  send caption message to server by socket
-                    ModelSendMessage message = new ModelSendMessage(user.getUserId(), MessageType.TEXT, text);
+                    ModelSendMessage message = new ModelSendMessage(user.getChatType(), user.getId(), MessageType.TEXT, text);
                     SocketService.getInstance().sendMessage(message, objects -> {
                         callBack(myself, objects);
                     });
@@ -244,7 +261,7 @@ public class Home extends JPanel {
                                 new ModelFileDataInfo();
                         //  upload file to server
                         ModelFile fileResponse = SocketService.getInstance().getServiceMessage().sendFile(file.getFile(), fileInfo);
-                        ModelSendMessage fileMessage = new ModelSendMessage(user.getUserId(), MessageType.toMessageType(file.getType().toString()), "", fileResponse.getId());
+                        ModelSendMessage fileMessage = new ModelSendMessage(user.getChatType(), user.getId(), MessageType.toMessageType(file.getType().toString()), "", fileResponse.getId());
                         //  send message by socket to server
                         SocketService.getInstance().sendMessage(fileMessage, objects -> {
                             Myself ms = myselfMap.get(file);
@@ -271,7 +288,7 @@ public class Home extends JPanel {
                         .setVoice(chatVoiceData)
                         .setSeen(true)
                         .build();
-                leftPanel.userMessage(user.getUserId(), new ModelLastMessage(FileType.toFileType("v")));
+                leftPanel.userMessage(user.getChatType(), user.getId(), new ModelLastMessage(FileType.toFileType("v")));
                 chatPanel.scrollToBottomWithAnimation();
                 try {
                     File file = AudioUtil.write(captureData);
@@ -279,7 +296,7 @@ public class Home extends JPanel {
                     //  upload voice file to server
                     ModelFile fileResponse = SocketService.getInstance().getServiceMessage().sendFile(file, fileInfo);
                     chatVoiceData.setName(fileResponse.getName());
-                    ModelSendMessage message = new ModelSendMessage(user.getUserId(), MessageType.VOICE, "", fileResponse.getId());
+                    ModelSendMessage message = new ModelSendMessage(user.getChatType(), user.getId(), MessageType.VOICE, "", fileResponse.getId());
                     //  send message to server by socket
                     SocketService.getInstance().sendMessage(message, objects -> {
                         callBack(myself, objects);
@@ -290,14 +307,24 @@ public class Home extends JPanel {
                     e.printStackTrace();
                 }
             }
+
+            @Override
+            public void onJoinGroup() {
+                try {
+                    ModelGroup group = SocketService.getInstance().getServiceMessage().joinGroup(user.getId());
+                    chatPanel.userMessageInput();
+                } catch (ResponseException e) {
+                    e.printStackTrace();
+                }
+            }
         };
-        eventLeft = user -> {
+        eventLeft = data -> {
             if (chatBody.getComponentCount() == 0) {
                 chatBody.add(chatPanel);
                 chatBody.repaint();
                 chatBody.revalidate();
             }
-            changeUser(user);
+            changeUser(data);
         };
         scrollRefreshModel = new ScrollRefreshModel(1, SwingConstants.TOP) {
             @Override
@@ -327,15 +354,29 @@ public class Home extends JPanel {
     /*
         This method work when select changed user profile left menu
      */
-    private synchronized void changeUser(ModelUser user) {
-        if (this.user != user) {
+    private synchronized void changeUser(ModelChatListItem user) {
+        if (this.user == null || (this.user.getChatType() != user.getChatType() || this.user.getId() != user.getId())) {
             this.user = user;
-            leftPanel.selectedUser(user.getUserId());
+            leftPanel.selectedUser(user);
             scrollRefreshModel.stop();
             chatPanel.getChatModel().clear();
             scrollRefreshModel.resetPage();
+            if (user.isGroup()) {
+                checkGroup(user.getUuid());
+            } else {
+                chatPanel.userMessageInput();
+            }
         } else {
             chatPanel.scrollToBottomWithAnimation();
+        }
+    }
+
+    private void checkGroup(String uuid) {
+        try {
+            ModelGroup group = SocketService.getInstance().getServiceMessage().checkGroup(uuid);
+            chatPanel.userMessageInput();
+        } catch (ResponseException e) {
+            chatPanel.useJoinButton();
         }
     }
 
@@ -347,32 +388,33 @@ public class Home extends JPanel {
             @Override
             public void onReceiveMessage(ModelMessage message) {
                 leftPanel.userMessage(message);
-                if (message.getFromUser() == user.getUserId()) {
+                System.out.println(message.getChatType()+" "+message.getFromUser());
+                if (message.getFromUser() == user.getId() && message.getChatType() == user.getChatType()) {
                     if (message.getType() == MessageType.TEXT) {
                         chatPanel.getChatModel().recipient()
-                                .setId(user.getUserId())
-                                .setUsername(user.getName().getFullName())
+                                .setId(message.getFromUser())
+                                .setUsername(user.getName())
                                 .setMessage(message.getMessage())
                                 .setDate(message.getCreateDate())
                                 .build();
                     } else if (message.getType() == MessageType.VOICE) {
                         chatPanel.getChatModel().recipient()
-                                .setId(user.getUserId())
-                                .setUsername(user.getName().getFullName())
+                                .setId(message.getFromUser())
+                                .setUsername(user.getName())
                                 .setVoice(new ChatVoiceData(message.getFile()))
                                 .setDate(message.getCreateDate())
                                 .build();
                     } else if (message.getType() == MessageType.PHOTO) {
                         chatPanel.getChatModel().recipient()
-                                .setId(user.getUserId())
-                                .setUsername(user.getName().getFullName())
+                                .setId(message.getFromUser())
+                                .setUsername(user.getName())
                                 .setPhotoData(new ChatPhotoData(message.getFile()))
                                 .setDate(message.getCreateDate())
                                 .build();
                     } else if (message.getType() == MessageType.FILE) {
                         chatPanel.getChatModel().recipient()
-                                .setId(user.getUserId())
-                                .setUsername(user.getName().getFullName())
+                                .setId(message.getFromUser())
+                                .setUsername(user.getName())
                                 .setFileData(new ChatFileData(message.getFile()))
                                 .setDate(message.getCreateDate())
                                 .build();

@@ -6,8 +6,8 @@ import net.miginfocom.swing.MigLayout;
 import raven.messenger.component.PictureBox;
 import raven.messenger.component.ProfileStatus;
 import raven.messenger.component.StringIcon;
+import raven.messenger.models.response.ModelChatListItem;
 import raven.messenger.models.response.ModelLastMessage;
-import raven.messenger.models.response.ModelUser;
 import raven.messenger.models.other.ModelImage;
 import raven.messenger.socket.MessageType;
 import raven.messenger.util.MethodUtil;
@@ -18,10 +18,10 @@ import java.awt.*;
 
 public class Item extends JButton {
 
-    private ModelUser user;
+    private ModelChatListItem data;
 
-    public Item(ModelUser user) {
-        this.user = user;
+    public Item(ModelChatListItem data) {
+        this.data = data;
         init();
     }
 
@@ -33,23 +33,23 @@ public class Item extends JButton {
                 "innerFocusWidth:0");
         setLayout(new MigLayout("wrap,fill,insets 3", "[fill]"));
         panelLabel = new PanelLabel();
-        if (user.getProfile() != null) {
+        if (data.getProfile() != null) {
             PictureBox picture = new PictureBox();
             picture.setRadius(999);
             picture.setBoxFit(PictureBox.BoxFit.COVER);
-            ModelImage image = user.getProfile();
+            ModelImage image = data.getProfile();
             picture.setImageHash(image.getHash(), 180, 180, image.getImage());
-            profile = new ProfileStatus(NetworkDataUtil.getNetworkIcon(user.getProfile(), user.getName().getProfileString(), 50, 50, 999));
+            profile = new ProfileStatus(NetworkDataUtil.getNetworkIcon(data.getProfile(), data.getProfileString(), 50, 50, 999));
         } else {
-            profile = new ProfileStatus(new StringIcon(user.getName().getProfileString(), Color.decode("#41AED7"), 50, 50));
+            profile = new ProfileStatus(new StringIcon(data.getProfileString(), Color.decode("#41AED7"), 50, 50));
         }
-        profile.setActiveStatus(user.isActiveStatus());
+        profile.setActiveStatus(data.isActiveStatus());
         add(profile, "dock west,width 50,height 50,gap 6 10");
         add(panelLabel);
     }
 
-    public ModelUser getUser() {
-        return user;
+    public ModelChatListItem getData() {
+        return data;
     }
 
     public boolean isActiveStatus() {
@@ -57,7 +57,7 @@ public class Item extends JButton {
     }
 
     public void setActiveStatus(boolean activeStatus) {
-        user.setActiveStatus(activeStatus);
+        data.setActiveStatus(activeStatus);
         profile.setActiveStatus(activeStatus);
     }
 
@@ -77,7 +77,11 @@ public class Item extends JButton {
         private void init() {
             setOpaque(false);
             setLayout(new LabelLayout());
-            lbName = new JLabel(user.getName().getFullName());
+            lbName = new JLabel(data.getName());
+            if (data.isGroup()) {
+                lbName.setHorizontalTextPosition(SwingConstants.LEADING);
+                lbName.setIcon(MethodUtil.createIcon("raven/messenger/icon/group.svg", 0.35f));
+            }
             lbDescriptionName = new JLabel();
             lbDescription = new JLabel();
             lbDescription.setHorizontalTextPosition(SwingConstants.LEADING);
@@ -95,7 +99,7 @@ public class Item extends JButton {
             add(lbDescriptionName);
             add(lbDescription);
             add(lbStatus);
-            setLastMessage(user.getLastMessage());
+            setLastMessage(data.getLastMessage());
         }
 
         private void setLastMessage(ModelLastMessage lastMessage) {
@@ -115,7 +119,11 @@ public class Item extends JButton {
                     lbDescription.setIcon(MethodUtil.createIcon("raven/messenger/icon/file.svg", 0.6f));
                 }
             } else {
-                lbDescription.setText("joined");
+                if (data.isGroup()) {
+                    lbDescription.setText("created");
+                } else {
+                    lbDescription.setText("joined");
+                }
             }
         }
 

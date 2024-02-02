@@ -1,0 +1,47 @@
+const group = require("../models/Group");
+
+exports.check = async (req, res, next) => {
+  try {
+    const id = req.query.group;
+    const data = await group.check(req.user, id);
+    if (data) {
+      res.status(200).json(data);
+    } else {
+      res.status(404).send("Group not found");
+    }
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
+
+exports.create = async (req, res, next) => {
+  try {
+    const file = {
+      image: req.file.filename,
+      size: req.file.size,
+    };
+    const reqData = {
+      file: file,
+      name: req.body.name,
+      description: req.body.description,
+    };
+    const data = await group.create(req.user, reqData);
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
+
+exports.joinGroup = async (req, res, next) => {
+  try {
+    const reqData = {
+      group: req.query.group,
+    };
+    const data = await group.joinGroup(req.user, reqData);
+    if (data) {
+      res.status(200).json(data);
+    }
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};

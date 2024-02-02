@@ -5,14 +5,16 @@ const user = function () {};
 
 user.findAll = (data) => {
   return new Promise((resolve, reject) => {
-    const limit = 30;
+    const limit = 10;
     let sql;
     let sqlData;
     const start = (data.page - 1) * limit;
     if (data.search === "") {
       sql =
-        "select u.user_id, u.user_uuid, `profile`, first_name, last_name, gender, max(m.create_date) as last_time from `user` as u left join message as m on ((u.user_id=m.from_user and m.to_user=?) or (u.user_id=m.to_user and m.from_user=?)) and m.`status`='1' where u.user_id <> ? and u.`status`='1' group by u.user_id order by last_time desc limit ?,?";
+        "select u.user_id as id, u.user_uuid as uuid, concat(first_name,' ',last_name) as `name`, `profile`, 'user' as `type`, max(m.message_id) as last_message, u.create_date, max(m.create_date) as last_time from `user` as u left join message as m on ((u.user_id = m.from_user and m.to_user = ?) or (u.user_id = m.to_user and m.from_user = ?)) and m.`status` = '1' where u.user_id <> ? and u.`status` = '1' group by u.user_id union select g.group_id as id, g.group_uuid as uuid, g.`name` as `name`, `profile`, 'group' as `type`, max(m.message_id) as last_message, g.create_date, if(max(m.create_date) is null,if(mb.user_id=?,max(mb.join_date),null),max(m.create_date)) as last_time from `groups` as g left join member as mb on (g.group_id = mb.group_id) left join message as m on (g.group_id = m.to_group and mb.user_id = ?) and m.`status` = '1' where g.`status` = '1' group by g.group_id, mb.user_id order by last_time desc limit ?,?";
       sqlData = [
+        data.user.id,
+        data.user.id,
         data.user.id,
         data.user.id,
         data.user.id,
@@ -21,12 +23,15 @@ user.findAll = (data) => {
       ];
     } else {
       sql =
-        "select u.user_id, u.user_uuid, `profile`, first_name, last_name, gender, max(m.create_date) as last_time from `user` as u left join message as m on ((u.user_id=m.from_user and m.to_user=?) or (u.user_id=m.to_user and m.from_user=?)) and m.`status`='1' where u.user_id <> ? and u.`status`='1' and (concat(first_name,' ',last_name) like ? or phone_number like ?) group by u.user_id order by last_time desc limit ?,?";
+        "select u.user_id as id, u.user_uuid as uuid, concat(first_name,' ',last_name) as `name`, `profile`, 'user' as `type`, max(m.message_id) as last_message, u.create_date, max(m.create_date) as last_time from `user` as u left join message as m on ((u.user_id = m.from_user and m.to_user = ?) or (u.user_id = m.to_user and m.from_user = ?)) and m.`status` = '1' where u.user_id <> ? and u.`status` = '1' and (concat(first_name,' ',last_name) like ? or phone_number like ?) group by u.user_id union select g.group_id as id, g.group_uuid as uuid, g.`name` as `name`, `profile`, 'group' as `type`, max(m.message_id) as last_message, g.create_date, if(max(m.create_date) is null,if(mb.user_id=?,max(mb.join_date),null),max(m.create_date)) as last_time from `groups` as g left join member as mb on (g.group_id = mb.group_id) left join message as m on (g.group_id = m.to_group and mb.user_id = ?) and m.`status` = '1' where g.`status` = '1' and (g.`name` like ?) group by g.group_id, mb.user_id order by last_time desc limit ?,?";
       sqlData = [
         data.user.id,
         data.user.id,
         data.user.id,
         `%${data.search}%`,
+        `%${data.search}%`,
+        data.user.id,
+        data.user.id,
         `%${data.search}%`,
         start.toString(),
         limit.toString(),
@@ -39,20 +44,19 @@ user.findAll = (data) => {
   });
 };
 
-user.findById = (id) => {
+user.findUserById = (id) => {
   return new Promise((resolve, reject) => {
     const sql =
-      "select user_id, user_uuid, `profile`, first_name, last_name, gender from `user` where `status`='1' and user_id=? limit 1";
+      "select user_id, user_uuid, concat(first_name,' ',last_name) as `name`, `profile` from `user` where `status`='1' and user_id=? limit 1";
     db.execute(sql, [id], (err, result) => {
       if (err) return reject(err);
       if (result.length === 1) {
         const r = result[0];
         const data = {
-          user_id: r.user_id,
-          user_uuid: r.user_uuid,
-          first_name: r.first_name,
-          last_name: r.last_name,
-          gender: r.gender,
+          id: r.user_id,
+          uuid: r.user_uuid,
+          name: r.name,
+          type: "user",
           active: r.user_id in users,
           profile: JSON.parse(r.profile),
         };
@@ -64,12 +68,12 @@ user.findById = (id) => {
   });
 };
 
-function getLastMessage(user, target) {
+function getLastMessage(user, id) {
   const sql =
-    "select from_user, message, message_type from message where message.`status`='1' and ((to_user=? and from_user=?) or (from_user=? and to_user=?)) order by message_id desc limit 1";
+    "select from_user, message, message_type from message where message_id=? limit 1";
   return db
     .promise()
-    .query(sql, [user, target, user, target])
+    .query(sql, [id])
     .then((result) => {
       const data = result[0][0];
       if (data) {
@@ -87,14 +91,15 @@ async function toList(user, result) {
   return Promise.all(
     result.map(async (e) => {
       return {
-        user_id: e.user_id,
-        user_uuid: e.user_uuid,
-        first_name: e.first_name,
-        last_name: e.last_name,
-        gender: e.gender,
-        active: e.user_id in users,
+        id: e.id,
+        uuid: e.uuid,
+        name: e.name,
+        type: e.type,
+        active: e.type === "user" ? e.id in users : false,
         profile: JSON.parse(e.profile),
-        last_message: await getLastMessage(user, e.user_id),
+        last_message: e.last_message
+          ? await getLastMessage(user, e.last_message)
+          : undefined,
       };
     })
   );

@@ -2,16 +2,26 @@ package raven.messenger.socket.models;
 
 import org.json.JSONObject;
 import raven.messenger.models.other.JsonModel;
+import raven.messenger.socket.ChatType;
 import raven.messenger.socket.MessageType;
 
 public class ModelSendMessage implements JsonModel {
 
-    public int getToUser() {
-        return toUser;
+
+    public ChatType getChatType() {
+        return chatType;
     }
 
-    public void setToUser(int toUser) {
-        this.toUser = toUser;
+    public void setChatType(ChatType chatType) {
+        this.chatType = chatType;
+    }
+
+    public int getTarget() {
+        return target;
+    }
+
+    public void setTarget(int target) {
+        this.target = target;
     }
 
     public MessageType getMessageType() {
@@ -30,20 +40,23 @@ public class ModelSendMessage implements JsonModel {
         this.message = message;
     }
 
-    public ModelSendMessage(int toUser, MessageType messageType, String message) {
-        this.toUser = toUser;
+    public ModelSendMessage(ChatType chatType, int target, MessageType messageType, String message) {
+        this.chatType = chatType;
+        this.target = target;
         this.messageType = messageType;
         this.message = message;
     }
 
-    public ModelSendMessage(int toUser, MessageType messageType, String message, int referenceId) {
-        this.toUser = toUser;
+    public ModelSendMessage(ChatType chatType, int target, MessageType messageType, String message, int referenceId) {
+        this.chatType = chatType;
+        this.target = target;
         this.messageType = messageType;
         this.message = message;
         this.referenceId = referenceId;
     }
 
-    private int toUser;
+    private ChatType chatType;
+    private int target;
     private MessageType messageType;
     private String message;
     private int referenceId;
@@ -51,7 +64,8 @@ public class ModelSendMessage implements JsonModel {
     @Override
     public JSONObject toJsonObject() {
         JSONObject json = new JSONObject();
-        json.put("to_user", toUser);
+        json.put("type", chatType.toString());
+        json.put("target", target);
         json.put("message_type", messageType.toString());
         json.put("message", message);
         if (referenceId > 0) {

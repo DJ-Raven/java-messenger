@@ -24,6 +24,7 @@ app.use("/api/auth", require("./routes/AuthRoutes"));
 app.use("/api/user", require("./routes/UserRoutes"));
 app.use("/api/message", require("./routes/MessageRoutes"));
 app.use("/api/profile", require("./routes/ProfileRoutes"));
+app.use("/api/group", require("./routes/GroupRoutes"));
 
 socketService(httpServer);
 

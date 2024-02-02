@@ -24,7 +24,8 @@ module.exports = function (server) {
         if (user !== null) {
           const data = {
             from_user: user.id,
-            to_user: ms.to_user,
+            type: ms.type,
+            target: ms.target,
             message_type: ms.message_type,
             message: ms.message,
             reference_id: ms?.reference_id,
@@ -32,8 +33,9 @@ module.exports = function (server) {
           message
             .create(data)
             .then((data) => {
-              const toSocketId = users[ms.to_user];
+              const toSocketId = users[ms.target];
               callback(data.create_date);
+              console.log(data);
               io.to(toSocketId).emit("message", data);
             })
             .catch((e) => {

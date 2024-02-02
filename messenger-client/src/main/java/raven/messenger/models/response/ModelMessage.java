@@ -2,6 +2,7 @@ package raven.messenger.models.response;
 
 import org.json.JSONObject;
 import raven.messenger.models.file.ModelFile;
+import raven.messenger.socket.ChatType;
 import raven.messenger.socket.MessageType;
 import raven.messenger.util.MethodUtil;
 
@@ -49,6 +50,14 @@ public class ModelMessage {
         this.type = type;
     }
 
+    public ChatType getChatType() {
+        return chatType;
+    }
+
+    public void setChatType(ChatType chatType) {
+        this.chatType = chatType;
+    }
+
     public Date getCreateDate() {
         return createDate;
     }
@@ -73,23 +82,13 @@ public class ModelMessage {
         this.file = file;
     }
 
-    public ModelMessage(int id, String uuid, int fromUser, String message, MessageType type, Date createDate, Date updateDate, ModelFile file) {
-        this.id = id;
-        this.uuid = uuid;
-        this.fromUser = fromUser;
-        this.message = message;
-        this.type = type;
-        this.createDate = createDate;
-        this.updateDate = updateDate;
-        this.file = file;
-    }
-
     public ModelMessage(JSONObject json) {
         id = json.getInt("id");
         uuid = json.getString("uuid");
         fromUser = json.getInt("from_user");
         message = json.getString("message");
-        type = MessageType.toMessageType(json.getString("type"));
+        type = MessageType.toMessageType(json.getString("message_type"));
+        chatType = ChatType.toChatType(json.getString("type"));
         createDate = MethodUtil.stringToDate(json.getString("create_date"));
         if (!json.isNull("update_date")) {
             updateDate = MethodUtil.stringToDate(json.getString("update_date"));
@@ -104,6 +103,7 @@ public class ModelMessage {
     private int fromUser;
     private String message;
     private MessageType type;
+    private ChatType chatType;
     private Date createDate;
     private Date updateDate;
     private ModelFile file;

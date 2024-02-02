@@ -4,12 +4,13 @@ import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
 import raven.messenger.api.exception.ResponseException;
 import raven.messenger.drawer.MenuDrawer;
+import raven.messenger.models.response.ModelChatListItem;
 import raven.messenger.models.response.ModelLastMessage;
 import raven.messenger.models.response.ModelMessage;
-import raven.messenger.models.response.ModelUser;
 import raven.messenger.plugin.swing.scroll.ScrollRefresh;
 import raven.messenger.plugin.swing.scroll.ScrollRefreshModel;
 import raven.messenger.service.ServiceUser;
+import raven.messenger.socket.ChatType;
 import raven.messenger.util.Debounce;
 import raven.messenger.util.MethodUtil;
 
@@ -113,7 +114,7 @@ public class LeftPanel extends JPanel {
             Component component = panel.getComponent(i);
             if (component instanceof Item) {
                 Item item = (Item) component;
-                if (item.getUser().getUserId() == userId) {
+                if (item.getData().isGroup() == false && item.getData().getId() == userId) {
                     item.setActiveStatus(status);
                     break;
                 }
@@ -122,13 +123,14 @@ public class LeftPanel extends JPanel {
     }
 
     public synchronized void userMessage(ModelMessage message) {
+        System.out.println(message.getChatType()+" "+message.getFromUser());
         boolean found = false;
         int count = panel.getComponentCount();
         for (int i = 0; i < count; i++) {
             Component component = panel.getComponent(i);
             if (component instanceof Item) {
                 Item item = (Item) component;
-                if (item.getUser().getUserId() == message.getFromUser()) {
+                if (item.getData().getId() == message.getFromUser() && item.getData().getChatType() == message.getChatType()) {
                     found = true;
                     item.setLastMessage(new ModelLastMessage(message));
                     panel.setComponentZOrder(component, 0);
@@ -140,7 +142,7 @@ public class LeftPanel extends JPanel {
         if (!found) {
             // Get user from server and add to top
             try {
-                ModelUser user = serviceUser.findById(message.getFromUser());
+                ModelChatListItem user = serviceUser.findById(message.getFromUser());
                 user.setLastMessage(new ModelLastMessage(message));
                 Item item = new Item(user);
                 item.addActionListener(e -> event.onUserSelected(user));
@@ -153,13 +155,13 @@ public class LeftPanel extends JPanel {
         }
     }
 
-    public synchronized void userMessage(int userId, ModelLastMessage lastMessage) {
+    public synchronized void userMessage(ChatType chatType, int id, ModelLastMessage lastMessage) {
         int count = panel.getComponentCount();
         for (int i = 0; i < count; i++) {
             Component component = panel.getComponent(i);
             if (component instanceof Item) {
                 Item item = (Item) component;
-                if (item.getUser().getUserId() == userId) {
+                if (item.getData().getId() == id && item.getData().getChatType() == chatType) {
                     item.setLastMessage(lastMessage);
                     panel.setComponentZOrder(component, 0);
                     panel.revalidate();
@@ -169,22 +171,22 @@ public class LeftPanel extends JPanel {
         }
     }
 
-    public void selectedUser(int userId) {
+    public void selectedUser(ModelChatListItem data) {
         int count = panel.getComponentCount();
         for (int i = 0; i < count; i++) {
             Component component = panel.getComponent(i);
             if (component instanceof Item) {
                 Item item = (Item) component;
-                item.setSelected(item.getUser().getUserId() == userId);
+                item.setSelected(item.getData().getId() == data.getId() && item.getData().getChatType() == data.getChatType());
             }
         }
     }
 
     public boolean loadData() {
         try {
-            List<ModelUser> response = serviceUser.findAll(scroll.getScrollRefreshModel().getPage(), textSearch);
-            for (ModelUser d : response) {
-                if (isNotExist(d.getUserId())) {
+            List<ModelChatListItem> response = serviceUser.findAll(scroll.getScrollRefreshModel().getPage(), textSearch);
+            for (ModelChatListItem d : response) {
+                if (isNotExist(d)) {
                     Item item = new Item(d);
                     item.addActionListener(e -> event.onUserSelected(d));
                     panel.add(item);
@@ -200,13 +202,13 @@ public class LeftPanel extends JPanel {
         }
     }
 
-    private boolean isNotExist(int userId) {
+    private boolean isNotExist(ModelChatListItem data) {
         int count = panel.getComponentCount();
         for (int i = 0; i < count; i++) {
             Component component = panel.getComponent(i);
             if (component instanceof Item) {
                 Item item = (Item) component;
-                if (item.getUser().getUserId() == userId) {
+                if (item.getData().getId() == data.getId() && item.getData().getChatType() == data.getChatType()) {
                     return false;
                 }
             }
