@@ -16,10 +16,12 @@ exports.check = async (req, res, next) => {
 
 exports.create = async (req, res, next) => {
   try {
-    const file = {
-      image: req.file.filename,
-      size: req.file.size,
-    };
+    const file = req.file
+      ? {
+          image: req.file.filename,
+          size: req.file.size,
+        }
+      : null;
     const reqData = {
       file: file,
       name: req.body.name,
@@ -28,6 +30,7 @@ exports.create = async (req, res, next) => {
     const data = await group.create(req.user, reqData);
     res.status(200).json(data);
   } catch (err) {
+    console.log(err);
     res.status(500).send(err);
   }
 };

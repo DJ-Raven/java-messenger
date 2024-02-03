@@ -33,21 +33,36 @@ group.create = (user, data) => {
   return new Promise(async (resolve, reject) => {
     const sql =
       "insert into `groups` (group_uuid, `name`, profile, description, create_by, create_date) values (?,?,?,?,?,?)";
-    let file = data.file;
-    const imageinfo = await utils.getImageInfo(`upload/${file.image}`);
-    file = Object.assign(file, JSON.parse(imageinfo));
+    let file;
+    if (data.file) {
+      file = data.file;
+      const imageinfo = await utils.getImageInfo(`upload/${file.image}`);
+      file = Object.assign(file, JSON.parse(imageinfo));
+    }
     const uuid = v4();
     const date = new Date();
     db.execute(
       sql,
-      [uuid, data.name, JSON.stringify(file), data.description, user.id, date],
+      [
+        uuid,
+        data.name,
+        file ? JSON.stringify(file) : null,
+        data.description,
+        user.id,
+        date,
+      ],
       (err, result) => {
         if (err) return reject(err);
-        resolve({
-          id: result.insertId,
-          uuid: uuid,
-          create_by: user.id,
-          create_date: date,
+        const sqlJoin =
+          "insert into member (user_id, group_id, join_date) values (?,?,?)";
+        db.execute(sqlJoin, [user.id, result.insertId, date], (err, result) => {
+          if (err) return reject(err);
+          resolve({
+            id: result.insertId,
+            uuid: uuid,
+            create_by: user.id,
+            create_date: date,
+          });
         });
       }
     );
