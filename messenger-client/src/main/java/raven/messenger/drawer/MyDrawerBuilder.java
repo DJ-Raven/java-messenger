@@ -2,7 +2,6 @@ package raven.messenger.drawer;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
-import raven.drawer.component.DrawerPanel;
 import raven.drawer.component.SimpleDrawerBuilder;
 import raven.drawer.component.footer.SimpleFooterData;
 import raven.drawer.component.header.SimpleHeaderData;
@@ -10,7 +9,6 @@ import raven.drawer.component.header.SimpleHeaderStyle;
 import raven.drawer.component.menu.SimpleMenuOption;
 import raven.drawer.component.menu.data.Item;
 import raven.drawer.component.menu.data.MenuItem;
-import raven.messenger.manager.FormsManager;
 import raven.messenger.option.OptionManager;
 
 import javax.swing.*;
@@ -67,6 +65,6 @@ public class MyDrawerBuilder extends SimpleDrawerBuilder {
     public SimpleFooterData getSimpleFooterData() {
         return new SimpleFooterData()
                 .setTitle("Java Messenger")
-                .setDescription("Version 1.0.0");
+                .setDescription("Version 1.1.0");
     }
 }

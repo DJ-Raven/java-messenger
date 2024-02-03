@@ -388,38 +388,45 @@ public class Home extends JPanel {
             @Override
             public void onReceiveMessage(ModelMessage message) {
                 leftPanel.userMessage(message);
-                System.out.println(message.getChatType()+" "+message.getFromUser());
-                if (message.getFromUser() == user.getId() && message.getChatType() == user.getChatType()) {
-                    if (message.getType() == MessageType.TEXT) {
-                        chatPanel.getChatModel().recipient()
-                                .setId(message.getFromUser())
-                                .setUsername(user.getName())
-                                .setMessage(message.getMessage())
-                                .setDate(message.getCreateDate())
-                                .build();
-                    } else if (message.getType() == MessageType.VOICE) {
-                        chatPanel.getChatModel().recipient()
-                                .setId(message.getFromUser())
-                                .setUsername(user.getName())
-                                .setVoice(new ChatVoiceData(message.getFile()))
-                                .setDate(message.getCreateDate())
-                                .build();
-                    } else if (message.getType() == MessageType.PHOTO) {
-                        chatPanel.getChatModel().recipient()
-                                .setId(message.getFromUser())
-                                .setUsername(user.getName())
-                                .setPhotoData(new ChatPhotoData(message.getFile()))
-                                .setDate(message.getCreateDate())
-                                .build();
-                    } else if (message.getType() == MessageType.FILE) {
-                        chatPanel.getChatModel().recipient()
-                                .setId(message.getFromUser())
-                                .setUsername(user.getName())
-                                .setFileData(new ChatFileData(message.getFile()))
-                                .setDate(message.getCreateDate())
-                                .build();
+                if (user != null) {
+
+                    if (message.getFromUser() == user.getId() && message.getChatType() == user.getChatType()) {
+                        boolean isGroup = user.isGroup();
+                        if (message.getType() == MessageType.TEXT) {
+                            chatPanel.getChatModel().recipient()
+                                    .setId(message.getFromUser())
+                                    .setUsername(user.getName())
+                                    .setProfile(getProfile(isGroup))
+                                    .setMessage(message.getMessage())
+                                    .setDate(message.getCreateDate())
+                                    .build();
+                        } else if (message.getType() == MessageType.VOICE) {
+                            chatPanel.getChatModel().recipient()
+                                    .setId(message.getFromUser())
+                                    .setUsername(user.getName())
+                                    .setProfile(getProfile(isGroup))
+                                    .setVoice(new ChatVoiceData(message.getFile()))
+                                    .setDate(message.getCreateDate())
+                                    .build();
+                        } else if (message.getType() == MessageType.PHOTO) {
+                            chatPanel.getChatModel().recipient()
+                                    .setId(message.getFromUser())
+                                    .setUsername(user.getName())
+                                    .setProfile(getProfile(isGroup))
+                                    .setPhotoData(new ChatPhotoData(message.getFile()))
+                                    .setDate(message.getCreateDate())
+                                    .build();
+                        } else if (message.getType() == MessageType.FILE) {
+                            chatPanel.getChatModel().recipient()
+                                    .setId(message.getFromUser())
+                                    .setUsername(user.getName())
+                                    .setProfile(getProfile(isGroup))
+                                    .setFileData(new ChatFileData(message.getFile()))
+                                    .setDate(message.getCreateDate())
+                                    .build();
+                        }
+                        chatPanel.scrollToBottomWithAnimation();
                     }
-                    chatPanel.scrollToBottomWithAnimation();
                 }
             }
 

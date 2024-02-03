@@ -87,6 +87,16 @@ group.joinGroup = (user, data) => {
   });
 };
 
+group.getMemeberId = (id) => {
+  return new Promise((resolve, reject) => {
+    const sql = "select user_id from member where group_id=?";
+    db.execute(sql, [id], (err, result) => {
+      if (err) return reject(err);
+      resolve(result.map((e) => e.user_id));
+    });
+  });
+};
+
 function getGroup(user, id) {
   return new Promise((resolve, reject) => {
     const sql =

@@ -7,7 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import raven.messenger.api.exception.ResponseException;
 import raven.messenger.models.response.ModelChatListItem;
-import raven.messenger.models.response.ModelUser;
+import raven.messenger.socket.ChatType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +30,11 @@ public class ServiceUser {
         throw new ResponseException(response.getStatusCode(), response.asString());
     }
 
-    public synchronized ModelChatListItem findById(int id) throws ResponseException {
+    public synchronized ModelChatListItem findById(ChatType chatType, int id) throws ResponseException {
         Response response = RestAssured.given()
-                .get("user/" + id);
+                .queryParam("type", chatType.toString())
+                .queryParam("id", id)
+                .get("user/find");
         if (response.getStatusCode() == 200) {
             JSONObject json = new JSONObject(response.getBody().asString());
             return new ModelChatListItem(json);

@@ -68,9 +68,7 @@ public class Recipient extends ChatItemOption {
     }
 
     public Recipient setProfile(Icon profile) {
-        if (profile != null) {
-            this.profile = profile;
-        }
+        this.profile = profile;
         return this;
     }
 

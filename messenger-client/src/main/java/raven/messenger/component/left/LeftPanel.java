@@ -123,7 +123,6 @@ public class LeftPanel extends JPanel {
     }
 
     public synchronized void userMessage(ModelMessage message) {
-        System.out.println(message.getChatType()+" "+message.getFromUser());
         boolean found = false;
         int count = panel.getComponentCount();
         for (int i = 0; i < count; i++) {
@@ -142,7 +141,7 @@ public class LeftPanel extends JPanel {
         if (!found) {
             // Get user from server and add to top
             try {
-                ModelChatListItem user = serviceUser.findById(message.getFromUser());
+                ModelChatListItem user = serviceUser.findById(message.getChatType(),message.getFromUser());
                 user.setLastMessage(new ModelLastMessage(message));
                 Item item = new Item(user);
                 item.addActionListener(e -> event.onUserSelected(user));

@@ -4,6 +4,6 @@ const jwtVerify = require("../models/JwtVerify");
 const router = express.Router();
 
 router.get("/", jwtVerify.verify, userController.findAll);
-router.get("/:id", jwtVerify.verify, userController.findById);
+router.get("/find", jwtVerify.verify, userController.findById);
 
 module.exports = router;

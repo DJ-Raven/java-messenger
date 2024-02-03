@@ -34,8 +34,9 @@ message.create = (data) => {
           id: result.insertId,
           uuid: uuid,
           from_user: data.type === "user" ? data.from_user : data.target,
-          message_type: data.message_type,
+          target: data.target,
           type: data.type,
+          message_type: data.message_type,
           message: data.message,
           create_date: date,
         };

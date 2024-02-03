@@ -68,6 +68,30 @@ user.findUserById = (id) => {
   });
 };
 
+user.findGroupById = (id) => {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "select group_id, group_uuid, `name`, `profile` from `groups` where `status`='1' and group_id=? limit 1";
+    db.execute(sql, [id], (err, result) => {
+      if (err) return reject(err);
+      if (result.length === 1) {
+        const r = result[0];
+        const data = {
+          id: r.group_id,
+          uuid: r.group_uuid,
+          name: r.name,
+          type: "group",
+          active: false,
+          profile: JSON.parse(r.profile),
+        };
+        resolve(data);
+      } else {
+        resolve(null);
+      }
+    });
+  });
+};
+
 function getLastMessage(user, id) {
   const sql =
     "select from_user, message, message_type from message where message_id=? limit 1";

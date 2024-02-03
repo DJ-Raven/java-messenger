@@ -14,6 +14,7 @@ public class ApiService {
 
     private static ApiService instance;
 
+    public static final String API_VERSION = "2";
     public static final String IP = "http://localhost";
 
     // Enable this for connect to online server
@@ -39,6 +40,7 @@ public class ApiService {
         RestAssured.reset();
         RestAssured.requestSpecification = new RequestSpecBuilder()
                 .setContentType(ContentType.JSON)
+                .addHeader("VERSION", API_VERSION)
                 .setBaseUri(IP)
                 .setBasePath("api")
                 .setPort(5000)

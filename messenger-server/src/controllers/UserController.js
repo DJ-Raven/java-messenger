@@ -9,14 +9,19 @@ exports.findAll = async (req, res, next) => {
     });
     res.status(200).json(data);
   } catch (err) {
-    console.log(err)
+    console.log(err);
     res.status(500).send(err);
   }
 };
 
 exports.findById = async (req, res, next) => {
   try {
-    const data = await user.findUserById(req.params.id);
+    const type = req.query.type;
+    const id = req.query.id;
+    const data =
+      type === "user"
+        ? await user.findUserById(id)
+        : await user.findGroupById(id);
     if (data) {
       res.status(200).json(data);
     } else {
