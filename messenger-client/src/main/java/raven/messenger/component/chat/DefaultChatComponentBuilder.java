@@ -23,7 +23,7 @@ public class DefaultChatComponentBuilder implements ChatComponentBuilder {
         ChatComponent chatComponent = getLastItemRecipient(recipient.getId(), chatPanel.getPanel(), recipient.isTop());
         boolean addNew = chatComponent == null;
         if (chatComponent == null) {
-            chatComponent = new ChatComponent(type, recipient.getId());
+            chatComponent = new ChatComponent(recipient.getUsername(), type, recipient.getId());
             if (recipient.getProfile() != null) {
                 chatComponent.setChatProfile(buildProfileImage(recipient.getProfile()));
             }
@@ -66,7 +66,7 @@ public class DefaultChatComponentBuilder implements ChatComponentBuilder {
         ChatComponent chatComponent = getLastItemMyself(chatPanel.getPanel(), myself.isTop());
         boolean addNew = chatComponent == null;
         if (chatComponent == null) {
-            chatComponent = new ChatComponent(type, 0);
+            chatComponent = new ChatComponent(null, type, 0);
         }
         JLabel lbTime = buildTime(myself.getTime());
         JLabel lbSent = buildSent(myself.isSent());

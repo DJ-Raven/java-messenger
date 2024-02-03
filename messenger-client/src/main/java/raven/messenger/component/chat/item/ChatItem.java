@@ -16,6 +16,7 @@ public class ChatItem extends JPanel {
     protected final int borderSize;
     protected final int type;
     protected int level;
+    private JLabel labelName;
 
 
     public ChatItem(int borderSize, int type) {
@@ -33,6 +34,20 @@ public class ChatItem extends JPanel {
                 "foreground:" + backgroundKey);
     }
 
+    public void addUserName(String userName) {
+        if (userName == null) {
+            if (labelName != null) {
+                remove(labelName);
+            }
+        } else {
+            labelName = new JLabel(userName);
+            labelName.putClientProperty(FlatClientProperties.STYLE, "" +
+                    "border:0,5,0,5;" +
+                    "foreground:$Component.accentColor;" +
+                    "font:bold");
+            add(labelName, 0);
+        }
+    }
 
     @Override
     protected void paintChildren(Graphics g) {

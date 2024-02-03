@@ -25,6 +25,11 @@ public class ModelName implements JsonModel {
         this.lastName = lastName;
     }
 
+    public ModelName(JSONObject json) {
+        this.firstName = json.getString("first_name");
+        this.lastName = json.getString("last_name");
+    }
+
     private String firstName;
     private String lastName;
 

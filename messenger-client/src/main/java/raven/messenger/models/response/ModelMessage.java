@@ -2,6 +2,7 @@ package raven.messenger.models.response;
 
 import org.json.JSONObject;
 import raven.messenger.models.file.ModelFile;
+import raven.messenger.models.other.ModelName;
 import raven.messenger.socket.ChatType;
 import raven.messenger.socket.MessageType;
 import raven.messenger.util.MethodUtil;
@@ -32,6 +33,14 @@ public class ModelMessage {
 
     public void setFromUser(int fromUser) {
         this.fromUser = fromUser;
+    }
+
+    public ModelName getFromName() {
+        return fromName;
+    }
+
+    public void setFromName(ModelName fromName) {
+        this.fromName = fromName;
     }
 
     public String getMessage() {
@@ -86,6 +95,7 @@ public class ModelMessage {
         id = json.getInt("id");
         uuid = json.getString("uuid");
         fromUser = json.getInt("from_user");
+        fromName = new ModelName(json.getJSONObject("from_name"));
         message = json.getString("message");
         type = MessageType.toMessageType(json.getString("message_type"));
         chatType = ChatType.toChatType(json.getString("type"));
@@ -101,6 +111,7 @@ public class ModelMessage {
     private int id;
     private String uuid;
     private int fromUser;
+    private ModelName fromName;
     private String message;
     private MessageType type;
     private ChatType chatType;

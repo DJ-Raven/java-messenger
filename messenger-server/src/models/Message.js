@@ -34,6 +34,7 @@ message.create = (data) => {
           id: result.insertId,
           uuid: uuid,
           from_user: data.type === "user" ? data.from_user : data.target,
+          from_name: data.from_name,
           target: data.target,
           type: data.type,
           message_type: data.message_type,
@@ -59,7 +60,7 @@ message.findUserMessage = (data) => {
   return new Promise((resolve, reject) => {
     const limit = 20;
     const sql =
-      "select message_id, message_uuid, from_user, message_type, message, create_date, update_date, file_id, files.`name`, files.original_name, files.size, files.type, files.info from message left join files on (reference_id=file_id) where message.`status`='1' and ((from_user=? and to_user=?) or (from_user=? and to_user=?)) order by message_id desc limit ?,?";
+      "select message_id, message_uuid, from_user, first_name, last_name, message_type, message, message.create_date, message.update_date, file_id, files.`name`, files.original_name, files.size, files.type, files.info from message join `user` on (from_user=user_id) left join files on (reference_id=file_id) where message.`status`='1' and ((from_user=? and to_user=?) or (from_user=? and to_user=?)) order by message_id desc limit ?,?";
     const from = data.user.id;
     const to = data.target;
     const start = (data.page - 1) * limit;
@@ -78,7 +79,7 @@ message.findGroupMessage = (data) => {
   return new Promise((resolve, reject) => {
     const limit = 20;
     const sql =
-      "select message_id, message_uuid, from_user, message_type, message, create_date, update_date, file_id, files.`name`, files.original_name, files.size, files.type, files.info from message left join files on (reference_id=file_id) where message.`status`='1' and to_group=? order by message_id desc limit ?,?";
+      "select message_id, message_uuid, from_user, `user`.first_name, `user`.last_name, message_type, message, message.create_date, message.update_date, file_id, files.`name`, files.original_name, files.size, files.type, files.info from message join `user` on (from_user=user_id) left join files on (reference_id=file_id) where message.`status`='1' and to_group=? order by message_id desc limit ?,?";
     const to = data.target;
     const start = (data.page - 1) * limit;
     db.execute(sql, [to, start.toString(), limit.toString()], (err, result) => {
@@ -163,6 +164,10 @@ function toList(result, type) {
       id: e.message_id,
       uuid: e.message_uuid,
       from_user: e.from_user,
+      from_name: {
+        first_name: e.first_name,
+        last_name: e.last_name,
+      },
       message_type: e.message_type,
       type: type,
       message: e.message,

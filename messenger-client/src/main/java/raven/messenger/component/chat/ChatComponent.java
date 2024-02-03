@@ -11,12 +11,15 @@ import java.util.List;
 
 public class ChatComponent extends JPanel {
 
+    private String userName;
     private int type;
 
     private int id;
     private ChatProfile chatProfile;
+    private boolean added;
 
-    public ChatComponent(int type, int id) {
+    public ChatComponent(String userName, int type, int id) {
+        this.userName = userName;
         this.type = type;
         this.id = id;
         init();
@@ -44,11 +47,27 @@ public class ChatComponent extends JPanel {
         return id;
     }
 
-    public void addItem(Component component, boolean top) {
+    public void addItem(ChatItem component, boolean top) {
         if (top) {
+            if (userName != null) {
+                removeOtherUserName();
+                component.addUserName(userName);
+            }
             add(component, 0);
         } else {
+            if (!added && userName != null) {
+                component.addUserName(userName);
+            }
             add(component);
+        }
+        added = true;
+    }
+
+    private void removeOtherUserName() {
+        for (Component component : getComponents()) {
+            if (component instanceof ChatItem) {
+                ((ChatItem) component).addUserName(null);
+            }
         }
     }
 

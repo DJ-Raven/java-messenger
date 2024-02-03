@@ -1,12 +1,12 @@
 package raven.messenger.socket.models;
 
 import org.json.JSONObject;
+import raven.messenger.manager.ProfileManager;
 import raven.messenger.models.other.JsonModel;
 import raven.messenger.socket.ChatType;
 import raven.messenger.socket.MessageType;
 
 public class ModelSendMessage implements JsonModel {
-
 
     public ChatType getChatType() {
         return chatType;
@@ -65,6 +65,7 @@ public class ModelSendMessage implements JsonModel {
     public JSONObject toJsonObject() {
         JSONObject json = new JSONObject();
         json.put("type", chatType.toString());
+        json.put("from_name", ProfileManager.getInstance().getProfile().getName().toJsonObject());
         json.put("target", target);
         json.put("message_type", messageType.toString());
         json.put("message", message);

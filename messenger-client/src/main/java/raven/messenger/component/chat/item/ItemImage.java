@@ -76,7 +76,7 @@ public class ItemImage extends ChatItem implements ProgressChat {
 
         button.addMouseListener(mouseAdapter);
 
-        setLayout(new MigLayout("fill,insets 5", "fill", "fill"));
+        setLayout(new MigLayout("fill,insets 5,wrap,gapy 3", "fill", "fill"));
         add(button);
         if (photo.getPath() == null) {
             createDownloadButton();

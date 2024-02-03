@@ -11,7 +11,7 @@ public class ItemMessage extends ChatItem {
     private JPanel timePanel;
 
     public ItemMessage(Component component, int type) {
-        super(5,type);
+        super(5, type);
         init();
         layeredPane.add(component);
     }
@@ -30,7 +30,7 @@ public class ItemMessage extends ChatItem {
     private void init() {
         layeredPane = new JLayeredPane();
         layeredPane.setLayout(new MigLayout("insets 0", "[fill,150::]"));
-        setLayout(new MigLayout("insets 0,fillx", "fill"));
+        setLayout(new MigLayout("insets 0,fillx,wrap,gapy 3", "fill"));
         add(layeredPane);
     }
 }

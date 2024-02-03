@@ -26,6 +26,7 @@ module.exports = function (server) {
         if (user !== null) {
           const data = {
             from_user: user.id,
+            from_name: ms.from_name,
             type: ms.type,
             target: ms.target,
             message_type: ms.message_type,
