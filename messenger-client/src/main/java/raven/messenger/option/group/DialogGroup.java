@@ -5,6 +5,7 @@ import net.coobird.thumbnailator.Thumbnails;
 import net.miginfocom.swing.MigLayout;
 import raven.messenger.component.StringIcon;
 import raven.messenger.component.profile.ProfilePanel;
+import raven.messenger.manager.FormsManager;
 import raven.messenger.models.request.ModelCreateGroup;
 import raven.messenger.util.MethodUtil;
 
@@ -66,6 +67,10 @@ public class DialogGroup extends JPanel {
             String name = txtName.getText().trim();
             profilePanel.setIconProfileString(name);
         }
+    }
+
+    public boolean validateInput() {
+        return FormsManager.getInstance().validateEmpty(txtName);
     }
 
     public ModelCreateGroup getData() throws IOException {

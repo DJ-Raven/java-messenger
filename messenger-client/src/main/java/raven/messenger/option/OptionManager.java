@@ -29,12 +29,14 @@ public class OptionManager {
         String actions[] = {"Cancel", "Save"};
         SimplePopupBorder dialogBorder = new SimplePopupBorder(dialogGroup, "New Group", new SimplePopupBorderOption().useScroll(), actions, (popupController, i) -> {
             if (i == 1) {
-                try {
-                    int id = SocketService.getInstance().getServiceGroup().create(dialogGroup.getData());
-                    GlobalEvent.getInstance().getGroupCreateEvent().onCreate(id);
-                    popupController.closePopup();
-                } catch (ResponseException | IOException e) {
-                    ErrorManager.getInstance().showError(e);
+                if (dialogGroup.validateInput()) {
+                    try {
+                        int id = SocketService.getInstance().getServiceGroup().create(dialogGroup.getData());
+                        GlobalEvent.getInstance().getGroupCreateEvent().onCreate(id);
+                        popupController.closePopup();
+                    } catch (ResponseException | IOException e) {
+                        ErrorManager.getInstance().showError(e);
+                    }
                 }
             } else {
                 popupController.closePopup();

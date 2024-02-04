@@ -95,7 +95,6 @@ public class ProfilePanel extends JPanel {
         if (!this.profileString.equals(st)) {
             stringIcon = new StringIcon(st, UIManager.getColor("Component.accentColor"), 100, 100);
             this.profileString = st;
-            System.out.println("Update");
         }
         labelProfile.setIcon(stringIcon);
     }
