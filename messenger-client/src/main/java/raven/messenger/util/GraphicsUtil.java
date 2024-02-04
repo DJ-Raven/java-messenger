@@ -4,13 +4,10 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.UIScale;
 
 import java.awt.*;
-import java.awt.geom.Area;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Rectangle2D;
 
 public class GraphicsUtil {
 
-    public static Shape getShape(int x, int y, int width, int height, int level, int type, boolean inside) {
+    public static Shape getShape(int x, int y, int width, int height, int level, int type, boolean inside, boolean smallTop) {
         int smallArc = UIScale.scale(5 - (inside ? 2 : 0));
         int bigArc = UIScale.scale(15 - (inside ? 5 : 0));
         int topLeft = 0;
@@ -20,6 +17,9 @@ public class GraphicsUtil {
         if (level == 0) {
             if (type == 1) {
                 topLeft = topRight = bottomRight = bigArc;
+                if (smallTop) {
+                    topLeft = topRight = smallArc;
+                }
                 bottomLeft = smallArc;
             } else if (type == 2) {
                 topLeft = topRight = bottomLeft = bigArc;
@@ -29,6 +29,9 @@ public class GraphicsUtil {
             if (type == 1) {
                 topLeft = topRight = bottomRight = bigArc;
                 bottomLeft = smallArc;
+                if (smallTop) {
+                    topLeft = topRight = smallArc;
+                }
             } else if (type == 2) {
                 topLeft = topRight = bottomLeft = bigArc;
                 bottomRight = smallArc;
@@ -53,11 +56,5 @@ public class GraphicsUtil {
             }
         }
         return FlatUIUtils.createRoundRectanglePath(x, y, width, height, topLeft, topRight, bottomLeft, bottomRight);
-    }
-
-    public static Shape createAvatar(int size) {
-        Area area = new Area(new Rectangle2D.Double(0, 0, size, size));
-        area.subtract(new Area(new Ellipse2D.Double(0, 0, size, size)));
-        return area;
     }
 }

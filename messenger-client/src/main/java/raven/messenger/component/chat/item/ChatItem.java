@@ -16,8 +16,7 @@ public class ChatItem extends JPanel {
     protected final int borderSize;
     protected final int type;
     protected int level;
-    private JLabel labelName;
-
+    protected JLabel labelName;
 
     public ChatItem(int borderSize, int type) {
         this.borderSize = borderSize;
@@ -38,6 +37,7 @@ public class ChatItem extends JPanel {
         if (userName == null) {
             if (labelName != null) {
                 remove(labelName);
+                labelName = null;
             }
         } else {
             labelName = new JLabel(userName);
@@ -69,7 +69,7 @@ public class ChatItem extends JPanel {
             x = 0;
             width = getWidth() - UIScale.scale(space);
         }
-        Area area = new Area(GraphicsUtil.getShape(x, y, width, height, level, type, false));
+        Area area = new Area(GraphicsUtil.getShape(x, y, width, height, level, type, false, false));
         if (level == 0 || level == 3) {
             area.add(new Area(getArrow(x, y, width, height, type)));
         }

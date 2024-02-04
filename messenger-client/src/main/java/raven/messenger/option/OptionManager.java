@@ -1,5 +1,6 @@
 package raven.messenger.option;
 
+import raven.messenger.option.group.DialogGroup;
 import raven.messenger.option.profile.DialogProfile;
 import raven.messenger.option.storage.DialogStorage;
 import raven.popup.GlassPanePopup;
@@ -18,8 +19,13 @@ public class OptionManager {
         return instance;
     }
 
-    public void newGroup(){
-
+    public void newGroup() {
+        DialogGroup dialogGroup = new DialogGroup();
+        String actions[] = {"Cancel", "Create"};
+        SimplePopupBorder dialogBorder = new SimplePopupBorder(dialogGroup, "New Group", new SimplePopupBorderOption().useScroll(), actions, (popupController, i) -> {
+            
+        });
+        GlassPanePopup.showPopup(dialogBorder, "group");
     }
 
     public void showProfile() {

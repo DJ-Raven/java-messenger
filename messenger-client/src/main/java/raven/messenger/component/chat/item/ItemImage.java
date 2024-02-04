@@ -171,7 +171,7 @@ public class ItemImage extends ChatItem implements ProgressChat {
         int width = networkIcon.getIconWidth();
         int height = networkIcon.getIconHeight();
         Area area = new Area(new Rectangle2D.Double(0, 0, width, height));
-        area.subtract(new Area(GraphicsUtil.getShape(0, 0, width, height, level, type, true)));
+        area.subtract(new Area(GraphicsUtil.getShape(0, 0, width, height, level, type, true, labelName != null)));
         return area;
     }
 

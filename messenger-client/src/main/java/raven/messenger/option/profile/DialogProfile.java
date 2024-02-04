@@ -5,7 +5,7 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.MigLayout;
 import raven.messenger.api.exception.ResponseException;
-import raven.messenger.manager.DialogManager;
+import raven.messenger.component.profile.ProfilePanel;
 import raven.messenger.manager.FormsManager;
 import raven.messenger.manager.ProfileManager;
 import raven.messenger.models.other.ModelGender;
@@ -17,14 +17,12 @@ import raven.messenger.util.NetworkDataUtil;
 import raven.popup.GlassPanePopup;
 import raven.popup.component.SimplePopupBorder;
 import raven.popup.component.SimplePopupBorderOption;
-import raven.swing.AvatarIcon;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 public class DialogProfile extends JPanel {
@@ -41,25 +39,14 @@ public class DialogProfile extends JPanel {
     }
 
     private void createProfile() {
-        JPanel panel = new JPanel(new MigLayout());
+        ProfilePanel profilePanel = new ProfilePanel();
+        profilePanel.setEventProfileSelected(image -> editProfile(image));
         ModelProfile profile = ProfileManager.getInstance().getProfile();
         Icon icon = NetworkDataUtil.getNetworkIcon(profile.getProfile(), profile.getName().getProfileString(), 100, 100, 999);
-        labelProfile = new JLabel(icon);
-        labelProfile.putClientProperty(FlatClientProperties.STYLE, "" + "font:bold +10");
-        panel.add(createEditProfile(), "pos 1al 1al");
-        panel.add(labelProfile);
-        add(panel);
+        profilePanel.setIcon(icon);
+        add(profilePanel);
     }
 
-    private JButton createEditProfile() {
-        JButton button = new JButton(MethodUtil.createIcon("raven/messenger/icon/edit.svg", 0.75f));
-        button.addActionListener(e -> {
-            editProfile();
-        });
-        button.putClientProperty(FlatClientProperties.STYLE_CLASS, "emptyButton");
-        button.putClientProperty(FlatClientProperties.STYLE, "" + "arc:999;");
-        return button;
-    }
 
     private void createInfo() {
         JPanel panel = new JPanel(new MigLayout("wrap,insets 0 0 15 0,fillx", "center", "[]20[][]"));
@@ -145,25 +132,11 @@ public class DialogProfile extends JPanel {
         }
     }
 
-    private void editProfile() {
-        File file = DialogManager.getInstance().showOpenDialog(DialogManager.ShowOpenType.PHOTO);
-        if (file != null) {
-            ProfileEditor profileEditor = new ProfileEditor(file);
-            String actions[] = {"Cancel", "Save"};
-            SimplePopupBorder popupBorder = new SimplePopupBorder(profileEditor, "Edit profile", new SimplePopupBorderOption().setWidth(300), actions, (popupController, i) -> {
-                popupController.closePopup();
-                if (i == 1) {
-                    Icon oldImage = labelProfile.getIcon();
-                    try {
-                        BufferedImage image = profileEditor.getEditProfile();
-                        labelProfile.setIcon(new AvatarIcon(new ImageIcon(image), 100, 100, 999));
-                        ProfileManager.getInstance().updateProfileImage(image);
-                    } catch (IOException | ResponseException ex) {
-                        labelProfile.setIcon(oldImage);
-                    }
-                }
-            });
-            GlassPanePopup.showPopup(popupBorder);
+    private void editProfile(BufferedImage image) {
+        try {
+            ProfileManager.getInstance().updateProfileImage(image);
+        } catch (ResponseException | IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -269,7 +242,6 @@ public class DialogProfile extends JPanel {
         GlassPanePopup.showPopup(popupBorder);
     }
 
-    private JLabel labelProfile;
     private JLabel labelName;
     private JLabel bioLength;
     private JButton buttonUpdateBio;
