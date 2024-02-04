@@ -33,7 +33,8 @@ message.create = (data) => {
         const res = {
           id: result.insertId,
           uuid: uuid,
-          from_user: data.type === "user" ? data.from_user : data.target,
+          from_user: data.from_user,
+          from_group: data.type === "group" ? data.target : undefined,
           from_name: data.from_name,
           target: data.target,
           type: data.type,

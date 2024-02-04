@@ -130,7 +130,7 @@ public class LeftPanel extends JPanel {
             Component component = panel.getComponent(i);
             if (component instanceof Item) {
                 Item item = (Item) component;
-                if (item.getData().getId() == message.getFromUser() && item.getData().getChatType() == message.getChatType()) {
+                if (item.getData().getId() == message.getFromId() && item.getData().getChatType() == message.getChatType()) {
                     found = true;
                     item.setLastMessage(new ModelLastMessage(message));
                     panel.setComponentZOrder(component, 0);
@@ -141,7 +141,7 @@ public class LeftPanel extends JPanel {
         }
         if (!found) {
             // Get user from server and add to top
-            createNew(message.getChatType(), message.getFromUser(), message);
+            createNew(message.getChatType(), message.getFromId(), message);
         }
     }
 

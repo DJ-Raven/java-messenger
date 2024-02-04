@@ -5,5 +5,6 @@ const router = express.Router();
 
 router.get("/", jwtVerify.verify, userController.findAll);
 router.get("/find", jwtVerify.verify, userController.findById);
+router.get("/profile", jwtVerify.verify, userController.getUserProfile);
 
 module.exports = router;

@@ -6,6 +6,7 @@ import io.restassured.response.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import raven.messenger.api.exception.ResponseException;
+import raven.messenger.models.other.ModelImage;
 import raven.messenger.models.response.ModelChatListItem;
 import raven.messenger.socket.ChatType;
 
@@ -38,6 +39,17 @@ public class ServiceUser {
         if (response.getStatusCode() == 200) {
             JSONObject json = new JSONObject(response.getBody().asString());
             return new ModelChatListItem(json);
+        }
+        throw new ResponseException(response.getStatusCode(), response.asString());
+    }
+
+    public synchronized ModelImage getUserProfile(int id) throws ResponseException {
+        Response response = RestAssured.given()
+                .queryParam("id", id)
+                .get("user/profile");
+        if (response.getStatusCode() == 200) {
+            JSONObject json = new JSONObject(response.getBody().asString());
+            return new ModelImage(json);
         }
         throw new ResponseException(response.getStatusCode(), response.asString());
     }

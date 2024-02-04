@@ -9,6 +9,7 @@ import raven.messenger.manager.ErrorManager;
 import raven.messenger.models.response.ModelMessage;
 import raven.messenger.service.ServiceGroup;
 import raven.messenger.service.ServiceMessage;
+import raven.messenger.service.ServiceUser;
 import raven.messenger.socket.event.SocketEvent;
 import raven.messenger.socket.models.ModelSendMessage;
 import raven.messenger.store.CookieManager;
@@ -23,6 +24,7 @@ public class SocketService {
     private static SocketService instance;
     private final ServiceMessage serviceMessage;
     private final ServiceGroup serviceGroup;
+    private final ServiceUser serviceUser;
     private Socket socket;
 
     public static SocketService getInstance() {
@@ -35,6 +37,7 @@ public class SocketService {
     private SocketService() {
         serviceMessage = new ServiceMessage();
         serviceGroup = new ServiceGroup();
+        serviceUser = new ServiceUser();
     }
 
     private Socket initSocket() {
@@ -94,6 +97,10 @@ public class SocketService {
 
     public ServiceGroup getServiceGroup() {
         return serviceGroup;
+    }
+
+    public ServiceUser getServiceUser() {
+        return serviceUser;
     }
 
     public void sendMessage(ModelSendMessage message, MessageCallback callback) {

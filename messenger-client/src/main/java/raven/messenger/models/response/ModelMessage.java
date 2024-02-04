@@ -35,6 +35,14 @@ public class ModelMessage {
         this.fromUser = fromUser;
     }
 
+    public int getFromGroup() {
+        return fromGroup;
+    }
+
+    public void setFromGroup(int fromGroup) {
+        this.fromGroup = fromGroup;
+    }
+
     public ModelName getFromName() {
         return fromName;
     }
@@ -95,6 +103,9 @@ public class ModelMessage {
         id = json.getInt("id");
         uuid = json.getString("uuid");
         fromUser = json.getInt("from_user");
+        if (!json.isNull("from_group")) {
+            fromGroup = json.getInt("from_group");
+        }
         fromName = new ModelName(json.getJSONObject("from_name"));
         message = json.getString("message");
         type = MessageType.toMessageType(json.getString("message_type"));
@@ -111,6 +122,7 @@ public class ModelMessage {
     private int id;
     private String uuid;
     private int fromUser;
+    private int fromGroup;
     private ModelName fromName;
     private String message;
     private MessageType type;
@@ -118,4 +130,8 @@ public class ModelMessage {
     private Date createDate;
     private Date updateDate;
     private ModelFile file;
+
+    public int getFromId() {
+        return chatType == ChatType.GROUP ? fromGroup : fromUser;
+    }
 }

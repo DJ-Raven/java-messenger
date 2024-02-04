@@ -30,19 +30,6 @@ public class NetworkDataUtil {
         }
     }
 
-    public static Icon getIcon(ModelImage image) {
-        if (image == null) {
-            return null;
-        } else {
-            File file = StoreManager.getInstance().getFile(image.getImage());
-            if (file != null) {
-                return new ImageIcon(file.getAbsolutePath());
-            } else {
-                return null;
-            }
-        }
-    }
-
     public static void downloadImage(NetworkIcon.IconResource resource, String image) {
         File file = StoreManager.getInstance().createFile(image);
         RequestFileMonitor requestFileMonitor = new RequestFileMonitor(image, file) {
