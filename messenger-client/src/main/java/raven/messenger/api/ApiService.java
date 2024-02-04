@@ -5,6 +5,7 @@ import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
 import io.restassured.http.Cookies;
 import raven.messenger.api.exception.GlobalErrorHandler;
+import raven.messenger.manager.ErrorManager;
 import raven.messenger.socket.SocketService;
 import raven.messenger.store.CookieManager;
 
@@ -62,6 +63,7 @@ public class ApiService {
         try {
             return CookieManager.getInstance().getCookie();
         } catch (IOException | ClassNotFoundException e) {
+            ErrorManager.getInstance().showError(e);
             return null;
         }
     }

@@ -5,6 +5,7 @@ import net.miginfocom.swing.MigLayout;
 import raven.messenger.component.ButtonProgress;
 import raven.messenger.component.chat.model.ChatFileData;
 import raven.messenger.manager.DialogManager;
+import raven.messenger.manager.ErrorManager;
 import raven.messenger.store.StoreManager;
 import raven.messenger.util.MethodUtil;
 
@@ -88,7 +89,7 @@ public class ItemFile extends JPanel implements ProgressChat {
                         try {
                             Files.copy(file.toPath(), saveFile.toPath());
                         } catch (Exception ex) {
-
+                            ErrorManager.getInstance().showError(ex);
                         }
                     }
                 }
@@ -103,6 +104,7 @@ public class ItemFile extends JPanel implements ProgressChat {
         try {
             Desktop.getDesktop().open(file);
         } catch (Exception e) {
+            ErrorManager.getInstance().showError(e);
         }
     }
 

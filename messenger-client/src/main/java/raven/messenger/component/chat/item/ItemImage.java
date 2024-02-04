@@ -7,6 +7,7 @@ import raven.messenger.component.NetworkIcon;
 import raven.messenger.component.PanelTransparent;
 import raven.messenger.component.chat.model.ChatPhotoData;
 import raven.messenger.manager.DialogManager;
+import raven.messenger.manager.ErrorManager;
 import raven.messenger.store.StoreManager;
 import raven.messenger.util.GraphicsUtil;
 import raven.messenger.util.MethodUtil;
@@ -124,7 +125,7 @@ public class ItemImage extends ChatItem implements ProgressChat {
                         try {
                             Files.copy(file.toPath(), saveFile.toPath());
                         } catch (Exception ex) {
-
+                            ErrorManager.getInstance().showError(ex);
                         }
                     }
                 }
@@ -139,6 +140,7 @@ public class ItemImage extends ChatItem implements ProgressChat {
         try {
             Desktop.getDesktop().open(file);
         } catch (Exception e) {
+            ErrorManager.getInstance().showError(e);
         }
     }
 

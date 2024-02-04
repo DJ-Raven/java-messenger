@@ -3,6 +3,7 @@ package raven.messenger.util;
 import raven.messenger.api.request.RequestFileMonitor;
 import raven.messenger.component.NetworkIcon;
 import raven.messenger.component.StringIcon;
+import raven.messenger.manager.ErrorManager;
 import raven.messenger.models.other.ModelImage;
 import raven.messenger.socket.SocketService;
 import raven.messenger.store.StoreManager;
@@ -63,7 +64,7 @@ public class NetworkDataUtil {
         try {
             SocketService.getInstance().getServiceMessage().getFile(requestFileMonitor);
         } catch (Exception e) {
-            System.err.println(e);
+            ErrorManager.getInstance().showError(e);
         }
     }
 }

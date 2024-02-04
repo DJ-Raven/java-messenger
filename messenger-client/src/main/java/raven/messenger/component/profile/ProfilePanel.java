@@ -4,6 +4,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
 import raven.messenger.component.StringIcon;
 import raven.messenger.manager.DialogManager;
+import raven.messenger.manager.ErrorManager;
 import raven.messenger.option.profile.ProfileEditor;
 import raven.messenger.util.MethodUtil;
 import raven.popup.GlassPanePopup;
@@ -76,6 +77,7 @@ public class ProfilePanel extends JPanel {
                         }
                         labelProfile.setIcon(new AvatarIcon(new ImageIcon(selectedImage), 100, 100, 999));
                     } catch (IOException e) {
+                        ErrorManager.getInstance().showError(e);
                         selectedImage = null;
                         labelProfile.setIcon(oldImage);
                     }

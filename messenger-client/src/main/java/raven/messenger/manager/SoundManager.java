@@ -60,7 +60,7 @@ public class SoundManager {
                 }
                 soundPlayback.play(file);
             } catch (UnsupportedAudioFileException | IOException e) {
-                System.err.println(e);
+                ErrorManager.getInstance().showError(e);
             }
         } else {
             if (itemSound != null) {

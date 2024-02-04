@@ -5,6 +5,7 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import org.json.JSONObject;
 import raven.messenger.api.ApiService;
+import raven.messenger.manager.ErrorManager;
 import raven.messenger.models.response.ModelMessage;
 import raven.messenger.service.ServiceGroup;
 import raven.messenger.service.ServiceMessage;
@@ -99,7 +100,7 @@ public class SocketService {
         try {
             socket.emit("message", message.toJsonObject(), (Ack) objects -> callback.onSuccess(objects));
         } catch (Exception e) {
-            System.err.println(e);
+            ErrorManager.getInstance().showError(e);
         }
     }
 }

@@ -6,6 +6,7 @@ import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.MigLayout;
 import raven.messenger.api.exception.ResponseException;
 import raven.messenger.component.profile.ProfilePanel;
+import raven.messenger.manager.ErrorManager;
 import raven.messenger.manager.FormsManager;
 import raven.messenger.manager.ProfileManager;
 import raven.messenger.models.other.ModelGender;
@@ -69,7 +70,7 @@ public class DialogProfile extends JPanel {
                 ProfileManager.getInstance().updateProfileBios(txtBio.getText().trim());
                 buttonUpdateBio.setVisible(false);
             } catch (ResponseException ex) {
-
+                ErrorManager.getInstance().showError(ex);
             }
         });
         txtBio.getDocument().addDocumentListener(new DocumentListener() {
@@ -136,7 +137,7 @@ public class DialogProfile extends JPanel {
         try {
             ProfileManager.getInstance().updateProfileImage(image);
         } catch (ResponseException | IOException e) {
-            e.printStackTrace();
+            ErrorManager.getInstance().showError(e);
         }
     }
 
@@ -165,7 +166,7 @@ public class DialogProfile extends JPanel {
                         labelName.setText(name.getFullName());
                         popupController.closePopup();
                     } catch (ResponseException e) {
-
+                        ErrorManager.getInstance().showError(e);
                     }
                 }
             } else {
@@ -205,7 +206,7 @@ public class DialogProfile extends JPanel {
                     }
                     popupController.closePopup();
                 } catch (ResponseException e) {
-
+                    ErrorManager.getInstance().showError(e);
                 }
             } else {
                 popupController.closePopup();
@@ -232,7 +233,7 @@ public class DialogProfile extends JPanel {
                         fieldPhone.setDescription(phoneNumber);
                         popupController.closePopup();
                     } catch (ResponseException e) {
-
+                        ErrorManager.getInstance().showError(e);
                     }
                 }
             } else {

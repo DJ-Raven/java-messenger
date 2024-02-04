@@ -9,6 +9,7 @@ import raven.messenger.component.chat.model.ChatPhotoData;
 import raven.messenger.component.chat.model.ChatVoiceData;
 import raven.messenger.event.GlobalEvent;
 import raven.messenger.event.GroupCreateEvent;
+import raven.messenger.manager.ErrorManager;
 import raven.messenger.manager.FormsManager;
 import raven.messenger.manager.ProfileManager;
 import raven.messenger.models.file.*;
@@ -179,9 +180,9 @@ public class Home extends JPanel {
             }
             return !data.isEmpty();
         } catch (Exception e) {
+            ErrorManager.getInstance().showError(e);
             chatPanel.refreshLayout();
             chatPanel.scrollToBottom();
-            e.printStackTrace();
             return false;
         }
     }
@@ -297,7 +298,7 @@ public class Home extends JPanel {
                         StoreManager.getInstance().addFile(file.getFile(), fileResponse.getName());
                     } catch (Exception e) {
                         myselfMap.get(file).setError(true);
-                        e.printStackTrace();
+                        ErrorManager.getInstance().showError(e);
                     }
                 }
             }
@@ -326,7 +327,7 @@ public class Home extends JPanel {
                     //  add file to cache storage
                     StoreManager.getInstance().addFile(file, fileResponse.getName());
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    ErrorManager.getInstance().showError(e);
                 }
             }
 
@@ -336,7 +337,7 @@ public class Home extends JPanel {
                     ModelGroup group = SocketService.getInstance().getServiceGroup().joinGroup(user.getId());
                     chatPanel.userMessageInput();
                 } catch (ResponseException e) {
-                    e.printStackTrace();
+                    ErrorManager.getInstance().showError(e);
                 }
             }
         };

@@ -87,7 +87,7 @@ public abstract class RequestFileMonitor {
         try {
             Thread.sleep(l);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            System.err.println(e);
         }
     }
 }

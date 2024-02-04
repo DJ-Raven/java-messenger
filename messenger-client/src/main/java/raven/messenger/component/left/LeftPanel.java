@@ -4,6 +4,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
 import raven.messenger.api.exception.ResponseException;
 import raven.messenger.drawer.MenuDrawer;
+import raven.messenger.manager.ErrorManager;
 import raven.messenger.models.response.ModelChatListItem;
 import raven.messenger.models.response.ModelLastMessage;
 import raven.messenger.models.response.ModelMessage;
@@ -160,7 +161,7 @@ public class LeftPanel extends JPanel {
             panel.repaint();
             panel.revalidate();
         } catch (ResponseException ex) {
-            ex.printStackTrace();
+            ErrorManager.getInstance().showError(ex);
         }
     }
 
@@ -203,7 +204,7 @@ public class LeftPanel extends JPanel {
             }
             return !response.isEmpty();
         } catch (ResponseException e) {
-            e.printStackTrace();
+            ErrorManager.getInstance().showError(e);
             return false;
         } finally {
             panel.repaint();
