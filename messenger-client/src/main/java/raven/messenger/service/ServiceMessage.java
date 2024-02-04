@@ -9,7 +9,6 @@ import org.json.JSONObject;
 import raven.messenger.api.exception.ResponseException;
 import raven.messenger.api.request.RequestFileMonitor;
 import raven.messenger.models.file.ModelFile;
-import raven.messenger.models.response.ModelGroup;
 import raven.messenger.models.response.ModelMessage;
 import raven.messenger.models.file.ModelFileInfo;
 import raven.messenger.socket.ChatType;
@@ -61,30 +60,6 @@ public class ServiceMessage {
         if (response.getStatusCode() == 200) {
             long length = Long.parseLong(response.getHeaders().get("Content-Length").getValue());
             req.save(response.asInputStream(), length);
-        } else {
-            throw new ResponseException(response.getStatusCode(), response.asString());
-        }
-    }
-
-    public synchronized ModelGroup checkGroup(String uuid) throws ResponseException {
-        String url = "group/check";
-        Response response = RestAssured.given()
-                .queryParam("group", uuid)
-                .get(url);
-        if (response.getStatusCode() == 200) {
-            return new ModelGroup(new JSONObject(response.getBody().asString()));
-        } else {
-            throw new ResponseException(response.getStatusCode(), response.asString());
-        }
-    }
-
-    public synchronized ModelGroup joinGroup(int id) throws ResponseException {
-        String url = "group/join";
-        Response response = RestAssured.given()
-                .queryParam("group", id)
-                .post(url);
-        if (response.getStatusCode() == 200) {
-            return new ModelGroup(new JSONObject(response.getBody().asString()));
         } else {
             throw new ResponseException(response.getStatusCode(), response.asString());
         }

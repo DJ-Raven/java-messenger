@@ -3,13 +3,11 @@ package raven.messenger.login;
 import com.formdev.flatlaf.FlatClientProperties;
 import io.restassured.http.Cookies;
 import net.miginfocom.swing.MigLayout;
-import raven.messenger.api.ApiService;
 import raven.messenger.api.exception.ResponseException;
+import raven.messenger.manager.ErrorManager;
 import raven.messenger.manager.FormsManager;
 import raven.messenger.service.ServiceAuth;
-import raven.messenger.socket.SocketService;
 import raven.messenger.store.CookieManager;
-import raven.toast.Notifications;
 
 import javax.swing.*;
 import java.awt.*;
@@ -106,7 +104,7 @@ public class Login extends JPanel {
                 FormsManager.getInstance().showHome();
             }
         } catch (ResponseException | IOException e) {
-            Notifications.getInstance().show(Notifications.Type.ERROR, e.getMessage());
+            ErrorManager.getInstance().showError(e);
         }
     }
 

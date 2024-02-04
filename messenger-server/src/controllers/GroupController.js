@@ -24,8 +24,8 @@ exports.create = async (req, res, next) => {
       : null;
     const reqData = {
       file: file,
-      name: req.body.name,
-      description: req.body.description,
+      name: req.query.name,
+      description: req.query.description,
     };
     const data = await group.create(req.user, reqData);
     res.status(200).json(data);

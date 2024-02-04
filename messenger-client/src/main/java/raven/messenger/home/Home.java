@@ -7,6 +7,8 @@ import raven.messenger.component.chat.Myself;
 import raven.messenger.component.chat.model.ChatFileData;
 import raven.messenger.component.chat.model.ChatPhotoData;
 import raven.messenger.component.chat.model.ChatVoiceData;
+import raven.messenger.event.GlobalEvent;
+import raven.messenger.event.GroupCreateEvent;
 import raven.messenger.manager.FormsManager;
 import raven.messenger.manager.ProfileManager;
 import raven.messenger.models.file.*;
@@ -25,6 +27,7 @@ import raven.messenger.plugin.sound.AudioUtil;
 import raven.messenger.plugin.sound.CaptureData;
 import raven.messenger.plugin.sound.WaveFormData;
 import raven.messenger.plugin.swing.scroll.ScrollRefreshModel;
+import raven.messenger.socket.ChatType;
 import raven.messenger.socket.MessageType;
 import raven.messenger.socket.SocketService;
 import raven.messenger.socket.event.SocketEvent;
@@ -72,6 +75,16 @@ public class Home extends JPanel {
         mainSplit.setRightComponent(subSplit);
         subSplit.setResizeWeight(1);
         add(mainSplit);
+        initChatEvent();
+    }
+
+    private void initChatEvent() {
+        GlobalEvent.getInstance().setGroupCreateEvent(new GroupCreateEvent() {
+            @Override
+            public void onCreate(int id) {
+                leftPanel.createNew(ChatType.GROUP, id);
+            }
+        });
     }
 
     private boolean loadData() {
@@ -320,7 +333,7 @@ public class Home extends JPanel {
             @Override
             public void onJoinGroup() {
                 try {
-                    ModelGroup group = SocketService.getInstance().getServiceMessage().joinGroup(user.getId());
+                    ModelGroup group = SocketService.getInstance().getServiceGroup().joinGroup(user.getId());
                     chatPanel.userMessageInput();
                 } catch (ResponseException e) {
                     e.printStackTrace();
@@ -382,7 +395,7 @@ public class Home extends JPanel {
 
     private void checkGroup(String uuid) {
         try {
-            ModelGroup group = SocketService.getInstance().getServiceMessage().checkGroup(uuid);
+            ModelGroup group = SocketService.getInstance().getServiceGroup().checkGroup(uuid);
             chatPanel.userMessageInput();
         } catch (ResponseException e) {
             chatPanel.useJoinButton();

@@ -140,17 +140,27 @@ public class LeftPanel extends JPanel {
         }
         if (!found) {
             // Get user from server and add to top
-            try {
-                ModelChatListItem user = serviceUser.findById(message.getChatType(),message.getFromUser());
+            createNew(message.getChatType(), message.getFromUser(), message);
+        }
+    }
+
+    public void createNew(ChatType chatType, int id) {
+        createNew(chatType, id, null);
+    }
+
+    public void createNew(ChatType chatType, int id, ModelMessage message) {
+        try {
+            ModelChatListItem user = serviceUser.findById(chatType, id);
+            if (message != null) {
                 user.setLastMessage(new ModelLastMessage(message));
-                Item item = new Item(user);
-                item.addActionListener(e -> event.onUserSelected(user));
-                panel.add(item, 0);
-                panel.repaint();
-                panel.revalidate();
-            } catch (ResponseException ex) {
-                ex.printStackTrace();
             }
+            Item item = new Item(user);
+            item.addActionListener(e -> event.onUserSelected(user));
+            panel.add(item, 0);
+            panel.repaint();
+            panel.revalidate();
+        } catch (ResponseException ex) {
+            ex.printStackTrace();
         }
     }
 

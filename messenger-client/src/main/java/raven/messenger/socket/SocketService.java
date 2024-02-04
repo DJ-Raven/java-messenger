@@ -6,6 +6,7 @@ import io.socket.client.Socket;
 import org.json.JSONObject;
 import raven.messenger.api.ApiService;
 import raven.messenger.models.response.ModelMessage;
+import raven.messenger.service.ServiceGroup;
 import raven.messenger.service.ServiceMessage;
 import raven.messenger.socket.event.SocketEvent;
 import raven.messenger.socket.models.ModelSendMessage;
@@ -20,6 +21,7 @@ public class SocketService {
 
     private static SocketService instance;
     private final ServiceMessage serviceMessage;
+    private final ServiceGroup serviceGroup;
     private Socket socket;
 
     public static SocketService getInstance() {
@@ -31,6 +33,7 @@ public class SocketService {
 
     private SocketService() {
         serviceMessage = new ServiceMessage();
+        serviceGroup = new ServiceGroup();
     }
 
     private Socket initSocket() {
@@ -86,6 +89,10 @@ public class SocketService {
 
     public ServiceMessage getServiceMessage() {
         return serviceMessage;
+    }
+
+    public ServiceGroup getServiceGroup() {
+        return serviceGroup;
     }
 
     public void sendMessage(ModelSendMessage message, MessageCallback callback) {

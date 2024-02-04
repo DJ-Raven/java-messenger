@@ -72,8 +72,10 @@ auth.register = (data) => {
 
 function validate(data) {
   return new Promise((resolve, reject) => {
-    const sql = "select user_id from `user` where user_name=? limit 1";
+    const sql =
+      "select user_id from `user` where user_name=? and `status`='1' limit 1";
     db.execute(sql, [data.user_name], (err, result) => {
+      if (err) return reject(err);
       if (result.length === 0) {
         resolve("Ok");
       } else {

@@ -43,8 +43,7 @@ public class ProfilePanel extends JPanel {
 
     private void init() {
         setLayout(new MigLayout("wrap,fillx"));
-        Icon icon = new StringIcon(MethodUtil.getProfileString("Group 2024"), UIManager.getColor("Component.accentColor"), 100, 100);
-        labelProfile = new JLabel(icon);
+        labelProfile = new JLabel();
         labelProfile.putClientProperty(FlatClientProperties.STYLE, "" + "font:bold +10");
         add(createEditProfile(), "pos 1al 1al");
         add(labelProfile);
@@ -84,6 +83,19 @@ public class ProfilePanel extends JPanel {
             });
             GlassPanePopup.showPopup(popupBorder);
         }
+    }
+
+    private String profileString = "";
+    private Icon stringIcon;
+
+    public void setIconProfileString(String profileString) {
+        String st = MethodUtil.getProfileString(profileString);
+        if (!this.profileString.equals(st)) {
+            stringIcon = new StringIcon(st, UIManager.getColor("Component.accentColor"), 100, 100);
+            this.profileString = st;
+            System.out.println("Update");
+        }
+        labelProfile.setIcon(stringIcon);
     }
 
     private JLabel labelProfile;
