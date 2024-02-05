@@ -35,7 +35,8 @@ exports.upload = async (req, res, next) => {
     const data = await message.upload(file);
     res.status(200).json(data);
   } catch (err) {
-    res.status(500).send(err.mesaage);
+    console.log(err)
+    res.status(500).send(err);
   }
 };
 

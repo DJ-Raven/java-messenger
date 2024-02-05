@@ -43,7 +43,7 @@ public abstract class RequestFileMonitor {
             try {
                 run = true;
                 //  Default 4096
-                final int BUFFER_SIZE = 200;
+                final int BUFFER_SIZE = 4096;
                 byte[] downloadBuffer = new byte[BUFFER_SIZE];
                 tempPath = Files.createTempFile("temp_", "_" + savePath.getName());
                 File tempFile = tempPath.toFile();
@@ -54,7 +54,6 @@ public abstract class RequestFileMonitor {
                 while ((downloadBytesRead = inputStream.read(downloadBuffer)) != -1) {
                     out.write(downloadBuffer, 0, downloadBytesRead);
                     downloadSize += downloadBytesRead;
-                    sleep(100);
                 }
                 out.close();
                 inputStream.close();
