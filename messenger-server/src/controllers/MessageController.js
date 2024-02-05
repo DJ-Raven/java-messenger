@@ -52,7 +52,6 @@ exports.download = async (req, res, next) => {
       res.status(404).send("File not found");
     }
   } catch (err) {
-    console.log(err);
     res.status(500).send(err.mesaage);
   }
 };

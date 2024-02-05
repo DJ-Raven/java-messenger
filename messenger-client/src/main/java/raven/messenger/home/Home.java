@@ -348,6 +348,7 @@ public class Home extends JPanel {
                 try {
                     ModelGroup group = SocketService.getInstance().getServiceGroup().joinGroup(user.getId());
                     chatPanel.userMessageInput();
+                    leftPanel.createNew(ChatType.GROUP, group.getGroupId());
                 } catch (ResponseException e) {
                     ErrorManager.getInstance().showError(e);
                 }

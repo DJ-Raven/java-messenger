@@ -5,7 +5,7 @@ const user = function () {};
 
 user.findAll = (data) => {
   return new Promise((resolve, reject) => {
-    const limit = 10;
+    const limit = 30;
     let sql;
     let sqlData;
     const start = (data.page - 1) * limit;

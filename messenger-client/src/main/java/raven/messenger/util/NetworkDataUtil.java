@@ -11,19 +11,27 @@ import raven.swing.AvatarIcon;
 
 import javax.swing.*;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 public class NetworkDataUtil {
 
-    public static Icon getNetworkIcon(ModelImage image, String string, int width, int height, int round) {
+    private static Map<String, NetworkIcon.IconResource> iconMap = new HashMap<>();
+
+    public static synchronized Icon getNetworkIcon(ModelImage image, String string, int width, int height, int round) {
         if (image == null) {
             return new StringIcon(string, UIManager.getColor("Component.accentColor"), width, height);
         } else {
+            if (iconMap.containsKey(image.getImage())) {
+                return new NetworkIcon(iconMap.get(image.getImage()), width, height);
+            }
             File file = StoreManager.getInstance().getFile(image.getImage());
             if (file != null) {
                 return new AvatarIcon(file.getAbsolutePath(), width, height, round);
             } else {
                 NetworkIcon.IconResource resource = new NetworkIcon.IconResource(image.getHash(), width, height, round);
                 NetworkIcon icon = new NetworkIcon(resource, width, height, true);
+                iconMap.put(image.getImage(), resource);
                 downloadImage(resource, image.getImage());
                 return icon;
             }
@@ -41,11 +49,13 @@ public class NetworkDataUtil {
             public void done(File file) {
                 if (file != null) {
                     resource.setImage(file.getAbsolutePath());
+                    iconMap.remove(image);
                 }
             }
 
             @Override
             public void error(Exception e) {
+                iconMap.remove(image);
             }
         };
         try {

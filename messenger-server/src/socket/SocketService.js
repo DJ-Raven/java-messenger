@@ -59,7 +59,6 @@ function emitToTarget(io, socketId, data) {
       io.to(toSocketId).emit("message", data);
     }
   } else {
-    console.log(data)
     group.getMemeberId(data.target).then((res) => {
       res.forEach((e) => {
         const toSocketId = users[e];

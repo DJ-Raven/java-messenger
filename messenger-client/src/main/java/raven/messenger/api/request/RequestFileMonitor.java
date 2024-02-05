@@ -1,6 +1,8 @@
 package raven.messenger.api.request;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public abstract class RequestFileMonitor {
 
@@ -33,18 +35,26 @@ public abstract class RequestFileMonitor {
     private Thread progressThread;
 
     public synchronized void save(InputStream inputStream, long length) {
+        if (run) {
+            return;
+        }
         new Thread(() -> {
+            Path tempPath = null;
             try {
-                //  Default 4096
-                final int BUFFER_SIZE = 4096;
-                byte[] downloadBuffer = new byte[BUFFER_SIZE];
-                OutputStream out = new FileOutputStream(savePath);
-                int downloadBytesRead;
                 run = true;
+                //  Default 4096
+                final int BUFFER_SIZE = 200;
+                byte[] downloadBuffer = new byte[BUFFER_SIZE];
+                tempPath = Files.createTempFile("temp_", "_" + savePath.getName());
+                File tempFile = tempPath.toFile();
+                tempFile.deleteOnExit();
+                OutputStream out = new FileOutputStream(tempFile);
+                int downloadBytesRead;
                 initEvent(length);
                 while ((downloadBytesRead = inputStream.read(downloadBuffer)) != -1) {
                     out.write(downloadBuffer, 0, downloadBytesRead);
                     downloadSize += downloadBytesRead;
+                    sleep(100);
                 }
                 out.close();
                 inputStream.close();
@@ -54,10 +64,21 @@ public abstract class RequestFileMonitor {
                 error(e);
             } finally {
                 run = false;
-                done(savePath);
+                if (tempPath != null) {
+                    done(tempPath);
+                }
                 progressThread = null;
             }
         }).start();
+    }
+
+    public void done(Path tempPath) {
+        try {
+            Files.copy(tempPath, savePath.toPath());
+            done(savePath);
+        } catch (IOException e) {
+            error(e);
+        }
     }
 
     private void initEvent(long length) {

@@ -11,6 +11,8 @@ import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
+import java.util.Map;
 
 public class NetworkIcon implements Icon {
 
@@ -23,6 +25,8 @@ public class NetworkIcon implements Icon {
     private int imageWidth;
     private int imageHeight;
     private boolean fill;
+    private boolean updatedHash;
+    private boolean updated;
 
     public NetworkIcon(IconResource resource, int width, int height) {
         this(resource, width, height, false);
@@ -37,8 +41,8 @@ public class NetworkIcon implements Icon {
 
     @Override
     public void paintIcon(Component c, Graphics g, int x, int y) {
-        if (resource.component != c) {
-            resource.component = c;
+        if (resource.updateImage == false && !resource.component.containsKey(c)) {
+            resource.component.put(c, this);
         }
         updateImage();
         if (image != null || imageHash != null) {
@@ -61,23 +65,25 @@ public class NetworkIcon implements Icon {
     }
 
     private synchronized void updateImage() {
-        if (resource.updateImage == false || resource.updateImageHash == false) {
-            if (resource.updateImageHash == false) {
+        if (resource.updateImage == false || resource.updateImageHash == false || !updatedHash) {
+            if (resource.updateImageHash == false || !updatedHash) {
                 if (resource.isImageHashAble()) {
                     imageHash = resizeImage(resource.imageHash, width, height);
                     imageWidth = imageHash.getWidth(null);
                     imageHeight = imageHash.getHeight(null);
                     resource.updateImageHash = true;
+                    updatedHash = true;
                 } else {
                     imageHash = null;
                 }
             }
-            if (resource.updateImage == false) {
+            if (resource.updateImage == false || !updated) {
                 if (resource.isImageAble()) {
                     image = resizeImage(resource.image, width, height);
                     imageWidth = image.getWidth(null);
                     imageHeight = image.getHeight(null);
                     resource.updateImage = true;
+                    updated = true;
                 } else {
                     image = null;
                 }
@@ -86,6 +92,7 @@ public class NetworkIcon implements Icon {
                 imageWidth = 0;
                 imageHeight = 0;
             }
+
         }
     }
 
@@ -106,6 +113,9 @@ public class NetworkIcon implements Icon {
     private Image roundImage(Image image, int round) {
         int width = image.getWidth(null);
         int height = image.getHeight(null);
+        if (width <= 0 || height <= 0) {
+            return null;
+        }
         BufferedImage buff = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = buff.createGraphics();
         FlatUIUtils.setRenderingHints(g);
@@ -152,7 +162,7 @@ public class NetworkIcon implements Icon {
 
         private Animator animator;
         protected float animate;
-        protected Component component;
+        protected Map<Component, NetworkIcon> component = new HashMap<>();
         protected String path;
         protected String blurHash;
         protected Image image;
@@ -181,18 +191,20 @@ public class NetworkIcon implements Icon {
 
         private void update() {
             if (component != null) {
-                component.repaint();
+                for (Map.Entry<Component, NetworkIcon> entry : component.entrySet()) {
+                    entry.getValue().updated = false;
+                    entry.getValue().updatedHash = false;
+                    entry.getKey().repaint();
+                }
+                component.clear();
             }
         }
 
         private void startAnimation() {
             if (animator == null && component != null) {
-                animator = new Animator(350, new Animator.TimingTarget() {
-                    @Override
-                    public void timingEvent(float v) {
-                        animate = v;
-                        component.repaint();
-                    }
+                animator = new Animator(350, v -> {
+                    animate = v;
+                    update();
                 });
                 animator.setInterpolator(CubicBezierEasing.EASE);
             }
@@ -240,5 +252,10 @@ public class NetworkIcon implements Icon {
             }
             return image.getHeight(null);
         }
+    }
+
+    private class IconComponent {
+        protected Component component;
+        protected NetworkIcon icon;
     }
 }
