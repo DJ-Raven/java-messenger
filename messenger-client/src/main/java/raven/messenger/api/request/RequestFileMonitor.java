@@ -3,8 +3,12 @@ package raven.messenger.api.request;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashSet;
+import java.util.Set;
 
 public abstract class RequestFileMonitor {
+
+    private static Set<String> fileSets = new HashSet<>();
 
     public String getFileName() {
         return fileName;
@@ -38,6 +42,10 @@ public abstract class RequestFileMonitor {
         if (run) {
             return;
         }
+        if (fileSets.contains(fileName)) {
+            return;
+        }
+        fileSets.add(fileName);
         new Thread(() -> {
             Path tempPath = null;
             try {
