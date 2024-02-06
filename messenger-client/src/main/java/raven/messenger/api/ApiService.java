@@ -5,7 +5,6 @@ import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
 import io.restassured.http.Cookies;
 import raven.messenger.api.exception.GlobalErrorHandler;
-import raven.messenger.manager.ErrorManager;
 import raven.messenger.socket.SocketService;
 import raven.messenger.store.CookieManager;
 
@@ -15,11 +14,10 @@ public class ApiService {
 
     private static ApiService instance;
 
-    public static final String API_VERSION = "2";
-    public static final String IP = "http://localhost";
+    //public static final String IP = "http://localhost";
 
     // Enable this for connect to online server
-    // public static final String IP = "http://52.221.189.33";
+    public static final String IP = "http://52.221.189.33";
 
     public static ApiService getInstance() {
         if (instance == null) {
@@ -41,7 +39,6 @@ public class ApiService {
         RestAssured.reset();
         RestAssured.requestSpecification = new RequestSpecBuilder()
                 .setContentType(ContentType.JSON)
-                .addHeader("VERSION", API_VERSION)
                 .setBaseUri(IP)
                 .setBasePath("api")
                 .setPort(5000)
@@ -63,7 +60,6 @@ public class ApiService {
         try {
             return CookieManager.getInstance().getCookie();
         } catch (IOException | ClassNotFoundException e) {
-            ErrorManager.getInstance().showError(e);
             return null;
         }
     }

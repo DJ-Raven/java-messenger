@@ -68,6 +68,7 @@ public abstract class RequestFileMonitor {
                 run = false;
                 progressThread.join();
             } catch (IOException | InterruptedException e) {
+                fileSets.remove(fileName);
                 error(e);
             } finally {
                 run = false;
@@ -81,6 +82,7 @@ public abstract class RequestFileMonitor {
 
     public void done(Path tempPath) {
         try {
+            fileSets.remove(fileName);
             Files.copy(tempPath, savePath.toPath());
             done(savePath);
         } catch (IOException e) {

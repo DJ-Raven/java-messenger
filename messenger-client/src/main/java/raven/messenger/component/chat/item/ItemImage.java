@@ -1,8 +1,8 @@
 package raven.messenger.component.chat.item;
 
 import net.miginfocom.swing.MigLayout;
-import raven.messenger.api.request.RequestFileMonitor;
 import raven.messenger.component.ButtonProgressTransparent;
+import raven.messenger.component.EmptyIcon;
 import raven.messenger.component.NetworkIcon;
 import raven.messenger.component.PanelTransparent;
 import raven.messenger.component.chat.model.ChatPhotoData;
@@ -28,7 +28,6 @@ public class ItemImage extends ChatItem implements ProgressChat {
     private NetworkIcon networkIcon;
     private ButtonProgressTransparent buttonProgress;
     private PanelTransparent timePanel;
-    private RequestFileMonitor requestFileMonitor;
 
     public ItemImage(ChatPhotoData photo, int type) {
         super(0, type);
@@ -37,14 +36,7 @@ public class ItemImage extends ChatItem implements ProgressChat {
     }
 
     private void init() {
-        NetworkIcon.IconResource resource;
-        if (photo.getPath() != null) {
-            resource = new NetworkIcon.IconResource(photo.getPath());
-        } else {
-            resource = new NetworkIcon.IconResource(photo.getHash(), photo.getWidth(), photo.getHeight());
-        }
-        networkIcon = new NetworkIcon(resource, 240, -1);
-        JButton button = new JButton(networkIcon);
+        JButton button = new JButton(new EmptyIcon(photo.getWidth(), photo.getHeight()));
         button.setContentAreaFilled(false);
         button.setFocusable(false);
         button.setBorder(BorderFactory.createEmptyBorder());
@@ -79,9 +71,20 @@ public class ItemImage extends ChatItem implements ProgressChat {
 
         setLayout(new MigLayout("fill,insets 5,wrap,gapy 3", "fill", "fill"));
         add(button);
-        if (photo.getPath() == null) {
-            createDownloadButton();
-        }
+        MethodUtil.runWithThread(() -> {
+            NetworkIcon.IconResource resource;
+            if (photo.getPath() != null) {
+                resource = new NetworkIcon.IconResource(photo.getPath());
+            } else {
+                resource = new NetworkIcon.IconResource(photo.getHash(), photo.getWidth(), photo.getHeight());
+            }
+            networkIcon = new NetworkIcon(resource, photo.getWidth(), photo.getHeight());
+            networkIcon.setShape(createShape());
+            button.setIcon(networkIcon);
+            if (photo.getPath() == null) {
+                createDownloadButton();
+            }
+        });
     }
 
     public void addTimePanel(Component component) {
@@ -103,6 +106,7 @@ public class ItemImage extends ChatItem implements ProgressChat {
             }
         });
         add(buttonProgress, "pos 0.5al 0.5al", 0);
+        doLayout();
     }
 
 
@@ -166,12 +170,14 @@ public class ItemImage extends ChatItem implements ProgressChat {
     @Override
     public void setLevel(int level) {
         super.setLevel(level);
-        networkIcon.setShape(createShape());
+        if (networkIcon != null) {
+            networkIcon.setShape(createShape());
+        }
     }
 
     private Shape createShape() {
-        int width = networkIcon.getIconWidth();
-        int height = networkIcon.getIconHeight();
+        int width = photo.getWidth();
+        int height = photo.getHeight();
         Area area = new Area(new Rectangle2D.Double(0, 0, width, height));
         area.subtract(new Area(GraphicsUtil.getShape(0, 0, width, height, level, type, true, labelName != null)));
         return area;

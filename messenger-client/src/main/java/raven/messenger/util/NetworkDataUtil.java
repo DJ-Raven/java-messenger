@@ -18,7 +18,7 @@ public class NetworkDataUtil {
 
     private static Map<String, NetworkIcon.IconResource> iconMap = new HashMap<>();
 
-    public static synchronized Icon getNetworkIcon(ModelImage image, String string, int width, int height, int round) {
+    public static Icon getNetworkIcon(ModelImage image, String string, int width, int height, int round) {
         if (image == null) {
             return new StringIcon(string, UIManager.getColor("Component.accentColor"), width, height);
         } else {
