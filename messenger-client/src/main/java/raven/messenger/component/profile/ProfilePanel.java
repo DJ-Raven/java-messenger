@@ -13,6 +13,7 @@ import raven.popup.component.SimplePopupBorderOption;
 import raven.swing.AvatarIcon;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -53,6 +54,7 @@ public class ProfilePanel extends JPanel {
 
     private JButton createEditProfile() {
         JButton button = new JButton(MethodUtil.createIcon("raven/messenger/icon/edit.svg", 0.75f));
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         button.addActionListener(e -> {
             editProfile();
         });

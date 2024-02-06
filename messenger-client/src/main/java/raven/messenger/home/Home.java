@@ -394,6 +394,7 @@ public class Home extends JPanel {
         if (this.user == null || (this.user.getChatType() != user.getChatType() || this.user.getId() != user.getId())) {
             this.user = user;
             leftPanel.selectedUser(user);
+            rightPanel.setData(user);
             scrollRefreshModel.stop();
             chatPanel.getChatModel().clear();
             scrollRefreshModel.resetPage();
@@ -411,6 +412,7 @@ public class Home extends JPanel {
         try {
             userImages.clear();
             ModelGroup group = SocketService.getInstance().getServiceGroup().checkGroup(uuid);
+
             chatPanel.userMessageInput();
         } catch (ResponseException e) {
             chatPanel.useJoinButton();

@@ -29,7 +29,7 @@ public class NetworkDataUtil {
             if (file != null) {
                 return new AvatarIcon(file.getAbsolutePath(), width, height, round);
             } else {
-                NetworkIcon.IconResource resource = new NetworkIcon.IconResource(image.getHash(), width, height, round);
+                NetworkIcon.IconResource resource = new NetworkIcon.IconResource(image.getHash(), image.getWidth(), image.getHeight(), round);
                 NetworkIcon icon = new NetworkIcon(resource, width, height, true);
                 iconMap.put(image.getImage(), resource);
                 downloadImage(resource, image.getImage());

@@ -1,11 +1,9 @@
 package raven.messenger.component.chat;
 
 import com.formdev.flatlaf.FlatClientProperties;
-import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.MigLayout;
 import raven.messenger.component.dialog.DialogSelectFile;
 import raven.messenger.manager.DialogManager;
-import raven.messenger.manager.FormsManager;
 import raven.messenger.plugin.sound.CaptureData;
 import raven.messenger.plugin.sound.SoundCapture;
 import raven.messenger.plugin.sound.SoundCaptureListener;
@@ -88,6 +86,7 @@ public class MessageInput extends JPanel {
             }
         });
         JButton buttonFile = createActionButton(MethodUtil.createIcon("raven/messenger/icon/attach.svg", 0.8f));
+        buttonFile.setCursor(new Cursor(Cursor.HAND_CURSOR));
         buttonFile.addActionListener(e -> sendFile());
         add(buttonFile);
         add(scroll);
@@ -98,6 +97,8 @@ public class MessageInput extends JPanel {
         JPanel panel = new JPanel(new MigLayout("insets 0,gap 3"));
         JButton buttonSend = createActionButton(MethodUtil.createIcon("raven/messenger/icon/sent.svg", 0.8f));
         JButton buttonSound = createActionButton(MethodUtil.createIcon("raven/messenger/icon/microphone.svg", 0.8f));
+        buttonSend.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        buttonSound.setCursor(new Cursor(Cursor.HAND_CURSOR));
         buttonSend.setFocusable(false);
         buttonSound.setFocusable(false);
         buttonSend.addActionListener(e -> sendText());

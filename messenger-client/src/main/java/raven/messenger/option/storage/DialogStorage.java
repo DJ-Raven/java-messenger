@@ -160,6 +160,7 @@ public class DialogStorage extends JPanel {
             JLabel labelName = new JLabel(file.getQty() + " " + file.getName());
             JLabel labelSize = new JLabel(MethodUtil.formatSize(file.getSize()));
             JButton buttonClear = new JButton("Clear");
+            buttonClear.setCursor(new Cursor(Cursor.HAND_CURSOR));
             if (file.getSize() == 0) {
                 buttonClear.setEnabled(false);
             }

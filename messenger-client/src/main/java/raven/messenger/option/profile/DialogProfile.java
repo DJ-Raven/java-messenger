@@ -274,6 +274,7 @@ public class DialogProfile extends JPanel {
         }
 
         private void init() {
+            setCursor(new Cursor(Cursor.HAND_CURSOR));
             setLayout(new MigLayout("fill,insets 5 25 5 25", "[]10[]push[]"));
             putClientProperty(FlatClientProperties.STYLE, "" + "margin:2,0,2,0;" + "borderWidth:0;" + "focusWidth:0;" + "innerFocusWidth:0;" + "background:null;");
             labelIcon = new JLabel(MethodUtil.createIcon("raven/messenger/icon/" + icon, 0.5f));

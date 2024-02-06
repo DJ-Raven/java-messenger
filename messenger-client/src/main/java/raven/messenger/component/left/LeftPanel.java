@@ -79,6 +79,7 @@ public class LeftPanel extends JPanel {
     private void createHeader() {
         header = new JPanel(new MigLayout("fill", "[grow 0][fill]"));
         JButton button = new JButton(MethodUtil.createIcon("raven/messenger/icon/menu.svg", 1f));
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         JTextField text = new JTextField();
         button.addActionListener(e -> {
             MenuDrawer.getInstance().showDrawer();

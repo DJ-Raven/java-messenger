@@ -3,6 +3,7 @@ package raven.messenger.component.profile;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import net.coobird.thumbnailator.Thumbnails;
 import raven.messenger.component.NetworkIcon;
+import raven.swing.AvatarIcon;
 
 import javax.swing.*;
 import java.awt.*;
@@ -43,6 +44,7 @@ public class ProfileImageEditor extends JPanel {
             width = profileSize;
             moveWidth = false;
         }
+        System.out.println(width+" "+height);
         NetworkIcon icon = new NetworkIcon(resource, width, height);
         labelIcon.setIcon(icon);
     }

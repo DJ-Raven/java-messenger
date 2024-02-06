@@ -14,10 +14,11 @@ public class ApiService {
 
     private static ApiService instance;
 
-    //public static final String IP = "http://localhost";
+    public static final String API_VERSION = "2";
+    public static final String IP = "http://localhost";
 
     // Enable this for connect to online server
-    public static final String IP = "http://52.221.189.33";
+    // public static final String IP = "http://52.221.189.33";
 
     public static ApiService getInstance() {
         if (instance == null) {
@@ -40,6 +41,7 @@ public class ApiService {
         RestAssured.requestSpecification = new RequestSpecBuilder()
                 .setContentType(ContentType.JSON)
                 .setBaseUri(IP)
+                .addHeader("VERSION", API_VERSION)
                 .setBasePath("api")
                 .setPort(5000)
                 .setAuth(RestAssured.preemptive().basic("user", "raven-messenger-server"))

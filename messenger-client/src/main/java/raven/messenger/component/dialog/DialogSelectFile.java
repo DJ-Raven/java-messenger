@@ -139,6 +139,7 @@ public class DialogSelectFile extends GlassPaneChild {
 
     private JButton createDeleteButton(Component component) {
         JButton cmdDelete = new JButton(MethodUtil.createIcon("raven/messenger/icon/delete.svg", 0.6f));
+        cmdDelete.setCursor(new Cursor(Cursor.HAND_CURSOR));
         cmdDelete.putClientProperty(FlatClientProperties.STYLE_CLASS, "myButton");
         cmdDelete.putClientProperty(FlatClientProperties.STYLE, "" +
                 "[dark]background:lighten(@background,3%);" +
