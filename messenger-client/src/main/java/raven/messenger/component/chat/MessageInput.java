@@ -4,6 +4,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
 import raven.messenger.component.dialog.DialogSelectFile;
 import raven.messenger.manager.DialogManager;
+import raven.messenger.models.file.ModelFileWithType;
 import raven.messenger.plugin.sound.CaptureData;
 import raven.messenger.plugin.sound.SoundCapture;
 import raven.messenger.plugin.sound.SoundCaptureListener;
@@ -156,7 +157,12 @@ public class MessageInput extends JPanel {
                     String text = dialogSelectFile.getMessage();
                     input.setText("");
                     input.grabFocus();
-                    MethodUtil.runWithThread(() -> event.onSendFileMessage(dialogSelectFile.getSelectedFiles(), text));
+                    MethodUtil.runWithThread(() -> {
+                        ModelFileWithType[] list = dialogSelectFile.getSelectedFiles();
+                        if (list != null) {
+                            event.onSendFileMessage(list, text);
+                        }
+                    });
                 } else {
                     callback.closePopup();
                 }

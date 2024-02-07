@@ -1,9 +1,14 @@
 package raven.messenger.util;
 
 import com.formdev.flatlaf.extras.FlatSVGIcon;
+import net.coobird.thumbnailator.Thumbnails;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -141,6 +146,18 @@ public class MethodUtil {
         } else {
             return (name.charAt(0) + "" + name.charAt(indexSpace + 1)).toUpperCase();
         }
+    }
+
+    public static File compressImage(File file) throws IOException {
+        Path tempPath = Files.createTempFile("temp_", "_photo.jpg");
+        File output = tempPath.toFile();
+        output.deleteOnExit();
+        Thumbnails.of(file)
+                .addFilter(new ThumbnailsFilterMax(1000, 1000))
+                .scale(1f)
+                .outputQuality(0.8)
+                .toFile(output);
+        return output;
     }
 
     public static void runWithThread(Runnable runnable) {

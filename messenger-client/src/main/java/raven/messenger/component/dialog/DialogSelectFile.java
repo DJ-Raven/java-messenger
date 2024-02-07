@@ -7,6 +7,7 @@ import raven.messenger.component.PictureBox;
 import raven.messenger.component.chat.AutoWrapText;
 import raven.messenger.component.chat.TextPaneCustom;
 import raven.messenger.manager.DialogManager;
+import raven.messenger.manager.ErrorManager;
 import raven.messenger.models.file.FileType;
 import raven.messenger.models.file.ModelFileWithType;
 import raven.messenger.util.MethodUtil;
@@ -19,6 +20,7 @@ import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.IOException;
 
 public class DialogSelectFile extends GlassPaneChild {
 
@@ -157,17 +159,22 @@ public class DialogSelectFile extends GlassPaneChild {
     }
 
     public ModelFileWithType[] getSelectedFiles() {
-        int count = panelFiles.getComponentCount();
-        ModelFileWithType files[] = new ModelFileWithType[count];
-        for (int i = 0; i < count; i++) {
-            Component com = panelFiles.getComponent(i);
-            if (com instanceof ItemPhoto) {
-                files[i] = new ModelFileWithType(((ItemPhoto) com).getFile(), FileType.PHOTO);
-            } else if (com instanceof ItemFile) {
-                files[i] = new ModelFileWithType(((ItemFile) com).getFile(), FileType.FILE);
+        try {
+            int count = panelFiles.getComponentCount();
+            ModelFileWithType files[] = new ModelFileWithType[count];
+            for (int i = 0; i < count; i++) {
+                Component com = panelFiles.getComponent(i);
+                if (com instanceof ItemPhoto) {
+                    files[i] = new ModelFileWithType(MethodUtil.compressImage(((ItemPhoto) com).getFile()), FileType.PHOTO);
+                } else if (com instanceof ItemFile) {
+                    files[i] = new ModelFileWithType(((ItemFile) com).getFile(), FileType.FILE);
+                }
             }
+            return files;
+        } catch (IOException e) {
+            ErrorManager.getInstance().showError(e);
         }
-        return files;
+        return null;
     }
 
     public String getMessage() {

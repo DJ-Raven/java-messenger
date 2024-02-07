@@ -29,6 +29,7 @@ public class Test extends JFrame {
         ChatProfile p=new ChatProfile();
         p.setImage(icon);
         add(p,"width 35!,height 35::");
+        add(new JLabel(new ImageIcon("C:\\Users\\RAVEN\\AppData\\Local\\Temp\\temp_15319939312760975989_photo.jpg")));
     }
 
     public static void main(String[] args) {
