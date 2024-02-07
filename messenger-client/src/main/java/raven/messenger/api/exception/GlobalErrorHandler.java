@@ -10,6 +10,7 @@ import raven.messenger.login.Login;
 import raven.messenger.manager.FormsManager;
 
 public class GlobalErrorHandler implements OrderedFilter {
+
     @Override
     public int getOrder() {
         return 0;

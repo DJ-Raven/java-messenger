@@ -48,9 +48,13 @@ public class DialogManager {
     }
 
     public void showViewPhotoDialog(ChatPhotoData photo) {
+        showViewPhotoDialog(photo.getPath());
+    }
+
+    public void showViewPhotoDialog(String path) {
         int w = -1;
         int h = -1;
-        NetworkIcon.IconResource resource = new NetworkIcon.IconResource(photo.getPath());
+        NetworkIcon.IconResource resource = new NetworkIcon.IconResource(path);
         if (resource.getImageHeight() > 500) {
             h = 500;
         } else if (resource.getImageWidth() > 1000) {

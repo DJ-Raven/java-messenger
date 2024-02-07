@@ -394,13 +394,13 @@ public class Home extends JPanel {
         if (this.user == null || (this.user.getChatType() != user.getChatType() || this.user.getId() != user.getId())) {
             this.user = user;
             leftPanel.selectedUser(user);
-            rightPanel.setData(user);
             scrollRefreshModel.stop();
             chatPanel.getChatModel().clear();
             scrollRefreshModel.resetPage();
             if (user.isGroup()) {
                 checkGroup(user.getUuid());
             } else {
+                rightPanel.setUser(null);
                 chatPanel.userMessageInput();
             }
         } else {
@@ -412,10 +412,11 @@ public class Home extends JPanel {
         try {
             userImages.clear();
             ModelGroup group = SocketService.getInstance().getServiceGroup().checkGroup(uuid);
-
+            rightPanel.setGroup(group);
             chatPanel.userMessageInput();
         } catch (ResponseException e) {
             chatPanel.useJoinButton();
+            rightPanel.setUser(null);
         }
     }
 
