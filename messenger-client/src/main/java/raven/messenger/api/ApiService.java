@@ -14,12 +14,12 @@ public class ApiService {
 
     private static ApiService instance;
 
-    public static final String API_VERSION = "3";
+    public static final String API_VERSION = "4";
 
     public static final String IP = "http://localhost";
 
     // Enable this for connect to online server
-    //public static final String IP = "http://52.221.189.33";
+    // public static final String IP = "http://52.221.189.33";
 
     public static ApiService getInstance() {
         if (instance == null) {

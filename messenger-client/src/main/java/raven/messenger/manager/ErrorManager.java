@@ -15,5 +15,6 @@ public class ErrorManager {
 
     public void showError(Exception e) {
         Notifications.getInstance().show(Notifications.Type.ERROR, e.getMessage());
+        e.printStackTrace();
     }
 }

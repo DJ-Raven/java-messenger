@@ -14,7 +14,7 @@ public class RightPanel extends JPanel {
     }
 
     private void init() {
-        setLayout(new MigLayout("fill", "[fill,250::]", "[fill]"));
+        setLayout(new MigLayout("fill,insets 0", "[fill,250::]", "[fill]"));
     }
 
     public void setGroup(ModelGroup group) {

@@ -32,12 +32,28 @@ public class ModelGroup {
         this.name = name;
     }
 
+    public int getTotalMember() {
+        return totalMember;
+    }
+
+    public void setTotalMember(int totalMember) {
+        this.totalMember = totalMember;
+    }
+
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(int createBy) {
+        this.createBy = createBy;
     }
 
     public Date getCreateDate() {
@@ -68,9 +84,11 @@ public class ModelGroup {
         groupId = json.getInt("group_id");
         groupUuid = json.getString("group_uuid");
         name = json.getString("name");
+        totalMember = json.getInt("total_member");
         description = json.getString("description");
+        createBy = json.getInt("create_by");
         createDate = MethodUtil.stringToDate(json.getString("create_date"));
-        joinDate = MethodUtil.stringToDate(json.getString("join_date"));
+        joinDate = json.isNull("join_date") ? null : MethodUtil.stringToDate(json.getString("join_date"));
         if (!json.isNull("profile")) {
             profile = new ModelImage(json.getJSONObject("profile"));
         }
@@ -79,8 +97,14 @@ public class ModelGroup {
     private int groupId;
     private String groupUuid;
     private String name;
+    private int totalMember;
     private String description;
+    private int createBy;
     private Date createDate;
     private Date joinDate;
     private ModelImage profile;
+
+    public boolean isJoin() {
+        return joinDate != null;
+    }
 }

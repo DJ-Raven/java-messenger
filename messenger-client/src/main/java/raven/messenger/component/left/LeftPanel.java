@@ -38,7 +38,8 @@ public class LeftPanel extends JPanel {
         scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scroll.getVerticalScrollBar().setUnitIncrement(10);
 
-        scroll.getVerticalScrollBar().putClientProperty(FlatClientProperties.STYLE, "" + "width:4");
+        scroll.getVerticalScrollBar().putClientProperty(FlatClientProperties.STYLE, "" +
+                "width:4");
         createHeader();
         add(scroll);
     }
@@ -85,9 +86,15 @@ public class LeftPanel extends JPanel {
             MenuDrawer.getInstance().showDrawer();
         });
         button.putClientProperty(FlatClientProperties.STYLE_CLASS, "myButton");
-        button.putClientProperty(FlatClientProperties.STYLE, "" + "arc:999;" + "background:null");
+        button.putClientProperty(FlatClientProperties.STYLE, "" +
+                "arc:999;" +
+                "background:null");
         text.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Search ...");
-        text.putClientProperty(FlatClientProperties.STYLE, "" + "arc:999;" + "margin:5,10,5,10;" + "borderWidth:0;" + "background:darken($Panel.background,2%);");
+        text.putClientProperty(FlatClientProperties.STYLE, "" +
+                "arc:999;" +
+                "margin:5,10,5,10;" +
+                "borderWidth:0;" +
+                "background:darken($Panel.background,2%);");
 
         Debounce.add(text, (ke, search) -> {
             search = search.trim();

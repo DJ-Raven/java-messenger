@@ -26,5 +26,6 @@ router.post(
   groupController.create
 );
 router.post("/join", jwtVerify.verify, groupController.joinGroup);
+router.get("/member", jwtVerify.verify, groupController.getGroupMember);
 
 module.exports = router;

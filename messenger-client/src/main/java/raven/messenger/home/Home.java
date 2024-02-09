@@ -371,8 +371,10 @@ public class Home extends JPanel {
             @Override
             public void onFinishRefresh() {
                 // Need to update this
-                FormsManager.getInstance().getMainFrame().repaint();
-                FormsManager.getInstance().getMainFrame().revalidate();
+                if (scrollRefresh.getScrollRefreshModel().getPage() > 1) {
+                    FormsManager.getInstance().getMainFrame().repaint();
+                    FormsManager.getInstance().getMainFrame().revalidate();
+                }
             }
 
             @Override
@@ -412,8 +414,12 @@ public class Home extends JPanel {
         try {
             userImages.clear();
             ModelGroup group = SocketService.getInstance().getServiceGroup().checkGroup(uuid);
+            if (group.isJoin()) {
+                chatPanel.userMessageInput();
+            } else {
+                chatPanel.useJoinButton();
+            }
             rightPanel.setGroup(group);
-            chatPanel.userMessageInput();
         } catch (ResponseException e) {
             chatPanel.useJoinButton();
             rightPanel.setUser(null);
