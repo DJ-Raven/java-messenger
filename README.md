@@ -8,7 +8,7 @@ This is a simple messenger app built using Java Swing for the client-side GUI, N
 <img src="https://github.com/DJ-Raven/java-messenger/blob/main/screenshot/sample-3.png?raw=true" alt="sample 3" width="400"/>&nbsp;
 
 ## Demo
-[Download Demo Test](messenger-client/demo/messenger-test-1.2.2.jar?raw=true)
+[Download Demo Test](messenger-client/demo/messenger-test-1.2.3.jar?raw=true)
 
 Run demo with `java -jar messenger-test-<version>.jar` or `double-click` (Requires Java 8 or newer)
 
