@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import raven.messenger.api.exception.ResponseException;
 import raven.messenger.models.other.ModelImage;
 import raven.messenger.models.response.ModelChatListItem;
+import raven.messenger.models.response.ModelUserInfo;
 import raven.messenger.socket.ChatType;
 
 import java.util.ArrayList;
@@ -50,6 +51,17 @@ public class ServiceUser {
         if (response.getStatusCode() == 200) {
             JSONObject json = new JSONObject(response.getBody().asString());
             return new ModelImage(json);
+        }
+        throw new ResponseException(response.getStatusCode(), response.asString());
+    }
+
+    public synchronized ModelUserInfo getUser(String id) throws ResponseException {
+        Response response = RestAssured.given()
+                .queryParam("id", id)
+                .get("user/get");
+        if (response.getStatusCode() == 200) {
+            JSONObject json = new JSONObject(response.getBody().asString());
+            return new ModelUserInfo(json);
         }
         throw new ResponseException(response.getStatusCode(), response.asString());
     }

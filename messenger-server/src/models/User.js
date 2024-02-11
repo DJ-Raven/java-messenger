@@ -107,6 +107,32 @@ user.getUserProfile = (id) => {
   });
 };
 
+user.getUser = (id) => {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "select user_id, user_uuid, `profile`, first_name, last_name, gender, bio, phone_number, create_date from `user` where user_uuid=? limit 1";
+    db.execute(sql, [id], (err, result) => {
+      if (err) return reject(err);
+      if (result.length === 1) {
+        const data = result[0];
+        resolve({
+          user_id: data.user_id,
+          user_uuid: data.user_uuid,
+          profile: JSON.parse(data.profile),
+          first_name: data.first_name,
+          last_name: data.last_name,
+          gender: data.gender,
+          bio: data.bio,
+          phone_number: data.phone_number,
+          create_date: data.create_date,
+        });
+      } else {
+        resolve(null);
+      }
+    });
+  });
+};
+
 function getLastMessage(user, id) {
   const sql =
     "select from_user, message, message_type from message where message_id=? limit 1";

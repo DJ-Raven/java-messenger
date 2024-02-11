@@ -402,8 +402,7 @@ public class Home extends JPanel {
             if (user.isGroup()) {
                 checkGroup(user.getUuid());
             } else {
-                rightPanel.setUser(null);
-                chatPanel.userMessageInput();
+                checkUser(user.getUuid());
             }
         } else {
             chatPanel.scrollToBottomWithAnimation();
@@ -423,6 +422,18 @@ public class Home extends JPanel {
         } catch (ResponseException e) {
             chatPanel.useJoinButton();
             rightPanel.setUser(null);
+            ErrorManager.getInstance().showError(e);
+        }
+    }
+
+    private void checkUser(String uuid) {
+        try {
+            ModelUserInfo userInfo = SocketService.getInstance().getServiceUser().getUser(uuid);
+            rightPanel.setUser(userInfo);
+            chatPanel.userMessageInput();
+        } catch (ResponseException e) {
+            chatPanel.userMessageInput();
+            ErrorManager.getInstance().showError(e);
         }
     }
 
