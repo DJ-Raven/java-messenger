@@ -151,7 +151,7 @@ group.getGroupMember = (data) => {
 function getGroup(user, id) {
   return new Promise((resolve, reject) => {
     const sql =
-      "select group_id, group_uuid, `name`, `profile`, description, create_date, join_date from `groups` join member using (group_id) where `groups`.`status`='1' and group_id=? and user_id=? limit 1";
+      "select group_id, group_uuid, `name`, `profile`, description, create_by, create_date, join_date, (select count(member_id) from member where member.group_id=`groups`.group_id) as total_member from `groups` join member using (group_id) where `groups`.`status`='1' and group_id=? and user_id=? limit 1";
     db.execute(sql, [id, user.id], (err, result) => {
       if (err) return reject(err);
       if (result.length === 1) {
@@ -160,8 +160,10 @@ function getGroup(user, id) {
           group_id: d.group_id,
           group_uuid: d.group_uuid,
           name: d.name,
+          total_member: d.total_member,
           profile: JSON.parse(d.profile),
           description: d.description,
+          create_by:d.create_by,
           create_date: d.create_date,
           join_date: d.join_date,
         });
