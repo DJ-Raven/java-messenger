@@ -5,7 +5,6 @@ import raven.messenger.models.response.ModelGroup;
 import raven.messenger.models.response.ModelUserInfo;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class RightPanel extends JPanel {
 
@@ -14,7 +13,7 @@ public class RightPanel extends JPanel {
     }
 
     private void init() {
-        setLayout(new MigLayout("fill,insets 0", "[fill,250::]", "[fill]"));
+        setLayout(new MigLayout("fill,insets 0", "[fill,270::]", "[fill]"));
     }
 
     public void setGroup(ModelGroup group) {
