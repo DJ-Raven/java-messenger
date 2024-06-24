@@ -15,9 +15,10 @@ import raven.messenger.models.response.ModelProfile;
 import raven.messenger.util.ComponentUtil;
 import raven.messenger.util.MethodUtil;
 import raven.messenger.util.NetworkDataUtil;
-import raven.popup.GlassPanePopup;
-import raven.popup.component.SimplePopupBorder;
-import raven.popup.component.SimplePopupBorderOption;
+import raven.modal.ModalDialog;
+import raven.modal.component.SimpleModalBorder;
+import raven.modal.option.ModalBorderOption;
+import raven.modal.option.Option;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -153,9 +154,8 @@ public class DialogProfile extends JPanel {
         panel.add(new JLabel("Last name"));
         panel.add(txtLastName);
 
-        String actions[] = {"Cancel", "Save"};
-        SimplePopupBorder popupBorder = new SimplePopupBorder(panel, "Edit name", new SimplePopupBorderOption().setWidth(300), actions, (popupController, i) -> {
-            if (i == 1) {
+        SimpleModalBorder modalBorder = new SimpleModalBorder(panel, "Edit Name", getOptions(), (callback, action) -> {
+            if (action == SimpleModalBorder.OK_OPTION) {
                 if (FormsManager.getInstance().validateEmpty(txtFirstName, txtLastName)) {
                     try {
                         String firstName = txtFirstName.getText().trim();
@@ -164,16 +164,17 @@ public class DialogProfile extends JPanel {
                         ProfileManager.getInstance().updateProfileUser(name);
                         fieldName.setDescription(name.getFullName());
                         labelName.setText(name.getFullName());
-                        popupController.closePopup();
                     } catch (ResponseException e) {
                         ErrorManager.getInstance().showError(e);
                     }
+                } else {
+                    callback.consume();
                 }
-            } else {
-                popupController.closePopup();
             }
         });
-        GlassPanePopup.showPopup(popupBorder);
+        Option option = ModalDialog.createOption();
+        option.getLayoutOption().setSize(300, -1);
+        ModalDialog.showModal(FormsManager.getInstance().getMainFrame(), modalBorder, option);
     }
 
     private void editGender() {
@@ -192,9 +193,8 @@ public class DialogProfile extends JPanel {
         panel.add(cmdMale);
         panel.add(cmdFemale);
 
-        String actions[] = {"Cancel", "Save"};
-        SimplePopupBorder popupBorder = new SimplePopupBorder(panel, "Edit gender", new SimplePopupBorderOption().setWidth(300), actions, (popupController, i) -> {
-            if (i == 1) {
+        SimpleModalBorder modalBorder = new SimpleModalBorder(panel, "Edit Gender", getOptions(), (callback, action) -> {
+            if (action == SimpleModalBorder.OK_OPTION) {
                 ModelGender gender = new ModelGender(cmdMale.isSelected() ? "M" : "F");
                 try {
                     ProfileManager.getInstance().updateProfileGender(gender);
@@ -204,15 +204,14 @@ public class DialogProfile extends JPanel {
                     } else {
                         fieldGender.setIcon("female.svg");
                     }
-                    popupController.closePopup();
                 } catch (ResponseException e) {
                     ErrorManager.getInstance().showError(e);
                 }
-            } else {
-                popupController.closePopup();
             }
         });
-        GlassPanePopup.showPopup(popupBorder);
+        Option option = ModalDialog.createOption();
+        option.getLayoutOption().setSize(300, -1);
+        ModalDialog.showModal(FormsManager.getInstance().getMainFrame(), modalBorder, option);
     }
 
     private void editPhone() {
@@ -223,24 +222,32 @@ public class DialogProfile extends JPanel {
         panel.add(new JLabel("Phone number"));
         panel.add(txtPhone);
 
-        String actions[] = {"Cancel", "Save"};
-        SimplePopupBorder popupBorder = new SimplePopupBorder(panel, "Edit phone", new SimplePopupBorderOption().setWidth(300), actions, (popupController, i) -> {
-            if (i == 1) {
+        SimpleModalBorder modalBorder = new SimpleModalBorder(panel, "Edit Phone", getOptions(), (callback, action) -> {
+            if (action == SimpleModalBorder.OK_OPTION) {
                 if (FormsManager.getInstance().validateEmpty(txtPhone)) {
                     try {
                         String phoneNumber = txtPhone.getText().trim();
                         ProfileManager.getInstance().updateProfilePhoneNumber(phoneNumber);
                         fieldPhone.setDescription(phoneNumber);
-                        popupController.closePopup();
                     } catch (ResponseException e) {
                         ErrorManager.getInstance().showError(e);
                     }
+                } else {
+                    callback.consume();
                 }
-            } else {
-                popupController.closePopup();
             }
         });
-        GlassPanePopup.showPopup(popupBorder);
+        Option option = ModalDialog.createOption();
+        option.getLayoutOption().setSize(300, -1);
+        ModalDialog.showModal(FormsManager.getInstance().getMainFrame(), modalBorder, option);
+    }
+
+    private SimpleModalBorder.Option[] getOptions() {
+        SimpleModalBorder.Option[] options = new SimpleModalBorder.Option[]{
+                new SimpleModalBorder.Option("Cancel", SimpleModalBorder.CANCEL_OPTION),
+                new SimpleModalBorder.Option("Save", SimpleModalBorder.OK_OPTION)
+        };
+        return options;
     }
 
     private JLabel labelName;

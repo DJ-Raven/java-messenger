@@ -2,14 +2,14 @@ package raven.messenger.drawer;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
-import raven.drawer.component.SimpleDrawerBuilder;
-import raven.drawer.component.footer.SimpleFooterData;
-import raven.drawer.component.header.SimpleHeaderData;
-import raven.drawer.component.header.SimpleHeaderStyle;
-import raven.drawer.component.menu.SimpleMenuOption;
-import raven.drawer.component.menu.data.Item;
-import raven.drawer.component.menu.data.MenuItem;
 import raven.messenger.option.OptionManager;
+import raven.modal.drawer.data.Item;
+import raven.modal.drawer.data.MenuItem;
+import raven.modal.drawer.menu.MenuOption;
+import raven.modal.drawer.simple.SimpleDrawerBuilder;
+import raven.modal.drawer.simple.footer.SimpleFooterData;
+import raven.modal.drawer.simple.header.SimpleHeaderData;
+import raven.modal.drawer.simple.header.SimpleHeaderStyle;
 
 import javax.swing.*;
 
@@ -32,7 +32,7 @@ public class MyDrawerBuilder extends SimpleDrawerBuilder {
     }
 
     @Override
-    public SimpleMenuOption getSimpleMenuOption() {
+    public MenuOption getSimpleMenuOption() {
 
         MenuItem[] menus = new MenuItem[]{
                 new Item("New group", "group.svg"),
@@ -40,7 +40,7 @@ public class MyDrawerBuilder extends SimpleDrawerBuilder {
                 new Item("Local storage", "storage.svg")
         };
 
-        SimpleMenuOption menuOption = new SimpleMenuOption()
+        MenuOption menuOption = new MenuOption()
                 .setMenus(menus)
                 .setBaseIconPath("raven/messenger/icon/drawer")
                 .setIconScale(0.5f);
@@ -59,6 +59,11 @@ public class MyDrawerBuilder extends SimpleDrawerBuilder {
             }
         });
         return menuOption;
+    }
+
+    @Override
+    public int getDrawerWidth() {
+        return 275;
     }
 
     @Override

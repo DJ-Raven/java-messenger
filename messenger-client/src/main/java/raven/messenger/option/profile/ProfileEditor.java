@@ -2,13 +2,13 @@ package raven.messenger.option.profile;
 
 import net.miginfocom.swing.MigLayout;
 import raven.messenger.component.profile.ProfileImageEditor;
-import raven.popup.component.GlassPaneChild;
 
+import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class ProfileEditor extends GlassPaneChild {
+public class ProfileEditor extends JPanel {
 
     private final File file;
 

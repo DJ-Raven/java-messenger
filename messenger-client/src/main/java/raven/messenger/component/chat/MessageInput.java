@@ -10,6 +10,7 @@ import raven.messenger.plugin.sound.SoundCapture;
 import raven.messenger.plugin.sound.SoundCaptureListener;
 import raven.messenger.util.EventMouseHold;
 import raven.messenger.util.MethodUtil;
+import raven.modal.component.SimpleModalBorder;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -151,9 +152,12 @@ public class MessageInput extends JPanel {
         if (files != null) {
             String title = getTitle(files);
             DialogSelectFile dialogSelectFile = new DialogSelectFile(files, input.getText());
-            DialogManager.getInstance().showDialog(dialogSelectFile, title, new String[]{"Cancel", "Send"}, (callback, action) -> {
-                if (action == 1) {
-                    DialogManager.getInstance().closeLast();
+            SimpleModalBorder.Option[] options = new SimpleModalBorder.Option[]{
+                    new SimpleModalBorder.Option("Cancel", SimpleModalBorder.CANCEL_OPTION),
+                    new SimpleModalBorder.Option("Send", SimpleModalBorder.OK_OPTION)
+            };
+            DialogManager.getInstance().showDialog(dialogSelectFile, title, options, (callback, action) -> {
+                if (action == SimpleModalBorder.OK_OPTION) {
                     String text = dialogSelectFile.getMessage();
                     input.setText("");
                     input.grabFocus();
@@ -163,10 +167,8 @@ public class MessageInput extends JPanel {
                             event.onSendFileMessage(list, text);
                         }
                     });
-                } else {
-                    callback.closePopup();
                 }
-            });
+            }, "select_file");
         }
     }
 

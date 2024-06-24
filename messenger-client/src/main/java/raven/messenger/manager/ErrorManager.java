@@ -1,6 +1,6 @@
 package raven.messenger.manager;
 
-import raven.toast.Notifications;
+import raven.modal.Toast;
 
 public class ErrorManager {
 
@@ -14,7 +14,7 @@ public class ErrorManager {
     }
 
     public void showError(Exception e) {
-        Notifications.getInstance().show(Notifications.Type.ERROR, e.getMessage());
+        Toast.show(FormsManager.getInstance().getMainFrame(), Toast.Type.ERROR, e.getMessage());
         e.printStackTrace();
     }
 }

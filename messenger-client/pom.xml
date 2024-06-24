@@ -18,12 +18,12 @@
         <dependency>
             <groupId>com.formdev</groupId>
             <artifactId>flatlaf</artifactId>
-            <version>3.3</version>
+            <version>3.4.1</version>
         </dependency>
         <dependency>
             <groupId>com.formdev</groupId>
             <artifactId>flatlaf-extras</artifactId>
-            <version>3.3</version>
+            <version>3.4.1</version>
         </dependency>
         <dependency>
             <groupId>com.formdev</groupId>
@@ -52,18 +52,11 @@
         </dependency>
 
         <dependency>
-            <groupId>raven.popup</groupId>
-            <artifactId>swing-glasspane-popup</artifactId>
-            <version>1.4.0</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/library/swing-glasspane-popup-1.4.0.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>raven.toast</groupId>
-            <artifactId>swing-toast-notifications</artifactId>
+            <groupId>raven.modaldialog</groupId>
+            <artifactId>modal-dialog</artifactId>
             <version>1.0.1</version>
             <scope>system</scope>
-            <systemPath>${basedir}/library/swing-toast-notifications-1.0.1.jar</systemPath>
+            <systemPath>${basedir}/library/modal-dialog-1.0.1.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.miglayout</groupId>

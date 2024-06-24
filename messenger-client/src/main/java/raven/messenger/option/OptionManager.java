@@ -1,15 +1,18 @@
 package raven.messenger.option;
 
 import raven.messenger.api.exception.ResponseException;
+import raven.messenger.component.ModalBorderCustom;
 import raven.messenger.event.GlobalEvent;
 import raven.messenger.manager.ErrorManager;
+import raven.messenger.manager.FormsManager;
 import raven.messenger.option.group.DialogGroup;
 import raven.messenger.option.profile.DialogProfile;
 import raven.messenger.option.storage.DialogStorage;
 import raven.messenger.socket.SocketService;
-import raven.popup.GlassPanePopup;
-import raven.popup.component.SimplePopupBorder;
-import raven.popup.component.SimplePopupBorderOption;
+import raven.modal.ModalDialog;
+import raven.modal.component.SimpleModalBorder;
+import raven.modal.option.ModalBorderOption;
+import raven.modal.option.Option;
 
 import java.io.IOException;
 
@@ -26,34 +29,42 @@ public class OptionManager {
 
     public void newGroup() {
         DialogGroup dialogGroup = new DialogGroup();
-        String actions[] = {"Cancel", "Save"};
-        SimplePopupBorder dialogBorder = new SimplePopupBorder(dialogGroup, "New Group", new SimplePopupBorderOption().useScroll(), actions, (popupController, i) -> {
-            if (i == 1) {
+        SimpleModalBorder.Option[] options = new SimpleModalBorder.Option[]{
+                new SimpleModalBorder.Option("Cancel", SimpleModalBorder.CANCEL_OPTION),
+                new SimpleModalBorder.Option("Save", SimpleModalBorder.OK_OPTION)
+        };
+        ModalBorderCustom modalBorder = new ModalBorderCustom(dialogGroup, "New Group", new ModalBorderOption().setUseScroll(true), options, (callback, action) -> {
+            if (action == SimpleModalBorder.OK_OPTION) {
                 if (dialogGroup.validateInput()) {
                     try {
                         int id = SocketService.getInstance().getServiceGroup().create(dialogGroup.getData());
                         GlobalEvent.getInstance().getGroupCreateEvent().onCreate(id);
-                        popupController.closePopup();
                     } catch (ResponseException | IOException e) {
                         ErrorManager.getInstance().showError(e);
                     }
+                } else {
+                    callback.consume();
                 }
-            } else {
-                popupController.closePopup();
             }
         });
-        GlassPanePopup.showPopup(dialogBorder, "group");
+        Option option = ModalDialog.createOption();
+        option.getLayoutOption().setSize(400, -1);
+        ModalDialog.showModal(FormsManager.getInstance().getMainFrame(), modalBorder, option, "group");
     }
 
     public void showProfile() {
         DialogProfile dialogProfile = new DialogProfile();
-        SimplePopupBorder dialogBorder = new SimplePopupBorder(dialogProfile, "Edit Profile", new SimplePopupBorderOption().useScroll());
-        GlassPanePopup.showPopup(dialogBorder, "profile");
+        SimpleModalBorder modalBorder = new SimpleModalBorder(dialogProfile, "Edit Profile", new ModalBorderOption().setUseScroll(true));
+        Option option = ModalDialog.createOption();
+        option.getLayoutOption().setSize(400, -1);
+        ModalDialog.showModal(FormsManager.getInstance().getMainFrame(), modalBorder, option, "profile");
     }
 
     public void showStorage() {
         DialogStorage dialogStorage = new DialogStorage();
-        SimplePopupBorder dialogBorder = new SimplePopupBorder(dialogStorage, "Local storage", new SimplePopupBorderOption().useScroll());
-        GlassPanePopup.showPopup(dialogBorder, "storage");
+        SimpleModalBorder modalBorder = new SimpleModalBorder(dialogStorage, "Local storage", new ModalBorderOption().setUseScroll(true));
+        Option option = ModalDialog.createOption();
+        option.getLayoutOption().setSize(400, -1);
+        ModalDialog.showModal(FormsManager.getInstance().getMainFrame(), modalBorder, option, "storage");
     }
 }
