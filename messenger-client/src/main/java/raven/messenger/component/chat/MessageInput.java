@@ -45,7 +45,7 @@ public class MessageInput extends JPanel {
         scroll.putClientProperty(FlatClientProperties.STYLE, "" +
                 "border:0,0,0,0");
         scroll.getVerticalScrollBar().putClientProperty(FlatClientProperties.STYLE, "" +
-                "border:0,3,0,0");
+                "width:3");
         scroll.getVerticalScrollBar().setUnitIncrement(10);
         soundCapture.addSoundCaptureListener(new SoundCaptureListener() {
             @Override

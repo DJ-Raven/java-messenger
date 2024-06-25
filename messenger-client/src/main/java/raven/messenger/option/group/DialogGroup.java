@@ -32,7 +32,7 @@ public class DialogGroup extends JPanel {
     }
 
     private void createDetail() {
-        JPanel panel = new JPanel(new MigLayout("fillx,wrap,insets 3 30 3 30", "fill"));
+        JPanel panel = new JPanel(new MigLayout("fillx,wrap,insets 3 35 3 35", "fill"));
         txtName = new JTextField();
         txtName.addKeyListener(new KeyAdapter() {
             @Override

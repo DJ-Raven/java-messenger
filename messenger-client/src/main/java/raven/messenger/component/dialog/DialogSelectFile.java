@@ -35,7 +35,7 @@ public class DialogSelectFile extends JPanel {
     }
 
     private void init() {
-        setLayout(new MigLayout("fill,wrap,insets 5 25 5 10", "fill", "[shrinkprio 2,100::]15[][shrinkprio 1]"));
+        setLayout(new MigLayout("fill,wrap,insets 5 35 5 25", "fill", "[shrinkprio 2,100::]15[][shrinkprio 1]"));
         JPanel panel = new JPanel(new MigLayout("fill,insets 0", "[fill][grow 0]", "fill"));
         panelFiles = new JPanel(new MigLayout("fillx,wrap,insets 0", "fill"));
         panelFiles.putClientProperty(FlatClientProperties.STYLE, "" +
@@ -44,6 +44,8 @@ public class DialogSelectFile extends JPanel {
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.putClientProperty(FlatClientProperties.STYLE, "" +
                 "border:0,0,0,0");
+        scrollPane.getVerticalScrollBar().putClientProperty(FlatClientProperties.STYLE, "" +
+                "width:5");
         scrollPane.getVerticalScrollBar().setUnitIncrement(10);
         panel.add(scrollPane);
         panel.add(scrollPane.getVerticalScrollBar());

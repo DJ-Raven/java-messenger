@@ -42,7 +42,7 @@ public class DialogManager {
     public void showDialog(Component component, String title, SimpleModalBorder.Option[] optionsType, ModalCallback callbackAction, String id) {
         ModalBorderCustom dialogBorder = new ModalBorderCustom(component, title, optionsType, callbackAction);
         Option option = ModalDialog.createOption();
-        option.getLayoutOption().setSize(400, -1);
+        option.getLayoutOption().setSize(430, -1);
         ModalDialog.showModal(frame, dialogBorder, option, id);
     }
 
