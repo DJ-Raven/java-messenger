@@ -8,7 +8,7 @@ import raven.messenger.component.EmptyModalBorderCustom;
 import raven.messenger.component.ModalBorderCustom;
 import raven.messenger.component.NetworkIcon;
 import raven.messenger.component.chat.model.ChatPhotoData;
-import raven.messenger.component.layout.OverlayScrollLayout;
+import raven.messenger.plugin.swing.scroll.ScrollOverlay;
 import raven.messenger.util.MethodUtil;
 import raven.modal.ModalDialog;
 import raven.modal.component.SimpleModalBorder;
@@ -62,9 +62,9 @@ public class DialogManager {
         } else if (resource.getImageWidth() > 1000) {
             w = 1000;
         }
-        JLayeredPane paneView = new JLayeredPane();
+
         JLabel label = new JLabel(new NetworkIcon(resource, w, h));
-        JScrollPane scrollPane = new JScrollPane(label);
+        ScrollOverlay scrollPane = new ScrollOverlay(label);
         scrollPane.setBorder(new ScaledEmptyBorder(0, 4, 0, 4));
         JScrollBar verticalScrollbar = scrollPane.getVerticalScrollBar();
         JScrollBar horizontalScrollBar = scrollPane.getHorizontalScrollBar();
@@ -78,18 +78,12 @@ public class DialogManager {
                 "trackArc:$ScrollBar.thumbArc;");
         verticalScrollbar.setUnitIncrement(10);
         horizontalScrollBar.setUnitIncrement(10);
-        paneView.setLayer(verticalScrollbar, JLayeredPane.MODAL_LAYER);
-        paneView.setLayer(horizontalScrollBar, JLayeredPane.MODAL_LAYER);
-        paneView.add(scrollPane);
-        paneView.add(verticalScrollbar);
-        paneView.add(horizontalScrollBar);
-        paneView.setLayout(new OverlayScrollLayout(scrollPane));
 
         // option
         Option option = ModalDialog.createOption();
         option.setRound(10);
         option.getLayoutOption().setSize(-1, -1);
-        ModalDialog.showModal(frame, new EmptyModalBorderCustom(paneView), option);
+        ModalDialog.showModal(frame, new EmptyModalBorderCustom(scrollPane), option);
     }
 
     public File showOpenDialog(ShowOpenType type) {
