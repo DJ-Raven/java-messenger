@@ -14,7 +14,7 @@ import java.awt.*;
 public class EmptyModalBorderCustom extends Modal {
 
     public EmptyModalBorderCustom(Component component) {
-        setLayout(new MigLayout("fill", "[fill]", "[fill]"));
+        setLayout(new MigLayout("fill", "[fill,200::]", "[fill,200::]"));
         add(component);
         add(createActionTitle(), "pos 1al 0", 0);
     }
