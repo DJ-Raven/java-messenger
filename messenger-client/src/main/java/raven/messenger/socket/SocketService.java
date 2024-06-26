@@ -10,6 +10,7 @@ import raven.messenger.models.response.ModelMessage;
 import raven.messenger.service.ServiceGroup;
 import raven.messenger.service.ServiceMessage;
 import raven.messenger.service.ServiceUser;
+import raven.messenger.socket.event.ConnectionPromise;
 import raven.messenger.socket.event.SocketEvent;
 import raven.messenger.socket.models.ModelSendMessage;
 import raven.messenger.store.CookieManager;
@@ -47,11 +48,12 @@ public class SocketService {
                 .setExtraHeaders(Collections.singletonMap("cookies", Collections.singletonList(cookie)))
                 .build();
         Socket socket = IO.socket(uri, option);
+        final ConnectionPromise connectionPromise = new ConnectionPromise();
         socket.on(Socket.EVENT_DISCONNECT, objects -> {
-            System.out.println("Client discounted");
+            connectionPromise.discounted();
         });
         socket.on(Socket.EVENT_CONNECT, objects -> {
-            System.out.println("Server connected");
+            connectionPromise.reconnected();
         });
         socket.on(Socket.EVENT_CONNECT_ERROR, objects -> {
             System.out.println(objects[0]);
