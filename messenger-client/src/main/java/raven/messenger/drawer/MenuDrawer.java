@@ -1,10 +1,11 @@
 package raven.messenger.drawer;
 
-import raven.drawer.Drawer;
-import raven.drawer.component.header.SimpleHeader;
-import raven.drawer.component.header.SimpleHeaderData;
+import raven.messenger.manager.FormsManager;
 import raven.messenger.models.response.ModelProfile;
 import raven.messenger.util.NetworkDataUtil;
+import raven.modal.Drawer;
+import raven.modal.drawer.simple.header.SimpleHeader;
+import raven.modal.drawer.simple.header.SimpleHeaderData;
 
 import javax.swing.*;
 
@@ -22,15 +23,15 @@ public class MenuDrawer {
 
     private MenuDrawer() {
         drawerBuilder = new MyDrawerBuilder();
-        Drawer.getInstance().setDrawerBuilder(drawerBuilder);
+        Drawer.installDrawer(FormsManager.getInstance().getMainFrame(), drawerBuilder);
     }
 
     public void showDrawer() {
-        SwingUtilities.invokeLater(() -> Drawer.getInstance().showDrawer());
+        SwingUtilities.invokeLater(() -> Drawer.showDrawer());
     }
 
     public void closeDrawer() {
-        Drawer.getInstance().closeDrawer();
+        Drawer.closeDrawer();
     }
 
     public void setDrawerHeader(ModelProfile profile) {

@@ -45,6 +45,7 @@ public class ChatPanel extends JPanel {
         panelBottom.putClientProperty(FlatClientProperties.STYLE, "" +
                 "background:$Chat.background");
         scroll.getVerticalScrollBar().putClientProperty(FlatClientProperties.STYLE, "" +
+                "width:5;" +
                 "background:$Chat.background;");
         scroll.setBorder(BorderFactory.createEmptyBorder());
         scroll.getVerticalScrollBar().setUnitIncrement(10);

@@ -26,9 +26,9 @@ public class DialogStorage extends JPanel {
     }
 
     private void init() {
-        setLayout(new MigLayout("fill,wrap,insets 10 0 15 0", "fill", "[]20[][]"));
+        setLayout(new MigLayout("fill,wrap,insets 30 0 30 0", "fill", "[]20[][]"));
         chart = new Chart();
-        panelDetail = new JPanel(new MigLayout("fill,wrap,gapy 0,insets 0 25 0 25", "fill"));
+        panelDetail = new JPanel(new MigLayout("fill,wrap,gapy 0,insets 0 30 0 30", "fill"));
         add(chart, "height 150!");
         add(ComponentUtil.createInfoText("The application stores cached data from the server on your", "computer's storage."));
         add(panelDetail);

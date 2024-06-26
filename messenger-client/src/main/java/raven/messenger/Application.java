@@ -6,7 +6,6 @@ import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.formdev.flatlaf.util.UIScale;
 import raven.messenger.manager.DialogManager;
 import raven.messenger.manager.FormsManager;
-import raven.toast.Notifications;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,7 +29,6 @@ public class Application extends JFrame {
                 FormsManager.getInstance().initApplication(Application.this);
             }
         });
-        Notifications.getInstance().setJFrame(this);
         DialogManager.getInstance().init(this);
         setLocationRelativeTo(null);
     }

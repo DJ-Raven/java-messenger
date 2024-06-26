@@ -15,9 +15,9 @@ import raven.messenger.models.response.ModelProfile;
 import raven.messenger.util.ComponentUtil;
 import raven.messenger.util.MethodUtil;
 import raven.messenger.util.NetworkDataUtil;
-import raven.popup.GlassPanePopup;
-import raven.popup.component.SimplePopupBorder;
-import raven.popup.component.SimplePopupBorderOption;
+import raven.modal.ModalDialog;
+import raven.modal.component.SimpleModalBorder;
+import raven.modal.option.Option;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -54,16 +54,22 @@ public class DialogProfile extends JPanel {
         buttonUpdateBio = new JButton(MethodUtil.createIcon("raven/messenger/icon/edit.svg", 0.7f));
         buttonUpdateBio.setVisible(false);
         bioLength = new JLabel("40");
-        bioLength.putClientProperty(FlatClientProperties.STYLE, "" + "foreground:$Text.lowForeground;" + "border:0,5,0,0");
+        bioLength.putClientProperty(FlatClientProperties.STYLE, "" +
+                "foreground:$Text.lowForeground;" +
+                "border:0,5,0,0");
         labelName = new JLabel("Ra Ven");
         txtBio = new JTextField();
-        labelName.putClientProperty(FlatClientProperties.STYLE, "" + "font:+5");
+        labelName.putClientProperty(FlatClientProperties.STYLE, "" +
+                "font:+5");
         txtBio.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Bio");
         JToolBar toolBar = new JToolBar();
         toolBar.add(buttonUpdateBio);
         toolBar.add(bioLength);
         txtBio.putClientProperty(FlatClientProperties.TEXT_FIELD_TRAILING_COMPONENT, toolBar);
-        txtBio.putClientProperty(FlatClientProperties.STYLE, "" + "font:+1;" + "border:5,1,5,1;" + "background:null");
+        txtBio.putClientProperty(FlatClientProperties.STYLE, "" +
+                "font:+1;" +
+                "border:5,1,5,1;" +
+                "background:null");
 
         buttonUpdateBio.addActionListener(e -> {
             try {
@@ -91,7 +97,7 @@ public class DialogProfile extends JPanel {
         });
 
         panel.add(labelName);
-        panel.add(txtBio, "grow 1,gapx 25 25");
+        panel.add(txtBio, "grow 1,gapx 35 35");
 
         panel.add(ComponentUtil.createInfoText("Provide a short description about yourself.", "Example: Passionate about photography and nature lover."), "grow 1");
         add(panel, "grow 1");
@@ -146,16 +152,17 @@ public class DialogProfile extends JPanel {
         JPanel panel = new JPanel(new MigLayout("wrap,fill,insets 5 25 5 25", "[fill]"));
         JTextField txtFirstName = new JTextField(profile.getName().getFirstName());
         JTextField txtLastName = new JTextField(profile.getName().getLastName());
-        txtFirstName.putClientProperty(FlatClientProperties.STYLE, "" + "background:null");
-        txtLastName.putClientProperty(FlatClientProperties.STYLE, "" + "background:null");
+        txtFirstName.putClientProperty(FlatClientProperties.STYLE, "" +
+                "background:null");
+        txtLastName.putClientProperty(FlatClientProperties.STYLE, "" +
+                "background:null");
         panel.add(new JLabel("First name"));
         panel.add(txtFirstName);
         panel.add(new JLabel("Last name"));
         panel.add(txtLastName);
 
-        String actions[] = {"Cancel", "Save"};
-        SimplePopupBorder popupBorder = new SimplePopupBorder(panel, "Edit name", new SimplePopupBorderOption().setWidth(300), actions, (popupController, i) -> {
-            if (i == 1) {
+        SimpleModalBorder modalBorder = new SimpleModalBorder(panel, "Edit Name", getOptions(), (callback, action) -> {
+            if (action == SimpleModalBorder.OK_OPTION) {
                 if (FormsManager.getInstance().validateEmpty(txtFirstName, txtLastName)) {
                     try {
                         String firstName = txtFirstName.getText().trim();
@@ -164,16 +171,17 @@ public class DialogProfile extends JPanel {
                         ProfileManager.getInstance().updateProfileUser(name);
                         fieldName.setDescription(name.getFullName());
                         labelName.setText(name.getFullName());
-                        popupController.closePopup();
                     } catch (ResponseException e) {
                         ErrorManager.getInstance().showError(e);
                     }
+                } else {
+                    callback.consume();
                 }
-            } else {
-                popupController.closePopup();
             }
         });
-        GlassPanePopup.showPopup(popupBorder);
+        Option option = ModalDialog.createOption();
+        option.getLayoutOption().setSize(300, -1);
+        ModalDialog.showModal(FormsManager.getInstance().getMainFrame(), modalBorder, option);
     }
 
     private void editGender() {
@@ -192,9 +200,8 @@ public class DialogProfile extends JPanel {
         panel.add(cmdMale);
         panel.add(cmdFemale);
 
-        String actions[] = {"Cancel", "Save"};
-        SimplePopupBorder popupBorder = new SimplePopupBorder(panel, "Edit gender", new SimplePopupBorderOption().setWidth(300), actions, (popupController, i) -> {
-            if (i == 1) {
+        SimpleModalBorder modalBorder = new SimpleModalBorder(panel, "Edit Gender", getOptions(), (callback, action) -> {
+            if (action == SimpleModalBorder.OK_OPTION) {
                 ModelGender gender = new ModelGender(cmdMale.isSelected() ? "M" : "F");
                 try {
                     ProfileManager.getInstance().updateProfileGender(gender);
@@ -204,43 +211,51 @@ public class DialogProfile extends JPanel {
                     } else {
                         fieldGender.setIcon("female.svg");
                     }
-                    popupController.closePopup();
                 } catch (ResponseException e) {
                     ErrorManager.getInstance().showError(e);
                 }
-            } else {
-                popupController.closePopup();
             }
         });
-        GlassPanePopup.showPopup(popupBorder);
+        Option option = ModalDialog.createOption();
+        option.getLayoutOption().setSize(300, -1);
+        ModalDialog.showModal(FormsManager.getInstance().getMainFrame(), modalBorder, option);
     }
 
     private void editPhone() {
         ModelProfile profile = ProfileManager.getInstance().getProfile();
         JPanel panel = new JPanel(new MigLayout("wrap,fill,insets 5 25 5 25", "[fill]"));
         JTextField txtPhone = new JTextField(profile.getPhoneNumber());
-        txtPhone.putClientProperty(FlatClientProperties.STYLE, "" + "background:null");
+        txtPhone.putClientProperty(FlatClientProperties.STYLE, "" +
+                "background:null");
         panel.add(new JLabel("Phone number"));
         panel.add(txtPhone);
 
-        String actions[] = {"Cancel", "Save"};
-        SimplePopupBorder popupBorder = new SimplePopupBorder(panel, "Edit phone", new SimplePopupBorderOption().setWidth(300), actions, (popupController, i) -> {
-            if (i == 1) {
+        SimpleModalBorder modalBorder = new SimpleModalBorder(panel, "Edit Phone", getOptions(), (callback, action) -> {
+            if (action == SimpleModalBorder.OK_OPTION) {
                 if (FormsManager.getInstance().validateEmpty(txtPhone)) {
                     try {
                         String phoneNumber = txtPhone.getText().trim();
                         ProfileManager.getInstance().updateProfilePhoneNumber(phoneNumber);
                         fieldPhone.setDescription(phoneNumber);
-                        popupController.closePopup();
                     } catch (ResponseException e) {
                         ErrorManager.getInstance().showError(e);
                     }
+                } else {
+                    callback.consume();
                 }
-            } else {
-                popupController.closePopup();
             }
         });
-        GlassPanePopup.showPopup(popupBorder);
+        Option option = ModalDialog.createOption();
+        option.getLayoutOption().setSize(300, -1);
+        ModalDialog.showModal(FormsManager.getInstance().getMainFrame(), modalBorder, option);
+    }
+
+    private SimpleModalBorder.Option[] getOptions() {
+        SimpleModalBorder.Option[] options = new SimpleModalBorder.Option[]{
+                new SimpleModalBorder.Option("Cancel", SimpleModalBorder.CANCEL_OPTION),
+                new SimpleModalBorder.Option("Save", SimpleModalBorder.OK_OPTION)
+        };
+        return options;
     }
 
     private JLabel labelName;
@@ -275,14 +290,21 @@ public class DialogProfile extends JPanel {
 
         private void init() {
             setCursor(new Cursor(Cursor.HAND_CURSOR));
-            setLayout(new MigLayout("fill,insets 5 25 5 25", "[]10[]push[]"));
-            putClientProperty(FlatClientProperties.STYLE, "" + "margin:2,0,2,0;" + "borderWidth:0;" + "focusWidth:0;" + "innerFocusWidth:0;" + "background:null;");
+            setLayout(new MigLayout("fill,insets 5 35 5 35", "[]10[]push[]"));
+            putClientProperty(FlatClientProperties.STYLE, "" +
+                    "margin:2,0,2,0;" +
+                    "borderWidth:0;" +
+                    "focusWidth:0;" +
+                    "innerFocusWidth:0;" +
+                    "background:null;");
             labelIcon = new JLabel(MethodUtil.createIcon("raven/messenger/icon/" + icon, 0.5f));
             add(labelIcon);
             labelName = new JLabel(name);
             labelDescription = new JLabel(description);
-            labelName.putClientProperty(FlatClientProperties.STYLE, "" + "font:+1");
-            labelDescription.putClientProperty(FlatClientProperties.STYLE, "" + "font:+1");
+            labelName.putClientProperty(FlatClientProperties.STYLE, "" +
+                    "font:+1");
+            labelDescription.putClientProperty(FlatClientProperties.STYLE, "" +
+                    "font:+1");
 
             add(labelName);
             add(labelDescription);
@@ -297,7 +319,12 @@ public class DialogProfile extends JPanel {
 
         public ButtonGender(Icon icon) {
             super(icon);
-            putClientProperty(FlatClientProperties.STYLE, "" + "arc:10;" + "borderWidth:0;" + "focusWidth:0;" + "innerFocusWidth:0;" + "background:null;");
+            putClientProperty(FlatClientProperties.STYLE, "" +
+                    "arc:10;" +
+                    "borderWidth:0;" +
+                    "focusWidth:0;" +
+                    "innerFocusWidth:0;" +
+                    "background:null;");
         }
 
         @Override

@@ -2,15 +2,17 @@ package raven.messenger.component.profile;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
+import raven.extras.AvatarIcon;
+import raven.messenger.component.ModalBorderCustom;
 import raven.messenger.component.StringIcon;
 import raven.messenger.manager.DialogManager;
 import raven.messenger.manager.ErrorManager;
+import raven.messenger.manager.FormsManager;
 import raven.messenger.option.profile.ProfileEditor;
 import raven.messenger.util.MethodUtil;
-import raven.popup.GlassPanePopup;
-import raven.popup.component.SimplePopupBorder;
-import raven.popup.component.SimplePopupBorderOption;
-import raven.swing.AvatarIcon;
+import raven.modal.ModalDialog;
+import raven.modal.component.SimpleModalBorder;
+import raven.modal.option.Option;
 
 import javax.swing.*;
 import java.awt.*;
@@ -51,7 +53,6 @@ public class ProfilePanel extends JPanel {
         add(labelProfile);
     }
 
-
     private JButton createEditProfile() {
         JButton button = new JButton(MethodUtil.createIcon("raven/messenger/icon/edit.svg", 0.75f));
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -67,10 +68,12 @@ public class ProfilePanel extends JPanel {
         File file = DialogManager.getInstance().showOpenDialog(DialogManager.ShowOpenType.PHOTO);
         if (file != null) {
             ProfileEditor profileEditor = new ProfileEditor(file);
-            String actions[] = {"Cancel", "Save"};
-            SimplePopupBorder popupBorder = new SimplePopupBorder(profileEditor, "Edit profile", new SimplePopupBorderOption().setWidth(300), actions, (popupController, i) -> {
-                popupController.closePopup();
-                if (i == 1) {
+            SimpleModalBorder.Option[] options = new SimpleModalBorder.Option[]{
+                    new SimpleModalBorder.Option("Cancel", SimpleModalBorder.CANCEL_OPTION),
+                    new SimpleModalBorder.Option("Save", SimpleModalBorder.OK_OPTION)
+            };
+            ModalBorderCustom modalBorder = new ModalBorderCustom(profileEditor, "Edit profile", options, (callback, action) -> {
+                if (action == SimpleModalBorder.OK_OPTION) {
                     Icon oldImage = labelProfile.getIcon();
                     try {
                         selectedImage = profileEditor.getEditProfile();
@@ -85,7 +88,9 @@ public class ProfilePanel extends JPanel {
                     }
                 }
             });
-            GlassPanePopup.showPopup(popupBorder);
+            Option option = ModalDialog.createOption();
+            option.getLayoutOption().setSize(300, -1);
+            ModalDialog.showModal(FormsManager.getInstance().getMainFrame(), modalBorder, option);
         }
     }
 

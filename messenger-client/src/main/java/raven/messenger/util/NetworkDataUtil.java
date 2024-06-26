@@ -1,5 +1,6 @@
 package raven.messenger.util;
 
+import raven.extras.AvatarIcon;
 import raven.messenger.api.request.RequestFileMonitor;
 import raven.messenger.component.NetworkIcon;
 import raven.messenger.component.StringIcon;
@@ -7,7 +8,6 @@ import raven.messenger.manager.ErrorManager;
 import raven.messenger.models.other.ModelImage;
 import raven.messenger.socket.SocketService;
 import raven.messenger.store.StoreManager;
-import raven.swing.AvatarIcon;
 
 import javax.swing.*;
 import java.io.File;

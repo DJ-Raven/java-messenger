@@ -1,17 +1,19 @@
 package raven.messenger.component.dialog;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.util.ScaledEmptyBorder;
 import net.miginfocom.swing.MigLayout;
 import raven.messenger.component.LabelRound;
 import raven.messenger.component.PictureBox;
 import raven.messenger.component.chat.AutoWrapText;
 import raven.messenger.component.chat.TextPaneCustom;
-import raven.messenger.manager.DialogManager;
 import raven.messenger.manager.ErrorManager;
 import raven.messenger.models.file.FileType;
 import raven.messenger.models.file.ModelFileWithType;
 import raven.messenger.util.MethodUtil;
-import raven.popup.component.GlassPaneChild;
+import raven.modal.ModalDialog;
+import raven.modal.component.ModalBorderAction;
+import raven.modal.component.SimpleModalBorder;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -22,7 +24,7 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 
-public class DialogSelectFile extends GlassPaneChild {
+public class DialogSelectFile extends JPanel {
 
     private final File[] files;
     private final String message;
@@ -36,15 +38,16 @@ public class DialogSelectFile extends GlassPaneChild {
     }
 
     private void init() {
-        setLayout(new MigLayout("fill,wrap,insets 5 25 5 10", "fill", "[shrinkprio 2,100::]15[][shrinkprio 1]"));
+        setLayout(new MigLayout("fill,wrap,insets 5 35 5 25", "fill", "[shrinkprio 2,100::]15[][shrinkprio 1]"));
         JPanel panel = new JPanel(new MigLayout("fill,insets 0", "[fill][grow 0]", "fill"));
         panelFiles = new JPanel(new MigLayout("fillx,wrap,insets 0", "fill"));
         panelFiles.putClientProperty(FlatClientProperties.STYLE, "" +
                 "background:null");
         scrollPane = new JScrollPane(panelFiles);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.putClientProperty(FlatClientProperties.STYLE, "" +
-                "border:0,0,0,0");
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        scrollPane.getVerticalScrollBar().putClientProperty(FlatClientProperties.STYLE, "" +
+                "width:5");
         scrollPane.getVerticalScrollBar().setUnitIncrement(10);
         panel.add(scrollPane);
         panel.add(scrollPane.getVerticalScrollBar());
@@ -93,7 +96,10 @@ public class DialogSelectFile extends GlassPaneChild {
             @Override
             public void keyTyped(KeyEvent e) {
                 if (e.getKeyChar() == 10 && e.isControlDown()) {
-                    callbackAction.action(createController(), 1);
+                    ModalBorderAction modalBorderAction = ModalBorderAction.getModalBorderAction(DialogSelectFile.this);
+                    if (modalBorderAction != null) {
+                        modalBorderAction.doAction(SimpleModalBorder.OK_OPTION);
+                    }
                 }
             }
         });
@@ -152,7 +158,7 @@ public class DialogSelectFile extends GlassPaneChild {
                 panelFiles.repaint();
                 revalidate();
             } else {
-                DialogManager.getInstance().closeLast();
+                ModalDialog.closeModal("select_file");
             }
         });
         return cmdDelete;

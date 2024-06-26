@@ -1,15 +1,19 @@
 package raven.messenger.manager;
 
+import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.util.ScaledEmptyBorder;
 import com.formdev.flatlaf.util.UIScale;
 import raven.messenger.Application;
+import raven.messenger.component.EmptyModalBorderCustom;
+import raven.messenger.component.ModalBorderCustom;
 import raven.messenger.component.NetworkIcon;
 import raven.messenger.component.chat.model.ChatPhotoData;
+import raven.messenger.plugin.swing.scroll.ScrollOverlay;
 import raven.messenger.util.MethodUtil;
-import raven.popup.DefaultOption;
-import raven.popup.GlassPanePopup;
-import raven.popup.component.EmptyPopupBorder;
-import raven.popup.component.PopupCallbackAction;
-import raven.popup.component.SimplePopupBorder;
+import raven.modal.ModalDialog;
+import raven.modal.component.SimpleModalBorder;
+import raven.modal.listener.ModalCallback;
+import raven.modal.option.Option;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
@@ -31,20 +35,18 @@ public class DialogManager {
     }
 
     private DialogManager() {
+        ModalDialog.getDefaultOption().setAnimationEnabled(false);
     }
 
     public void init(JFrame frame) {
         this.frame = frame;
-        GlassPanePopup.install(frame);
     }
 
-    public void showDialog(Component component, String title) {
-        showDialog(component, title, null, null);
-    }
-
-    public void showDialog(Component component, String title, String[] action, PopupCallbackAction callbackAction) {
-        SimplePopupBorder dialogBorder = new SimplePopupBorder(component, title, action, callbackAction);
-        GlassPanePopup.showPopup(dialogBorder);
+    public void showDialog(Component component, String title, SimpleModalBorder.Option[] optionsType, ModalCallback callbackAction, String id) {
+        ModalBorderCustom dialogBorder = new ModalBorderCustom(component, title, optionsType, callbackAction);
+        Option option = ModalDialog.createOption();
+        option.getLayoutOption().setSize(430, -1);
+        ModalDialog.showModal(frame, dialogBorder, option, id);
     }
 
     public void showViewPhotoDialog(ChatPhotoData photo) {
@@ -60,18 +62,28 @@ public class DialogManager {
         } else if (resource.getImageWidth() > 1000) {
             w = 1000;
         }
-        JLabel label = new JLabel(new NetworkIcon(resource, w, h));
-        JScrollPane scrollPane = new JScrollPane(label);
-        GlassPanePopup.showPopup(new EmptyPopupBorder(scrollPane), new DefaultOption() {
-            @Override
-            public boolean closeWhenClickOutside() {
-                return true;
-            }
-        });
-    }
 
-    public void closeLast() {
-        GlassPanePopup.closePopupLast();
+        JLabel label = new JLabel(new NetworkIcon(resource, w, h));
+        ScrollOverlay scrollPane = new ScrollOverlay(label);
+        scrollPane.setBorder(new ScaledEmptyBorder(0, 0, 0, 0));
+        JScrollBar verticalScrollbar = scrollPane.getVerticalScrollBar();
+        JScrollBar horizontalScrollBar = scrollPane.getHorizontalScrollBar();
+        verticalScrollbar.setOpaque(false);
+        horizontalScrollBar.setOpaque(false);
+        verticalScrollbar.putClientProperty(FlatClientProperties.STYLE, "" +
+                "width:4;" +
+                "trackArc:$ScrollBar.thumbArc;");
+        horizontalScrollBar.putClientProperty(FlatClientProperties.STYLE, "" +
+                "width:4;" +
+                "trackArc:$ScrollBar.thumbArc;");
+        verticalScrollbar.setUnitIncrement(10);
+        horizontalScrollBar.setUnitIncrement(10);
+
+        // option
+        Option option = ModalDialog.createOption();
+        option.setRound(0);
+        option.getLayoutOption().setSize(-1, -1);
+        ModalDialog.showModal(frame, new EmptyModalBorderCustom(scrollPane), option);
     }
 
     public File showOpenDialog(ShowOpenType type) {
