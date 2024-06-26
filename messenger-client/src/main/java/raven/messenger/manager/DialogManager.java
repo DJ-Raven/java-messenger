@@ -65,7 +65,7 @@ public class DialogManager {
 
         JLabel label = new JLabel(new NetworkIcon(resource, w, h));
         ScrollOverlay scrollPane = new ScrollOverlay(label);
-        scrollPane.setBorder(new ScaledEmptyBorder(0, 4, 0, 4));
+        scrollPane.setBorder(new ScaledEmptyBorder(0, 0, 0, 0));
         JScrollBar verticalScrollbar = scrollPane.getVerticalScrollBar();
         JScrollBar horizontalScrollBar = scrollPane.getHorizontalScrollBar();
         verticalScrollbar.setOpaque(false);
@@ -81,7 +81,7 @@ public class DialogManager {
 
         // option
         Option option = ModalDialog.createOption();
-        option.setRound(10);
+        option.setRound(0);
         option.getLayoutOption().setSize(-1, -1);
         ModalDialog.showModal(frame, new EmptyModalBorderCustom(scrollPane), option);
     }

@@ -14,9 +14,9 @@ import java.awt.*;
 public class EmptyModalBorderCustom extends Modal {
 
     public EmptyModalBorderCustom(Component component) {
-        setLayout(new MigLayout("fill", "[fill,200::]", "[fill,200::]"));
+        setLayout(new MigLayout("fill,insets 1", "[fill,200::]", "[fill,200::]"));
         add(component);
-        add(createActionTitle(), "pos 1al 0", 0);
+        add(createActionTitle(), "pos visual.x2-pref-5 visual.y+5", 0);
     }
 
     private Component createActionTitle() {
@@ -27,7 +27,7 @@ public class EmptyModalBorderCustom extends Modal {
         JButton buttonClose = new JButton(icon);
         buttonClose.putClientProperty(FlatClientProperties.STYLE, "" +
                 "arc:999;" +
-                "margin:5,5,5,5;");
+                "margin:50,50,50,50;");
         buttonClose.addActionListener(e -> getController().close());
         panel.add(buttonClose);
         return panel;
