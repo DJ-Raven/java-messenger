@@ -54,9 +54,9 @@
         <dependency>
             <groupId>raven.modaldialog</groupId>
             <artifactId>modal-dialog</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.2</version>
             <scope>system</scope>
-            <systemPath>${basedir}/library/modal-dialog-1.0.1.jar</systemPath>
+            <systemPath>${basedir}/library/modal-dialog-1.0.2.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.miglayout</groupId>

@@ -12,6 +12,8 @@ import raven.messenger.models.file.FileType;
 import raven.messenger.models.file.ModelFileWithType;
 import raven.messenger.util.MethodUtil;
 import raven.modal.ModalDialog;
+import raven.modal.component.ModalBorderAction;
+import raven.modal.component.SimpleModalBorder;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -94,7 +96,10 @@ public class DialogSelectFile extends JPanel {
             @Override
             public void keyTyped(KeyEvent e) {
                 if (e.getKeyChar() == 10 && e.isControlDown()) {
-                    // callbackAction.action(createController(), 1);
+                    ModalBorderAction modalBorderAction = ModalBorderAction.getModalBorderAction(DialogSelectFile.this);
+                    if (modalBorderAction != null) {
+                        modalBorderAction.doAction(SimpleModalBorder.OK_OPTION);
+                    }
                 }
             }
         });
