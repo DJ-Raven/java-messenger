@@ -1,6 +1,7 @@
 package raven.messenger.component.dialog;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.util.ScaledEmptyBorder;
 import net.miginfocom.swing.MigLayout;
 import raven.messenger.component.LabelRound;
 import raven.messenger.component.PictureBox;
@@ -42,8 +43,7 @@ public class DialogSelectFile extends JPanel {
                 "background:null");
         scrollPane = new JScrollPane(panelFiles);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.putClientProperty(FlatClientProperties.STYLE, "" +
-                "border:0,0,0,0");
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
         scrollPane.getVerticalScrollBar().putClientProperty(FlatClientProperties.STYLE, "" +
                 "width:5");
         scrollPane.getVerticalScrollBar().setUnitIncrement(10);

@@ -1,11 +1,14 @@
 package raven.messenger.manager;
 
+import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.util.ScaledEmptyBorder;
 import com.formdev.flatlaf.util.UIScale;
 import raven.messenger.Application;
+import raven.messenger.component.EmptyModalBorderCustom;
 import raven.messenger.component.ModalBorderCustom;
 import raven.messenger.component.NetworkIcon;
 import raven.messenger.component.chat.model.ChatPhotoData;
+import raven.messenger.component.layout.OverlayScrollLayout;
 import raven.messenger.util.MethodUtil;
 import raven.modal.ModalDialog;
 import raven.modal.component.SimpleModalBorder;
@@ -59,12 +62,34 @@ public class DialogManager {
         } else if (resource.getImageWidth() > 1000) {
             w = 1000;
         }
+        JLayeredPane paneView = new JLayeredPane();
         JLabel label = new JLabel(new NetworkIcon(resource, w, h));
         JScrollPane scrollPane = new JScrollPane(label);
-        scrollPane.setBorder(new ScaledEmptyBorder(0, 10, 0, 10));
+        scrollPane.setBorder(new ScaledEmptyBorder(0, 4, 0, 4));
+        JScrollBar verticalScrollbar = scrollPane.getVerticalScrollBar();
+        JScrollBar horizontalScrollBar = scrollPane.getHorizontalScrollBar();
+        verticalScrollbar.setOpaque(false);
+        horizontalScrollBar.setOpaque(false);
+        verticalScrollbar.putClientProperty(FlatClientProperties.STYLE, "" +
+                "width:4;" +
+                "trackArc:$ScrollBar.thumbArc;");
+        horizontalScrollBar.putClientProperty(FlatClientProperties.STYLE, "" +
+                "width:4;" +
+                "trackArc:$ScrollBar.thumbArc;");
+        verticalScrollbar.setUnitIncrement(10);
+        horizontalScrollBar.setUnitIncrement(10);
+        paneView.setLayer(verticalScrollbar, JLayeredPane.MODAL_LAYER);
+        paneView.setLayer(horizontalScrollBar, JLayeredPane.MODAL_LAYER);
+        paneView.add(scrollPane);
+        paneView.add(verticalScrollbar);
+        paneView.add(horizontalScrollBar);
+        paneView.setLayout(new OverlayScrollLayout(scrollPane));
+
+        // option
         Option option = ModalDialog.createOption();
+        option.setRound(10);
         option.getLayoutOption().setSize(-1, -1);
-        ModalDialog.showModal(frame, new SimpleModalBorder(scrollPane, null), option);
+        ModalDialog.showModal(frame, new EmptyModalBorderCustom(paneView), option);
     }
 
     public File showOpenDialog(ShowOpenType type) {
