@@ -1,6 +1,10 @@
 package raven.messenger.connection;
 
+import io.restassured.RestAssured;
+import io.restassured.response.Response;
 import raven.messenger.manager.FormsManager;
+
+import java.net.ConnectException;
 
 public class ConnectionManager {
 
@@ -35,5 +39,24 @@ public class ConnectionManager {
             callBack.onConnected();
             callBack = null;
         }
+    }
+
+    public Type checkConnection() {
+        try {
+            Response response = RestAssured.given()
+                    .get("check");
+            if (response.getStatusCode() == 200) {
+                return Type.SUCCESS;
+            } else if (response.getStatusCode() == 426) {
+                return Type.CLIENT_REQUIRED_UPDATE;
+            }
+            return Type.ERROR;
+        } catch (Exception e) {
+            return Type.ERROR;
+        }
+    }
+
+    public enum Type {
+        ERROR, CLIENT_REQUIRED_UPDATE, SUCCESS
     }
 }

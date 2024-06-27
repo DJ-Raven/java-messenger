@@ -3,6 +3,8 @@ package raven.messenger.manager;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
 import raven.messenger.api.ApiService;
+import raven.messenger.connection.ConnectionManager;
+import raven.messenger.connection.FormUpdate;
 import raven.messenger.home.Home;
 import raven.messenger.login.Login;
 import raven.messenger.Application;
@@ -35,7 +37,16 @@ public class FormsManager {
         if (signed) {
             showHome();
         } else {
-            showForm(new Login(null));
+            ConnectionManager.Type type = ConnectionManager.getInstance().checkConnection();
+            if (type == ConnectionManager.Type.SUCCESS) {
+                showForm(new Login(null));
+            } else if (type == ConnectionManager.Type.CLIENT_REQUIRED_UPDATE) {
+                showForm(new FormUpdate());
+            } else {
+                ConnectionManager.getInstance().showError(() -> {
+
+                });
+            }
         }
     }
 
