@@ -3,6 +3,7 @@ package raven.messenger.connection;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import raven.messenger.manager.FormsManager;
+import raven.modal.Toast;
 
 import java.net.ConnectException;
 
@@ -24,6 +25,7 @@ public class ConnectionManager {
 
     public void showError(ConnectionCallBack callBack) {
         getInstance().callBack = callBack;
+        Toast.show(FormsManager.getInstance().getMainFrame(), Toast.Type.ERROR, "Connection error");
         FormsManager.getInstance().showForm(getInstance().getFormError());
     }
 

@@ -25,7 +25,7 @@ public class ServiceAuth {
         throw new ResponseException(response.getStatusCode(), response.asString());
     }
 
-    public synchronized String register(ModelRegister data) throws ResponseException {
+    public synchronized String register(ModelRegister data) throws ResponseException, ConnectException {
         Response response = RestAssured.given()
                 .body(data.toJsonObject().toString())
                 .post("auth/register");

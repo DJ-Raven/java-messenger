@@ -39,15 +39,19 @@ public class FormsManager {
         } else {
             ConnectionManager.Type type = ConnectionManager.getInstance().checkConnection();
             if (type == ConnectionManager.Type.SUCCESS) {
-                showForm(new Login(null));
+                showLogin();
             } else if (type == ConnectionManager.Type.CLIENT_REQUIRED_UPDATE) {
                 showForm(new FormUpdate());
             } else {
                 ConnectionManager.getInstance().showError(() -> {
-
+                    showLogin();
                 });
             }
         }
+    }
+
+    private void showLogin() {
+        showForm(new Login(null));
     }
 
     public void initApplication(Application application) {
