@@ -5,6 +5,7 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import org.json.JSONObject;
 import raven.messenger.api.ApiService;
+import raven.messenger.connection.ConnectionManager;
 import raven.messenger.manager.ErrorManager;
 import raven.messenger.models.response.ModelMessage;
 import raven.messenger.service.ServiceGroup;
@@ -54,6 +55,7 @@ public class SocketService {
         });
         socket.on(Socket.EVENT_CONNECT, objects -> {
             connectionPromise.reconnected();
+            ConnectionManager.getInstance().checkOnReconnection();
         });
         socket.on(Socket.EVENT_CONNECT_ERROR, objects -> {
             System.out.println(objects[0]);

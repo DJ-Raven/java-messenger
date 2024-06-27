@@ -4,6 +4,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 import io.restassured.http.Cookies;
 import net.miginfocom.swing.MigLayout;
 import raven.messenger.api.exception.ResponseException;
+import raven.messenger.connection.ConnectionManager;
 import raven.messenger.manager.ErrorManager;
 import raven.messenger.manager.FormsManager;
 import raven.messenger.service.ServiceAuth;
@@ -12,6 +13,7 @@ import raven.messenger.store.CookieManager;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.net.ConnectException;
 
 public class Login extends JPanel {
 
@@ -103,11 +105,14 @@ public class Login extends JPanel {
                 CookieManager.getInstance().setCookieString(cookie.toString());
                 FormsManager.getInstance().showHome();
             }
+        } catch (ConnectException e1) {
+            ConnectionManager.getInstance().showError(() -> {
+                FormsManager.getInstance().showForm(this);
+            });
         } catch (ResponseException | IOException e) {
             ErrorManager.getInstance().showError(e);
         }
     }
-
 
     private JTextField txtUsername;
     private JPasswordField txtPassword;

@@ -8,9 +8,11 @@ import raven.messenger.api.ApiService;
 import raven.messenger.api.exception.ResponseException;
 import raven.messenger.models.request.ModelRegister;
 
+import java.net.ConnectException;
+
 public class ServiceAuth {
 
-    public synchronized Cookies login(String user, String password) throws ResponseException {
+    public synchronized Cookies login(String user, String password) throws ResponseException, ConnectException {
         Response response = RestAssured.given()
                 .queryParam("user", user)
                 .queryParam("password", password)
