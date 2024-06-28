@@ -137,9 +137,7 @@ public class Register extends JPanel {
                     String response = serviceAuth.register(model);
                     FormsManager.getInstance().showForm(new Login(response));
                 } catch (ConnectException e) {
-                    ConnectionManager.getInstance().showError(() -> {
-                        FormsManager.getInstance().showForm(this);
-                    });
+                    ConnectionManager.getInstance().showError(() -> FormsManager.getInstance().showForm(this), true);
                 } catch (ResponseException e) {
                     ErrorManager.getInstance().showError(e);
                 }

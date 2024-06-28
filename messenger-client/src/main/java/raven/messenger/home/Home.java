@@ -197,7 +197,8 @@ public class Home extends JPanel {
             ProfileManager.getInstance().initProfile();
             leftPanel.initData();
         } catch (ConnectException e) {
-            ConnectionManager.getInstance().showError(() -> callBackConnection());
+            // do not show reconnect button because it auto from the socket
+            ConnectionManager.getInstance().showError(() -> callBackConnection(), false);
         } catch (ResponseException e) {
             ErrorManager.getInstance().showError(e);
         }

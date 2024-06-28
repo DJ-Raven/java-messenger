@@ -106,9 +106,7 @@ public class Login extends JPanel {
                 FormsManager.getInstance().showHome();
             }
         } catch (ConnectException e1) {
-            ConnectionManager.getInstance().showError(() -> {
-                FormsManager.getInstance().showForm(this);
-            });
+            ConnectionManager.getInstance().showError(() -> FormsManager.getInstance().showForm(this), true);
         } catch (ResponseException | IOException e) {
             ErrorManager.getInstance().showError(e);
         }

@@ -43,9 +43,7 @@ public class FormsManager {
             } else if (type == ConnectionManager.Type.CLIENT_REQUIRED_UPDATE) {
                 showForm(new FormUpdate());
             } else {
-                ConnectionManager.getInstance().showError(() -> {
-                    showLogin();
-                });
+                ConnectionManager.getInstance().showError(() -> showLogin(), true);
             }
         }
     }

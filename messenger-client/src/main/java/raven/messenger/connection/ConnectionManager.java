@@ -23,16 +23,17 @@ public class ConnectionManager {
     private ConnectionManager() {
     }
 
-    public void showError(ConnectionCallBack callBack) {
+    public void showError(ConnectionCallBack callBack, boolean showReconnectButton) {
         getInstance().callBack = callBack;
         Toast.show(FormsManager.getInstance().getMainFrame(), Toast.Type.ERROR, "Connection error");
-        FormsManager.getInstance().showForm(getInstance().getFormError());
+        FormsManager.getInstance().showForm(getInstance().getFormError(showReconnectButton));
     }
 
-    private FormError getFormError() {
+    private FormError getFormError(boolean showReconnectButton) {
         if (formError == null) {
             formError = new FormError();
         }
+        formError.showReconnectButton(showReconnectButton);
         return formError;
     }
 
