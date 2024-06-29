@@ -5,9 +5,11 @@ import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
 import raven.messenger.api.ApiService;
 import raven.messenger.connection.ConnectionManager;
 import raven.messenger.connection.FormUpdate;
+import raven.messenger.drawer.MenuDrawer;
 import raven.messenger.home.Home;
 import raven.messenger.login.Login;
 import raven.messenger.Application;
+import raven.modal.Drawer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -61,6 +63,7 @@ public class FormsManager {
         if (home == null) {
             home = new Home();
         }
+        MenuDrawer.getInstance().setVisible(true);
         showForm(home);
         home.initHome();
     }

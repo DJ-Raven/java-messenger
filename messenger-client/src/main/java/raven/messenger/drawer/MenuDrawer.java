@@ -34,6 +34,10 @@ public class MenuDrawer {
         Drawer.closeDrawer();
     }
 
+    public void setVisible(boolean v) {
+        Drawer.setVisible(v);
+    }
+
     public void setDrawerHeader(ModelProfile profile) {
         SimpleHeader header = (SimpleHeader) drawerBuilder.getHeader();
         SimpleHeaderData data = header.getSimpleHeaderData();

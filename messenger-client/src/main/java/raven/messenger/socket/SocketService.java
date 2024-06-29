@@ -28,6 +28,7 @@ public class SocketService {
     private final ServiceGroup serviceGroup;
     private final ServiceUser serviceUser;
     private Socket socket;
+    private boolean close;
 
     public static SocketService getInstance() {
         if (instance == null) {
@@ -51,7 +52,9 @@ public class SocketService {
         Socket socket = IO.socket(uri, option);
         final ConnectionPromise connectionPromise = new ConnectionPromise();
         socket.on(Socket.EVENT_DISCONNECT, objects -> {
-            connectionPromise.discounted();
+            if (!close) {
+                connectionPromise.discounted();
+            }
         });
         socket.on(Socket.EVENT_CONNECT, objects -> {
             connectionPromise.reconnected();
@@ -79,12 +82,14 @@ public class SocketService {
     }
 
     public void open() {
+        close = false;
         socket = initSocket();
         socket.open();
     }
 
     public void close() {
         if (socket != null) {
+            close = true;
             socket.disconnect();
             socket.close();
             socket = null;
