@@ -12,6 +12,7 @@ import raven.messenger.service.ServiceProfile;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.ConnectException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -31,12 +32,8 @@ public class ProfileManager {
         serviceProfile = new ServiceProfile();
     }
 
-    public void initProfile() {
-        try {
-            profile = serviceProfile.getProfile();
-        } catch (ResponseException e) {
-            profile = null;
-        }
+    public void initProfile() throws ResponseException, ConnectException {
+        profile = serviceProfile.getProfile();
         MenuDrawer.getInstance().setDrawerHeader(profile);
     }
 

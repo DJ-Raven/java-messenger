@@ -2,7 +2,11 @@ package raven.messenger.drawer;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
+import raven.messenger.api.ApiService;
+import raven.messenger.login.Login;
+import raven.messenger.manager.FormsManager;
 import raven.messenger.option.OptionManager;
+import raven.modal.Drawer;
 import raven.modal.drawer.data.Item;
 import raven.modal.drawer.data.MenuItem;
 import raven.modal.drawer.menu.MenuOption;
@@ -37,7 +41,8 @@ public class MyDrawerBuilder extends SimpleDrawerBuilder {
         MenuItem[] menus = new MenuItem[]{
                 new Item("New group", "group.svg"),
                 new Item("Account", "account.svg"),
-                new Item("Local storage", "storage.svg")
+                new Item("Local storage", "storage.svg"),
+                new Item("Log Out", "logout.svg")
         };
 
         MenuOption menuOption = new MenuOption()
@@ -46,15 +51,20 @@ public class MyDrawerBuilder extends SimpleDrawerBuilder {
                 .setIconScale(0.5f);
         menuOption.addMenuEvent((menuAction, index) -> {
             if (index.length == 1) {
-                if (index[0] == 0) {
+                int i = index[0];
+                if (i == 0) {
                     OptionManager.getInstance().newGroup();
                     MenuDrawer.getInstance().closeDrawer();
-                } else if (index[0] == 1) {
+                } else if (i == 1) {
                     OptionManager.getInstance().showProfile();
                     MenuDrawer.getInstance().closeDrawer();
-                } else if (index[0] == 2) {
+                } else if (i == 2) {
                     OptionManager.getInstance().showStorage();
                     MenuDrawer.getInstance().closeDrawer();
+                } else if (i == 3) {
+                    ApiService.getInstance().closeAll();
+                    FormsManager.getInstance().showForm(new Login(null));
+                    Drawer.setVisible(false);
                 }
             }
         });

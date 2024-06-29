@@ -4,6 +4,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
 import raven.messenger.api.exception.ResponseException;
 import raven.messenger.component.PasswordStrengthStatus;
+import raven.messenger.connection.ConnectionManager;
 import raven.messenger.manager.ErrorManager;
 import raven.messenger.manager.FormsManager;
 import raven.messenger.models.request.ModelRegister;
@@ -12,6 +13,7 @@ import raven.messenger.service.ServiceAuth;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.ConnectException;
 
 public class Register extends JPanel {
     private final ServiceAuth serviceAuth = new ServiceAuth();
@@ -134,6 +136,8 @@ public class Register extends JPanel {
                 try {
                     String response = serviceAuth.register(model);
                     FormsManager.getInstance().showForm(new Login(response));
+                } catch (ConnectException e) {
+                    ConnectionManager.getInstance().showError(() -> FormsManager.getInstance().showForm(this), true);
                 } catch (ResponseException e) {
                     ErrorManager.getInstance().showError(e);
                 }

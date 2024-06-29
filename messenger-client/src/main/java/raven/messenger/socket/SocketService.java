@@ -5,11 +5,13 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import org.json.JSONObject;
 import raven.messenger.api.ApiService;
+import raven.messenger.connection.ConnectionManager;
 import raven.messenger.manager.ErrorManager;
 import raven.messenger.models.response.ModelMessage;
 import raven.messenger.service.ServiceGroup;
 import raven.messenger.service.ServiceMessage;
 import raven.messenger.service.ServiceUser;
+import raven.messenger.socket.event.ConnectionPromise;
 import raven.messenger.socket.event.SocketEvent;
 import raven.messenger.socket.models.ModelSendMessage;
 import raven.messenger.store.CookieManager;
@@ -26,6 +28,7 @@ public class SocketService {
     private final ServiceGroup serviceGroup;
     private final ServiceUser serviceUser;
     private Socket socket;
+    private boolean close;
 
     public static SocketService getInstance() {
         if (instance == null) {
@@ -47,11 +50,15 @@ public class SocketService {
                 .setExtraHeaders(Collections.singletonMap("cookies", Collections.singletonList(cookie)))
                 .build();
         Socket socket = IO.socket(uri, option);
+        final ConnectionPromise connectionPromise = new ConnectionPromise();
         socket.on(Socket.EVENT_DISCONNECT, objects -> {
-            System.out.println("Client discounted");
+            if (!close) {
+                connectionPromise.discounted();
+            }
         });
         socket.on(Socket.EVENT_CONNECT, objects -> {
-            System.out.println("Server connected");
+            connectionPromise.reconnected();
+            ConnectionManager.getInstance().checkOnReconnection();
         });
         socket.on(Socket.EVENT_CONNECT_ERROR, objects -> {
             System.out.println(objects[0]);
@@ -75,12 +82,14 @@ public class SocketService {
     }
 
     public void open() {
+        close = false;
         socket = initSocket();
         socket.open();
     }
 
     public void close() {
         if (socket != null) {
+            close = true;
             socket.disconnect();
             socket.close();
             socket = null;

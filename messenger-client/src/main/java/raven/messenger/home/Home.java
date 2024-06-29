@@ -7,6 +7,7 @@ import raven.messenger.component.chat.Myself;
 import raven.messenger.component.chat.model.ChatFileData;
 import raven.messenger.component.chat.model.ChatPhotoData;
 import raven.messenger.component.chat.model.ChatVoiceData;
+import raven.messenger.connection.ConnectionManager;
 import raven.messenger.event.GlobalEvent;
 import raven.messenger.event.GroupCreateEvent;
 import raven.messenger.manager.ErrorManager;
@@ -39,6 +40,7 @@ import raven.messenger.util.NetworkDataUtil;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.net.ConnectException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -191,8 +193,25 @@ public class Home extends JPanel {
     public void initHome() {
         SocketService.getInstance().open();
         SocketService.getInstance().setSocketEvent(createSocketEvent());
-        ProfileManager.getInstance().initProfile();
-        leftPanel.initData();
+        try {
+            ProfileManager.getInstance().initProfile();
+            leftPanel.initData();
+        } catch (ConnectException e) {
+            // do not show reconnect button because it auto from the socket
+            ConnectionManager.getInstance().showError(() -> callBackConnection(), false);
+        } catch (ResponseException e) {
+            ErrorManager.getInstance().showError(e);
+        }
+    }
+
+    private void callBackConnection() {
+        try {
+            FormsManager.getInstance().showForm(this);
+            ProfileManager.getInstance().initProfile();
+            leftPanel.initData();
+        } catch (Exception e) {
+            ErrorManager.getInstance().showError(e);
+        }
     }
 
     private Icon getProfile(int id, ModelName name, boolean group) {
