@@ -11,6 +11,7 @@ import raven.messenger.component.chat.model.ChatPhotoData;
 import raven.messenger.plugin.swing.scroll.ScrollOverlay;
 import raven.messenger.util.MethodUtil;
 import raven.modal.ModalDialog;
+import raven.modal.Toast;
 import raven.modal.component.SimpleModalBorder;
 import raven.modal.listener.ModalCallback;
 import raven.modal.option.Option;
@@ -36,6 +37,7 @@ public class DialogManager {
 
     private DialogManager() {
         ModalDialog.getDefaultOption().setAnimationEnabled(false);
+        Toast.getDefaultOption().getLayoutOption().setMargin(20, 7, 7, 7);
     }
 
     public void init(JFrame frame) {
