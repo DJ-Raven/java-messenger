@@ -14,6 +14,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>com.formdev</groupId>
@@ -71,6 +78,17 @@
             <version>5.3</version>
             <scope>system</scope>
             <systemPath>${basedir}/library/miglayout-swing.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.umjammer</groupId>
+            <artifactId>jlayer</artifactId>
+            <version>1.0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.mpatric</groupId>
+            <artifactId>mp3agic</artifactId>
+            <version>0.9.1</version>
         </dependency>
     </dependencies>
 

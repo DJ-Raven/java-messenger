@@ -133,10 +133,6 @@ public class WaveFormPanel extends JPanel {
         return newBuff;
     }
 
-    public WaveFormData getWaveFormData() {
-        return waveFormData;
-    }
-
     public void setWaveFormData(WaveFormData waveFormData) {
         this.waveFormData = waveFormData;
         updated = false;

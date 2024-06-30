@@ -3,7 +3,7 @@ package raven.messenger.component.chat.item;
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
 import raven.messenger.component.ButtonProgress;
-import raven.messenger.component.chat.model.ChatVoiceData;
+import raven.messenger.component.chat.model.ChatSoundData;
 import raven.messenger.manager.SoundManager;
 import raven.messenger.plugin.sound.AudioUtil;
 import raven.messenger.plugin.sound.WaveFormListener;
@@ -16,51 +16,53 @@ import java.io.File;
 
 public class ItemSound extends JPanel implements ProgressChat {
 
-    private ChatVoiceData data;
+    private ChatSoundData data;
     private int type;
     private WaveFormPanel waveFormPanel;
     private ButtonProgress buttonPlay;
 
-    public ItemSound(ChatVoiceData data, int type) {
+    public ItemSound(ChatSoundData data, int type) {
         this.data = data;
         this.type = type;
         init();
     }
 
     private void init() {
-        waveFormPanel = new WaveFormPanel();
-        waveFormPanel.addWaveFormListener(new WaveFormListener() {
-            @Override
-            public void onClick(float v) {
-                if (!SoundManager.getInstance().checkSound(ItemSound.this)) {
-                    play();
+        if (data.getData() != null) {
+            waveFormPanel = new WaveFormPanel();
+            waveFormPanel.addWaveFormListener(new WaveFormListener() {
+                @Override
+                public void onClick(float v) {
+                    if (!SoundManager.getInstance().checkSound(ItemSound.this)) {
+                        play();
+                    }
+                    if (SoundManager.getInstance().checkSound(ItemSound.this)) {
+                        SoundManager.getInstance().getSoundPlayback().skip(v);
+                        SoundManager.getInstance().getSoundPlayback().resumes();
+                    }
                 }
-                if (SoundManager.getInstance().checkSound(ItemSound.this)) {
-                    SoundManager.getInstance().getSoundPlayback().skip(v);
-                    SoundManager.getInstance().getSoundPlayback().resumes();
-                }
-            }
 
-            @Override
-            public void onDrag() {
-                if (!SoundManager.getInstance().checkSound(ItemSound.this)) {
-                    play();
+                @Override
+                public void onDrag() {
+                    if (!SoundManager.getInstance().checkSound(ItemSound.this)) {
+                        play();
+                    }
+                    if (SoundManager.getInstance().checkSound(ItemSound.this)) {
+                        SoundManager.getInstance().getSoundPlayback().pause();
+                    }
                 }
-                if (SoundManager.getInstance().checkSound(ItemSound.this)) {
-                    SoundManager.getInstance().getSoundPlayback().pause();
-                }
-            }
-        });
-        waveFormPanel.setWaveFormData(AudioUtil.createDefaultWaveFormData(data.getData()));
+            });
+            waveFormPanel.setWaveFormData(AudioUtil.createDefaultWaveFormData(data.getData()));
+            String foregroundKey = type == 1 ? "$Chat.item.recipientVoiceForeground" : "$Chat.item.myselfVoiceForeground";
+            waveFormPanel.putClientProperty(FlatClientProperties.STYLE, "" +
+                    "background:null;" +
+                    "foreground:" + foregroundKey);
+        }
         String backgroundKey = type == 1 ? "$Chat.item.background" : "$Chat.item.myselfBackground";
-        String foregroundKey = type == 1 ? "$Chat.item.recipientVoiceForeground" : "$Chat.item.myselfVoiceForeground";
-
-        setLayout(new MigLayout("insets 3 5 3 5,gapy 0", "[]10[" + waveFormPanel.getWaveFormData().getWidth() + ",fill]", ""));
+        setLayout(new MigLayout("insets 3 5 3 5,gapy 0", "[]10[184,fill]", ""));
         putClientProperty(FlatClientProperties.STYLE, "" +
                 "background:" + backgroundKey);
-        waveFormPanel.putClientProperty(FlatClientProperties.STYLE, "" +
-                "background:null;" +
-                "foreground:" + foregroundKey);
+
         String icon = StoreManager.getInstance().getFile(data.getName()) != null ? "play.svg" : "download.svg";
         buttonPlay = new ButtonProgress(MethodUtil.createIcon("raven/messenger/icon/" + icon, 0.8f));
         buttonPlay.putClientProperty(FlatClientProperties.STYLE, "" +
@@ -71,10 +73,10 @@ public class ItemSound extends JPanel implements ProgressChat {
                 "innerFocusWidth:0");
         buttonPlay.addActionListener(e -> {
             if (SoundManager.getInstance().checkSound(this)) {
-                if (SoundManager.getInstance().getSoundPlayback().isRunning()) {
-                    SoundManager.getInstance().getSoundPlayback().pause();
+                if (SoundManager.getInstance().isRunning()) {
+                    SoundManager.getInstance().pause();
                 } else {
-                    SoundManager.getInstance().getSoundPlayback().resumes();
+                    SoundManager.getInstance().resumes();
                 }
             } else {
                 play();
@@ -86,14 +88,20 @@ public class ItemSound extends JPanel implements ProgressChat {
                 "foreground:$Text.lowForeground");
 
         add(buttonPlay, "span 1 2");
-        add(waveFormPanel, "wrap,height " + waveFormPanel.getWaveFormData().getHeight());
+        if (waveFormPanel != null) {
+            add(waveFormPanel, "wrap,height 30");
+        } else {
+            JLabel lbName = new JLabel(data.getName());
+            add(lbName, "wrap,width 184!,height 30");
+        }
         add(lbDuration);
     }
 
     private void play() {
         File file = StoreManager.getInstance().getFile(data.getName());
         if (file != null) {
-            SoundManager.getInstance().play(file, this);
+            boolean isMusic = data.getData() == null;
+            SoundManager.getInstance().play(file, isMusic, this);
         } else {
             File savePath = StoreManager.getInstance().createFile(data.getName());
             ProgressChat.download(this, data.getName(), savePath);

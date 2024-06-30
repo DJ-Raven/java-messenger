@@ -8,7 +8,7 @@ import raven.messenger.component.chat.item.ItemImage;
 import raven.messenger.component.chat.item.ItemSound;
 import raven.messenger.component.chat.model.ChatFileData;
 import raven.messenger.component.chat.model.ChatPhotoData;
-import raven.messenger.component.chat.model.ChatVoiceData;
+import raven.messenger.component.chat.model.ChatSoundData;
 import raven.messenger.util.MethodUtil;
 
 import javax.swing.*;
@@ -188,7 +188,7 @@ public class DefaultChatComponentBuilder implements ChatComponentBuilder {
         }
     }
 
-    protected ItemMessage buildVoidMessage(ChatVoiceData data, int type) {
+    protected ItemMessage buildVoidMessage(ChatSoundData data, int type) {
         ItemSound itemSound = new ItemSound(data, type);
         ItemMessage itemMessage = new ItemMessage(itemSound, type);
         return itemMessage;

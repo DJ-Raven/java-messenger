@@ -1,11 +1,12 @@
 package raven.messenger.component.chat.model;
 
+import raven.messenger.models.file.FileType;
 import raven.messenger.models.file.ModelFile;
 import raven.messenger.models.file.ModelFileVoiceInfo;
 
 import java.util.List;
 
-public class ChatVoiceData {
+public class ChatSoundData {
 
     public String getName() {
         return name;
@@ -39,19 +40,23 @@ public class ChatVoiceData {
         this.duration = duration;
     }
 
-    public ChatVoiceData(List<Float> data, String name, int size, double duration) {
+    public ChatSoundData(List<Float> data, String name, int size, double duration) {
         this.data = data;
         this.name = name;
         this.size = size;
         this.duration = duration;
     }
 
-    public ChatVoiceData(ModelFile file) {
+    public ChatSoundData(ModelFile file) {
         this.name = file.getName();
         this.size = file.getSize();
-        ModelFileVoiceInfo info = file.getVoidInfo();
-        this.data = info.getWaveData();
-        this.duration = info.getDuration();
+        if (file.getType() == FileType.VOICE) {
+            ModelFileVoiceInfo info = file.getVoidInfo();
+            this.data = info.getWaveData();
+            this.duration = info.getDuration();
+        } else {
+            duration = 0;
+        }
     }
 
     private String name;

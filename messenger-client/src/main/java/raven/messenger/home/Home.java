@@ -6,7 +6,7 @@ import raven.messenger.component.StringIcon;
 import raven.messenger.component.chat.Myself;
 import raven.messenger.component.chat.model.ChatFileData;
 import raven.messenger.component.chat.model.ChatPhotoData;
-import raven.messenger.component.chat.model.ChatVoiceData;
+import raven.messenger.component.chat.model.ChatSoundData;
 import raven.messenger.connection.ConnectionManager;
 import raven.messenger.event.GlobalEvent;
 import raven.messenger.event.GroupCreateEvent;
@@ -111,7 +111,7 @@ public class Home extends JPanel {
                                 .build();
                     } else if (d.getType() == MessageType.VOICE) {
                         chatModel.myself()
-                                .setVoice(new ChatVoiceData(d.getFile()))
+                                .setVoice(new ChatSoundData(d.getFile()))
                                 .setSent(true)
                                 .setSeen(true)
                                 .setDate(d.getCreateDate())
@@ -153,7 +153,7 @@ public class Home extends JPanel {
                                 .setId(d.getFromUser())
                                 .setUsername(getProfileName(d.getFromName(), isGroup))
                                 .setProfile(getProfile(d.getFromUser(), d.getFromName(), isGroup))
-                                .setVoice(new ChatVoiceData(d.getFile()))
+                                .setVoice(new ChatSoundData(d.getFile()))
                                 .setDate(d.getCreateDate())
                                 .setTop(true)
                                 .setAutoRefresh(false)
@@ -337,9 +337,9 @@ public class Home extends JPanel {
             @Override
             public void onMicrophoneCapture(CaptureData captureData) {
                 WaveFormData waveFormData = AudioUtil.getWaveFormData(captureData.getAudioData(), captureData.getAudioFormat());
-                ChatVoiceData chatVoiceData = new ChatVoiceData(waveFormData.getData(), "", 0, captureData.getDuration());
+                ChatSoundData chatSoundData = new ChatSoundData(waveFormData.getData(), "", 0, captureData.getDuration());
                 Myself myself = chatPanel.getChatModel().myself()
-                        .setVoice(chatVoiceData)
+                        .setVoice(chatSoundData)
                         .setSeen(true)
                         .build();
                 leftPanel.userMessage(user.getChatType(), user.getId(), new ModelLastMessage(FileType.toFileType("v")));
@@ -349,7 +349,7 @@ public class Home extends JPanel {
                     ModelFileInfo fileInfo = new ModelFileVoiceInfo(captureData.getDuration(), waveFormData.getData());
                     //  upload voice file to server
                     ModelFile fileResponse = SocketService.getInstance().getServiceMessage().sendFile(file, fileInfo);
-                    chatVoiceData.setName(fileResponse.getName());
+                    chatSoundData.setName(fileResponse.getName());
                     ModelSendMessage message = new ModelSendMessage(user.getChatType(), user.getId(), MessageType.VOICE, "", fileResponse.getId());
                     //  send message to server by socket
                     SocketService.getInstance().sendMessage(message, objects -> {
@@ -480,7 +480,7 @@ public class Home extends JPanel {
                                     .setId(message.getFromUser())
                                     .setUsername(getProfileName(message.getFromName(), isGroup))
                                     .setProfile(getProfile(message.getFromUser(), message.getFromName(), isGroup))
-                                    .setVoice(new ChatVoiceData(message.getFile()))
+                                    .setVoice(new ChatSoundData(message.getFile()))
                                     .setDate(message.getCreateDate())
                                     .build();
                         } else if (message.getType() == MessageType.PHOTO) {
