@@ -161,6 +161,10 @@ message.checkIsProfile = (user, file) => {
 
 function toList(result, type) {
   const list = result.map((e) => {
+    const file = getFile(e);
+    const file_type =
+      file && utils.isMusicFile(file.name) ? "v" : e.message_type;
+
     return {
       id: e.message_id,
       uuid: e.message_uuid,
@@ -169,12 +173,12 @@ function toList(result, type) {
         first_name: e.first_name,
         last_name: e.last_name,
       },
-      message_type: e.message_type,
+      message_type: file_type,
       type: type,
       message: e.message,
       create_date: e.create_date,
       ...e?.update_date,
-      file: getFile(e),
+      file: file,
     };
   });
   return list;

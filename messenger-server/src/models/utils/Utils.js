@@ -1,6 +1,9 @@
 const blurhash = require("blurhash");
 const sharp = require("sharp");
 const fs = require("fs");
+const path = require("path");
+
+const music_extensions = [".mp3", ".wav", ".ogg", ".flac", ".aac", ".m4a"];
 
 exports.getImageInfo = (image) => {
   return new Promise((resolve, rejects) => {
@@ -29,4 +32,9 @@ exports.getImageInfo = (image) => {
         });
     });
   });
+};
+
+exports.isMusicFile = (file) => {
+  const file_extension = path.extname(file).toLowerCase();
+  return music_extensions.includes(file_extension);
 };
