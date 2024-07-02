@@ -20,6 +20,7 @@ public class SoundManager {
     private Mp3Player mp3Player;
     private ItemSound itemSound;
     private boolean isMusic;
+    private String soundName;
 
     public static SoundManager getInstance() {
         if (instance == null) {
@@ -42,7 +43,6 @@ public class SoundManager {
             public void start() {
                 if (itemSound != null) {
                     itemSound.playButton();
-                    soundPlayerControl.playButton();
                 }
             }
 
@@ -50,7 +50,6 @@ public class SoundManager {
             public void stop() {
                 if (itemSound != null) {
                     itemSound.stopButton();
-                    soundPlayerControl.stopButton();
                 }
             }
         });
@@ -65,9 +64,10 @@ public class SoundManager {
             @Override
             public void started(PlayerEvent event) {
                 if (itemSound != null) {
-                    soundPlayerControl.setVisible(true);
                     itemSound.playButton();
                     soundPlayerControl.playButton();
+                    soundPlayerControl.setSoundName(soundName);
+                    soundPlayerControl.setVisible(true);
                 }
             }
 
@@ -94,13 +94,10 @@ public class SoundManager {
         this.soundPlayerControl = soundPlayerControl;
     }
 
-    public void play(File file, boolean isMusic) {
-        play(file, isMusic, null);
-    }
-
-    public void play(File file, boolean isMusic, ItemSound itemSound) {
+    public void play(File file, boolean isMusic, ItemSound itemSound, String soundName) {
         if (file.exists()) {
             try {
+                this.soundName = soundName;
                 stop();
                 if (itemSound != null) {
                     this.itemSound = itemSound;

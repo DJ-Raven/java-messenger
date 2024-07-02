@@ -16,6 +16,14 @@ public class ChatSoundData {
         this.name = name;
     }
 
+    public String getOriginalName() {
+        return originalName;
+    }
+
+    public void setOriginalName(String originalName) {
+        this.originalName = originalName;
+    }
+
     public int getSize() {
         return size;
     }
@@ -49,6 +57,7 @@ public class ChatSoundData {
 
     public ChatSoundData(ModelFile file) {
         this.name = file.getName();
+        this.originalName = file.getOriginalName();
         this.size = file.getSize();
         if (file.getType() == FileType.VOICE) {
             ModelFileVoiceInfo info = file.getVoidInfo();
@@ -60,6 +69,7 @@ public class ChatSoundData {
     }
 
     private String name;
+    private String originalName;
     private int size;
     private List<Float> data;
     private double duration;

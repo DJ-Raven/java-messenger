@@ -91,7 +91,7 @@ public class ItemSound extends JPanel implements ProgressChat {
         if (waveFormPanel != null) {
             add(waveFormPanel, "wrap,height 30");
         } else {
-            JLabel lbName = new JLabel(data.getName());
+            JLabel lbName = new JLabel(data.getOriginalName());
             add(lbName, "wrap,width 184!,height 30");
         }
         add(lbDuration);
@@ -101,7 +101,7 @@ public class ItemSound extends JPanel implements ProgressChat {
         File file = StoreManager.getInstance().getFile(data.getName());
         if (file != null) {
             boolean isMusic = data.getData() == null;
-            SoundManager.getInstance().play(file, isMusic, this);
+            SoundManager.getInstance().play(file, isMusic, this, data.getOriginalName());
         } else {
             File savePath = StoreManager.getInstance().createFile(data.getName());
             ProgressChat.download(this, data.getName(), savePath);
@@ -115,7 +115,6 @@ public class ItemSound extends JPanel implements ProgressChat {
     public void playButton() {
         buttonPlay.setIcon(MethodUtil.createIcon("raven/messenger/icon/pause.svg", 0.8f));
     }
-
 
     public void setProgress(float progress) {
         waveFormPanel.setProgress(progress);

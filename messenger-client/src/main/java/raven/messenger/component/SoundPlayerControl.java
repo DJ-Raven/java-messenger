@@ -18,18 +18,23 @@ public class SoundPlayerControl extends JPanel {
     }
 
     private void init() {
-        setLayout(new MigLayout("fill,wrap, insets 3", "[fill]", "[center]"));
+        setLayout(new MigLayout("fill,wrap 3, insets 3", "[grow 0][fill][grow 0]", "[center]"));
         putClientProperty(FlatClientProperties.STYLE, "" +
                 "background:null;");
-        labelText = new JLabel("Player name");
+        labelText = new JTextField("Player name");
+        labelText.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+        labelText.setBorder(BorderFactory.createEmptyBorder());
+        labelText.putClientProperty(FlatClientProperties.STYLE, "" +
+                "background:null;");
+        labelText.setFocusable(false);
         labelDuration = new JLabel("00:00");
         buttonPlay = createPlayButton();
         progressBar = createProgress();
 
-        add(buttonPlay, "split 3,grow 0");
-        add(labelText, "push");
-        add(labelDuration, "grow 0");
-        add(progressBar, "span 2");
+        add(buttonPlay);
+        add(labelText);
+        add(labelDuration);
+        add(progressBar, "span 3,grow");
     }
 
     private JButton createPlayButton() {
@@ -71,6 +76,10 @@ public class SoundPlayerControl extends JPanel {
         return progressBar;
     }
 
+    public void setSoundName(String soundName) {
+        labelText.setText(soundName);
+    }
+
     public void lengthChanged(float f, int length) {
         progressBar.setValue((int) (f * 100));
         labelDuration.setText(formatDuration(length));
@@ -92,7 +101,7 @@ public class SoundPlayerControl extends JPanel {
     }
 
     private JButton buttonPlay;
-    private JLabel labelText;
+    private JTextField labelText;
     private JLabel labelDuration;
     private JProgressBar progressBar;
 }
