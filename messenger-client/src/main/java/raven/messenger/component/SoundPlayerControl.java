@@ -18,7 +18,7 @@ public class SoundPlayerControl extends JPanel {
     }
 
     private void init() {
-        setLayout(new MigLayout("fill,wrap 3, insets 3", "[grow 0][fill][grow 0]", "[center]"));
+        setLayout(new MigLayout("wrap 4, insets 3", "[grow 0][fill,grow][][]", "[center]"));
         putClientProperty(FlatClientProperties.STYLE, "" +
                 "background:null;");
         labelText = new JTextField("Player name");
@@ -34,7 +34,8 @@ public class SoundPlayerControl extends JPanel {
         add(buttonPlay);
         add(labelText);
         add(labelDuration);
-        add(progressBar, "span 3,grow");
+        add(createCloseButton());
+        add(progressBar, "span 4,grow");
     }
 
     private JButton createPlayButton() {
@@ -46,6 +47,22 @@ public class SoundPlayerControl extends JPanel {
             } else {
                 SoundManager.getInstance().resumes();
             }
+        });
+        button.putClientProperty(FlatClientProperties.STYLE, "" +
+                "arc:999;" +
+                "margin:2,2,2,2;" +
+                "background:null;" +
+                "borderWidth:0;" +
+                "focusWidth:0;" +
+                "innerFocusWidth:0");
+        return button;
+    }
+
+    private JButton createCloseButton() {
+        JButton button = new JButton(new FlatSVGIcon("raven/messenger/icon/close.svg", 0.55f));
+        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        button.addActionListener(e -> {
+            SoundManager.getInstance().stop();
         });
         button.putClientProperty(FlatClientProperties.STYLE, "" +
                 "arc:999;" +

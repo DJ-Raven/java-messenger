@@ -118,7 +118,7 @@ public class SoundManager {
         }
     }
 
-    private void stop() {
+    public void stop() {
         if (isMusic) {
             mp3Player.stop();
         } else {
