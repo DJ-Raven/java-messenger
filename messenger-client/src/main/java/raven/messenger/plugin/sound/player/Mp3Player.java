@@ -137,6 +137,8 @@ public class Mp3Player {
     public void resumes() {
         if (isPause) {
             playImpl();
+        } else {
+            play();
         }
     }
 
