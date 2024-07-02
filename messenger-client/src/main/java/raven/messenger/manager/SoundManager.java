@@ -4,6 +4,7 @@ import raven.messenger.component.chat.item.ItemSound;
 import raven.messenger.plugin.sound.SoundPlayback;
 import raven.messenger.plugin.sound.SoundPlaybackListener;
 import raven.messenger.plugin.sound.player.Mp3Player;
+import raven.messenger.plugin.sound.player.PlayerEvent;
 import raven.messenger.plugin.sound.player.PlayerListener;
 
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -51,22 +52,23 @@ public class SoundManager {
         });
         mp3Player = new Mp3Player();
         mp3Player.addPlayerListener(new PlayerListener() {
+
             @Override
-            public void started() {
+            public void started(PlayerEvent event) {
                 if (itemSound != null) {
                     itemSound.playButton();
                 }
             }
 
             @Override
-            public void paused() {
+            public void paused(PlayerEvent event) {
                 if (itemSound != null) {
                     itemSound.stopButton();
                 }
             }
 
             @Override
-            public void finished() {
+            public void finished(PlayerEvent event) {
                 if (itemSound != null) {
                     itemSound.stopButton();
                 }

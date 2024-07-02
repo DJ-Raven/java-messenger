@@ -7,6 +7,7 @@ import javazoom.jl.player.advanced.AdvancedPlayer;
 import javazoom.jl.player.advanced.PlaybackEvent;
 import javazoom.jl.player.advanced.PlaybackListener;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -19,16 +20,23 @@ public class Mp3Player {
     private File path;
     private AdvancedPlayer advancedPlayer;
     private InputStream inputStream;
-    private double frameRatePerMilliseconds;
     private Thread playThread;
-    private int currentFrame;
     private Mp3File mp3File;
     private boolean isPlaying;
     private boolean isPause;
     private boolean skip;
     private List<PlayerListener> listeners;
 
+    protected double frameRatePerMilliseconds;
+    protected int currentFrame;
+    protected int position;
+
     public Mp3Player() {
+    }
+
+    public Mp3Player(File path) {
+        this.path = path;
+        init();
     }
 
     private void init() {
@@ -40,9 +48,20 @@ public class Mp3Player {
         }
     }
 
-    public void play(File path) {
+    public void prepare(File path) {
         this.path = path;
         init();
+    }
+
+    public void play() {
+        play(null);
+    }
+
+    public void play(File path) {
+        if (path != null) {
+            this.path = path;
+            init();
+        }
         stop();
         currentFrame = 0;
         playImpl();
@@ -70,7 +89,7 @@ public class Mp3Player {
         }
         playThread = new Thread(() -> {
             try {
-                if (isPause) {
+                if (currentFrame > 0) {
                     advancedPlayer.play(currentFrame, Integer.MAX_VALUE);
                 } else {
                     advancedPlayer.play();
@@ -97,6 +116,10 @@ public class Mp3Player {
 
     public boolean isPlaying() {
         return isPlaying;
+    }
+
+    public boolean isPlayable() {
+        return path != null;
     }
 
     public void pause() {
@@ -128,20 +151,20 @@ public class Mp3Player {
     private void started(PlaybackEvent evt) {
         isPlaying = true;
         isPause = false;
-        started();
+        started(getEvent());
     }
 
     private void finished(PlaybackEvent evt) {
         if (isPause) {
             currentFrame += (int) (evt.getFrame() * frameRatePerMilliseconds);
             if (!skip) {
-                paused();
+                paused(getEvent());
             } else {
                 skip = false;
             }
         } else {
             currentFrame = 0;
-            finished();
+            finished(getEvent());
             close();
         }
         isPlaying = false;
@@ -185,53 +208,55 @@ public class Mp3Player {
         return mp3File;
     }
 
-    private void progressChanged(float f) {
+    private PlayerEvent getEvent() {
+        return new PlayerEvent(this);
+    }
+
+    private void lengthChanged(PlayerEvent event) {
         if (listeners != null) {
             for (PlayerListener l : listeners) {
-                l.progressChanged(f);
+                l.lengthChanged(event);
             }
         }
     }
 
-    private void started() {
+    private void started(PlayerEvent event) {
         if (listeners != null) {
             for (PlayerListener l : listeners) {
-                l.started();
+                l.started(event);
             }
         }
     }
 
-    private void finished() {
+    private void finished(PlayerEvent event) {
         if (listeners != null) {
             for (PlayerListener l : listeners) {
-                l.finished();
+                l.finished(event);
             }
         }
     }
 
-    private void paused() {
+    private void paused(PlayerEvent event) {
         if (listeners != null) {
             for (PlayerListener l : listeners) {
-                l.paused();
+                l.paused(event);
             }
         }
     }
 
     private class PlayerAudioDevice extends JavaSoundAudioDevice {
 
-        private float currentPercent = -1;
+        private int seconds = -1;
 
         @Override
         protected void writeImpl(short[] samples, int offs, int len) throws JavaLayerException {
             super.writeImpl(samples, offs, len);
+            position = getPosition();
             if (!isPause) {
-                double current = currentFrame / frameRatePerMilliseconds / mp3File.getLengthInMilliseconds();
-                double value = (double) getPosition() / mp3File.getLengthInMilliseconds();
-                // to get two decimal places
-                float percent = Math.round((current + value) * 100f) / 100f;
-                if (currentPercent != percent) {
-                    progressChanged(percent);
-                    currentPercent = percent;
+                int seconds = (int) (currentFrame / frameRatePerMilliseconds + getPosition()) / 1000;
+                if (this.seconds != seconds) {
+                    lengthChanged(getEvent());
+                    this.seconds = seconds;
                 }
             }
         }

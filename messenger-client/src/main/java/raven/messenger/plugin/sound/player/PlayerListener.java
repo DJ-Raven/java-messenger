@@ -2,15 +2,15 @@ package raven.messenger.plugin.sound.player;
 
 public abstract class PlayerListener {
 
-    public void progressChanged(float f) {
+    public void lengthChanged(PlayerEvent event) {
     }
 
-    public void started() {
+    public void started(PlayerEvent event) {
     }
 
-    public void finished() {
+    public void finished(PlayerEvent event) {
     }
 
-    public void paused() {
+    public void paused(PlayerEvent event) {
     }
 }
