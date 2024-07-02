@@ -2,7 +2,9 @@ package raven.messenger.component.chat;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
+import raven.messenger.component.SoundPlayerControl;
 import raven.messenger.component.layout.ChatViewportLayout;
+import raven.messenger.manager.SoundManager;
 import raven.messenger.plugin.swing.scroll.ScrollRefresh;
 import raven.messenger.plugin.swing.scroll.ScrollRefreshModel;
 import raven.messenger.util.ScrollAnimation;
@@ -25,12 +27,15 @@ public class ChatPanel extends JPanel {
     }
 
     private void init() {
-        setLayout(new MigLayout("wrap,fill", "[fill,400::]", "[fill][shrink 0,grow 0]"));
+        setOpaque(true);
+        setLayout(new MigLayout("hidemode 2,wrap,fill", "[fill,400::]", "3[grow 0]0[fill][shrink 0,grow 0]"));
         putClientProperty(FlatClientProperties.STYLE, "" +
                 "background:$Chat.background");
         scrollAnimation = new ScrollAnimation();
         panel = new JPanel(new MigLayout("insets 0,wrap,fillx"));
+
         panelBottom = new JPanel(new BorderLayout());
+        createPlayerPanel();
         createEmptyDataLabel();
         messageInput = new MessageInput(event);
         joinGroupButton = new JoinGroupButton(e -> {
@@ -72,6 +77,13 @@ public class ChatPanel extends JPanel {
         removeEmptyDataLabel();
         emptyChatData = new EmptyChatData();
         panel.add(emptyChatData, "pos 0.5al 0.5al");
+    }
+
+    protected void createPlayerPanel() {
+        SoundPlayerControl soundPlayerControl = new SoundPlayerControl();
+        soundPlayerControl.setVisible(false);
+        SoundManager.getInstance().setSoundPlayerControl(soundPlayerControl);
+        add(soundPlayerControl);
     }
 
     private void removeEmptyDataLabel() {

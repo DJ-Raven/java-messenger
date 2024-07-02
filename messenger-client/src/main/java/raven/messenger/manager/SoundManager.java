@@ -1,5 +1,6 @@
 package raven.messenger.manager;
 
+import raven.messenger.component.SoundPlayerControl;
 import raven.messenger.component.chat.item.ItemSound;
 import raven.messenger.plugin.sound.SoundPlayback;
 import raven.messenger.plugin.sound.SoundPlaybackListener;
@@ -14,6 +15,7 @@ import java.io.IOException;
 public class SoundManager {
 
     private static SoundManager instance;
+    private SoundPlayerControl soundPlayerControl;
     private SoundPlayback soundPlayback;
     private Mp3Player mp3Player;
     private ItemSound itemSound;
@@ -40,6 +42,7 @@ public class SoundManager {
             public void start() {
                 if (itemSound != null) {
                     itemSound.playButton();
+                    soundPlayerControl.playButton();
                 }
             }
 
@@ -47,6 +50,7 @@ public class SoundManager {
             public void stop() {
                 if (itemSound != null) {
                     itemSound.stopButton();
+                    soundPlayerControl.stopButton();
                 }
             }
         });
@@ -54,9 +58,16 @@ public class SoundManager {
         mp3Player.addPlayerListener(new PlayerListener() {
 
             @Override
+            public void lengthChanged(PlayerEvent event) {
+                soundPlayerControl.lengthChanged(event.getCurrentInPercent(), event.getCurrentInSeconds());
+            }
+
+            @Override
             public void started(PlayerEvent event) {
                 if (itemSound != null) {
+                    soundPlayerControl.setVisible(true);
                     itemSound.playButton();
+                    soundPlayerControl.playButton();
                 }
             }
 
@@ -64,6 +75,7 @@ public class SoundManager {
             public void paused(PlayerEvent event) {
                 if (itemSound != null) {
                     itemSound.stopButton();
+                    soundPlayerControl.stopButton();
                 }
             }
 
@@ -71,9 +83,15 @@ public class SoundManager {
             public void finished(PlayerEvent event) {
                 if (itemSound != null) {
                     itemSound.stopButton();
+                    soundPlayerControl.stopButton();
+                    soundPlayerControl.setVisible(false);
                 }
             }
         });
+    }
+
+    public void setSoundPlayerControl(SoundPlayerControl soundPlayerControl) {
+        this.soundPlayerControl = soundPlayerControl;
     }
 
     public void play(File file, boolean isMusic) {
@@ -147,6 +165,12 @@ public class SoundManager {
             mp3Player.resumes();
         } else {
             soundPlayback.resumes();
+        }
+    }
+
+    public void skip(float f) {
+        if (isMusic) {
+            mp3Player.skip(f);
         }
     }
 }
