@@ -6,7 +6,7 @@ import raven.messenger.component.StringIcon;
 import raven.messenger.component.chat.Myself;
 import raven.messenger.component.chat.model.ChatFileData;
 import raven.messenger.component.chat.model.ChatPhotoData;
-import raven.messenger.component.chat.model.ChatVoiceData;
+import raven.messenger.component.chat.model.ChatSoundData;
 import raven.messenger.connection.ConnectionManager;
 import raven.messenger.event.GlobalEvent;
 import raven.messenger.event.GroupCreateEvent;
@@ -27,6 +27,7 @@ import raven.messenger.models.response.*;
 import raven.messenger.plugin.sound.AudioUtil;
 import raven.messenger.plugin.sound.CaptureData;
 import raven.messenger.plugin.sound.WaveFormData;
+import raven.messenger.plugin.sound.player.Mp3Player;
 import raven.messenger.plugin.swing.scroll.ScrollRefreshModel;
 import raven.messenger.socket.ChatType;
 import raven.messenger.socket.MessageType;
@@ -111,7 +112,7 @@ public class Home extends JPanel {
                                 .build();
                     } else if (d.getType() == MessageType.VOICE) {
                         chatModel.myself()
-                                .setVoice(new ChatVoiceData(d.getFile()))
+                                .setVoice(new ChatSoundData(d.getFile()))
                                 .setSent(true)
                                 .setSeen(true)
                                 .setDate(d.getCreateDate())
@@ -153,7 +154,7 @@ public class Home extends JPanel {
                                 .setId(d.getFromUser())
                                 .setUsername(getProfileName(d.getFromName(), isGroup))
                                 .setProfile(getProfile(d.getFromUser(), d.getFromName(), isGroup))
-                                .setVoice(new ChatVoiceData(d.getFile()))
+                                .setVoice(new ChatSoundData(d.getFile()))
                                 .setDate(d.getCreateDate())
                                 .setTop(true)
                                 .setAutoRefresh(false)
@@ -292,10 +293,18 @@ public class Home extends JPanel {
                                 .setSeen(true)
                                 .build();
                     } else {
-                        m = chatPanel.getChatModel().myself()
-                                .setFileData(new ChatFileData(file.getFile()))
-                                .setSeen(true)
-                                .build();
+                        boolean isMp3File = Mp3Player.isMp3File(file.getFile().getName());
+                        if (isMp3File) {
+                            m = chatPanel.getChatModel().myself()
+                                    .setVoice(new ChatSoundData(file.getFile()))
+                                    .setSeen(true)
+                                    .build();
+                        } else {
+                            m = chatPanel.getChatModel().myself()
+                                    .setFileData(new ChatFileData(file.getFile()))
+                                    .setSeen(true)
+                                    .build();
+                        }
                     }
                     myselfMap.put(file, m);
                     leftPanel.userMessage(user.getChatType(), user.getId(), new ModelLastMessage(file.getType()));
@@ -315,12 +324,14 @@ public class Home extends JPanel {
                                 new ModelFileDataInfo();
                         //  upload file to server
                         ModelFile fileResponse = SocketService.getInstance().getServiceMessage().sendFile(file.getFile(), fileInfo);
+                        String fileName = fileResponse.getName();
                         ModelSendMessage fileMessage = new ModelSendMessage(user.getChatType(), user.getId(), MessageType.toMessageType(file.getType().toString()), "", fileResponse.getId());
                         //  send message by socket to server
                         SocketService.getInstance().sendMessage(fileMessage, objects -> {
                             Myself ms = myselfMap.get(file);
                             if (ms != null) {
                                 Date date = MethodUtil.stringToDate(objects[0].toString());
+                                ms.setFileName(fileName);
                                 ms.setDate(date);
                                 ms.setSent(true);
                             }
@@ -337,9 +348,9 @@ public class Home extends JPanel {
             @Override
             public void onMicrophoneCapture(CaptureData captureData) {
                 WaveFormData waveFormData = AudioUtil.getWaveFormData(captureData.getAudioData(), captureData.getAudioFormat());
-                ChatVoiceData chatVoiceData = new ChatVoiceData(waveFormData.getData(), "", 0, captureData.getDuration());
+                ChatSoundData chatSoundData = new ChatSoundData(waveFormData.getData(), "", 0, captureData.getDuration());
                 Myself myself = chatPanel.getChatModel().myself()
-                        .setVoice(chatVoiceData)
+                        .setVoice(chatSoundData)
                         .setSeen(true)
                         .build();
                 leftPanel.userMessage(user.getChatType(), user.getId(), new ModelLastMessage(FileType.toFileType("v")));
@@ -349,7 +360,7 @@ public class Home extends JPanel {
                     ModelFileInfo fileInfo = new ModelFileVoiceInfo(captureData.getDuration(), waveFormData.getData());
                     //  upload voice file to server
                     ModelFile fileResponse = SocketService.getInstance().getServiceMessage().sendFile(file, fileInfo);
-                    chatVoiceData.setName(fileResponse.getName());
+                    chatSoundData.setName(fileResponse.getName());
                     ModelSendMessage message = new ModelSendMessage(user.getChatType(), user.getId(), MessageType.VOICE, "", fileResponse.getId());
                     //  send message to server by socket
                     SocketService.getInstance().sendMessage(message, objects -> {
@@ -480,7 +491,7 @@ public class Home extends JPanel {
                                     .setId(message.getFromUser())
                                     .setUsername(getProfileName(message.getFromName(), isGroup))
                                     .setProfile(getProfile(message.getFromUser(), message.getFromName(), isGroup))
-                                    .setVoice(new ChatVoiceData(message.getFile()))
+                                    .setVoice(new ChatSoundData(message.getFile()))
                                     .setDate(message.getCreateDate())
                                     .build();
                         } else if (message.getType() == MessageType.PHOTO) {

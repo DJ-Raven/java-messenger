@@ -2,7 +2,7 @@ package raven.messenger.component.chat;
 
 import raven.messenger.component.chat.model.ChatFileData;
 import raven.messenger.component.chat.model.ChatPhotoData;
-import raven.messenger.component.chat.model.ChatVoiceData;
+import raven.messenger.component.chat.model.ChatSoundData;
 import raven.messenger.util.MethodUtil;
 
 import javax.swing.*;
@@ -14,7 +14,7 @@ public class Myself extends ChatItemOption {
         return message;
     }
 
-    public ChatVoiceData getVoice() {
+    public ChatSoundData getVoice() {
         return voice;
     }
 
@@ -35,7 +35,7 @@ public class Myself extends ChatItemOption {
     }
 
     private String message;
-    private ChatVoiceData voice;
+    private ChatSoundData voice;
     private ChatPhotoData photo;
     private ChatFileData file;
     private boolean sent;
@@ -54,7 +54,7 @@ public class Myself extends ChatItemOption {
         return this;
     }
 
-    public Myself setVoice(ChatVoiceData voice) {
+    public Myself setVoice(ChatSoundData voice) {
         this.voice = voice;
         return this;
     }
@@ -86,6 +86,15 @@ public class Myself extends ChatItemOption {
 
     public Myself setSeen(boolean seen) {
         this.seen = seen;
+        return this;
+    }
+
+    public Myself setFileName(String fileName) {
+        if (voice != null) {
+            voice.setName(fileName);
+        } else if (file != null) {
+            file.setName(fileName);
+        }
         return this;
     }
 

@@ -1,10 +1,11 @@
 package raven.messenger.component.chat.model;
 
+import raven.messenger.event.FileNameEvent;
 import raven.messenger.models.file.ModelFile;
 
 import java.io.File;
 
-public class ChatFileData {
+public class ChatFileData extends FileNameEvent {
 
     public String getOriginalName() {
         return originalName;
@@ -18,8 +19,10 @@ public class ChatFileData {
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
+        runEvent(name);
     }
 
     public File getFile() {

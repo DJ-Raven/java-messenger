@@ -2,7 +2,9 @@ package raven.messenger.component.chat;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
+import raven.messenger.component.SoundPlayerControl;
 import raven.messenger.component.layout.ChatViewportLayout;
+import raven.messenger.manager.SoundManager;
 import raven.messenger.plugin.swing.scroll.ScrollRefresh;
 import raven.messenger.plugin.swing.scroll.ScrollRefreshModel;
 import raven.messenger.util.ScrollAnimation;
@@ -11,7 +13,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.AdjustmentEvent;
 
-public class ChatPanel extends JPanel {
+public class ChatPanel extends JLayeredPane {
 
     private final ChatActionListener event;
     private EmptyChatData emptyChatData;
@@ -25,12 +27,15 @@ public class ChatPanel extends JPanel {
     }
 
     private void init() {
+        setOpaque(true);
         setLayout(new MigLayout("wrap,fill", "[fill,400::]", "[fill][shrink 0,grow 0]"));
         putClientProperty(FlatClientProperties.STYLE, "" +
                 "background:$Chat.background");
         scrollAnimation = new ScrollAnimation();
         panel = new JPanel(new MigLayout("insets 0,wrap,fillx"));
+
         panelBottom = new JPanel(new BorderLayout());
+        createPlayerPanel();
         createEmptyDataLabel();
         messageInput = new MessageInput(event);
         joinGroupButton = new JoinGroupButton(e -> {
@@ -40,7 +45,7 @@ public class ChatPanel extends JPanel {
         scroll = new ScrollRefresh(scrollRefreshModel, panel);
         scroll.getViewport().setLayout(new ChatViewportLayout());
         panel.putClientProperty(FlatClientProperties.STYLE, "" +
-                "border:3,0,3,0;" +
+                "border:33,0,3,0;" +
                 "background:$Chat.background");
         panelBottom.putClientProperty(FlatClientProperties.STYLE, "" +
                 "background:$Chat.background");
@@ -72,6 +77,14 @@ public class ChatPanel extends JPanel {
         removeEmptyDataLabel();
         emptyChatData = new EmptyChatData();
         panel.add(emptyChatData, "pos 0.5al 0.5al");
+    }
+
+    protected void createPlayerPanel() {
+        SoundPlayerControl soundPlayerControl = new SoundPlayerControl();
+        soundPlayerControl.setVisible(false);
+        SoundManager.getInstance().setSoundPlayerControl(soundPlayerControl);
+        setLayer(soundPlayerControl, JLayeredPane.MODAL_LAYER);
+        add(soundPlayerControl, "pos 0 0 100%");
     }
 
     private void removeEmptyDataLabel() {
@@ -163,6 +176,13 @@ public class ChatPanel extends JPanel {
         panelBottom.add(messageInput);
         panelBottom.repaint();
         panelBottom.revalidate();
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        g.setColor(UIManager.getColor("Chat.background"));
+        g.fillRect(0, 0, getWidth(), getHeight());
+        super.paintComponent(g);
     }
 
     private ChatComponentBuilder chatComponentBuilder;
