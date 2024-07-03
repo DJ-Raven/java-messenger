@@ -7,11 +7,9 @@ public class ChatModel {
     public ChatModel(ChatPanel chatPanel) {
         this.chatPanel = chatPanel;
         init();
-
     }
 
     private void init() {
-
     }
 
     protected void add(Recipient recipient) {

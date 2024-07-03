@@ -32,7 +32,15 @@ public class ItemFile extends JPanel implements ProgressChat {
         putClientProperty(FlatClientProperties.STYLE, "" +
                 "background:" + backgroundKey);
 
-        String icon = StoreManager.getInstance().getFile(data.getName()) != null ? "file.svg" : "download.svg";
+        String icon;
+        if (StoreManager.getInstance().getFile(data.getName()) != null) {
+            icon = "file.svg";
+        } else {
+            icon = "download.svg";
+            data.setEventFileNameChanged(o -> {
+                buttonProgress.setIcon(MethodUtil.createIcon("raven/messenger/icon/play.svg", 0.8f));
+            });
+        }
         buttonProgress = new ButtonProgress(MethodUtil.createIcon("raven/messenger/icon/" + icon, 0.8f));
         buttonProgress.putClientProperty(FlatClientProperties.STYLE, "" +
                 "arc:999;" +

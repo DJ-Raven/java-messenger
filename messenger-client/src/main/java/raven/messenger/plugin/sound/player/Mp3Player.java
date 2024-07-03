@@ -262,4 +262,8 @@ public class Mp3Player {
             }
         }
     }
+
+    public static boolean isMp3File(String fileName) {
+        return fileName.toLowerCase().endsWith(".mp3");
+    }
 }

@@ -1,19 +1,23 @@
 package raven.messenger.component.chat.model;
 
+import raven.messenger.event.FileNameEvent;
 import raven.messenger.models.file.FileType;
 import raven.messenger.models.file.ModelFile;
 import raven.messenger.models.file.ModelFileVoiceInfo;
 
+import java.io.File;
 import java.util.List;
 
-public class ChatSoundData {
+public class ChatSoundData extends FileNameEvent {
 
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
+        runEvent(name);
     }
 
     public String getOriginalName() {
@@ -24,11 +28,11 @@ public class ChatSoundData {
         this.originalName = originalName;
     }
 
-    public int getSize() {
+    public long getSize() {
         return size;
     }
 
-    public void setSize(int size) {
+    public void setSize(long size) {
         this.size = size;
     }
 
@@ -48,6 +52,11 @@ public class ChatSoundData {
         this.duration = duration;
     }
 
+    public ChatSoundData(File file) {
+        this.originalName = file.getName();
+        this.size = file.length();
+    }
+
     public ChatSoundData(List<Float> data, String name, int size, double duration) {
         this.data = data;
         this.name = name;
@@ -63,14 +72,12 @@ public class ChatSoundData {
             ModelFileVoiceInfo info = file.getVoidInfo();
             this.data = info.getWaveData();
             this.duration = info.getDuration();
-        } else {
-            duration = 0;
         }
     }
 
     private String name;
     private String originalName;
-    private int size;
+    private long size;
     private List<Float> data;
     private double duration;
 }

@@ -13,6 +13,7 @@ import java.util.Map;
 public abstract class ChatItemOption {
 
     protected Map<String, Component> componentMap;
+    private Object source;
     protected final ChatModel chatModel;
     private boolean top;
     private boolean autoRefresh = true;

@@ -27,6 +27,7 @@ import raven.messenger.models.response.*;
 import raven.messenger.plugin.sound.AudioUtil;
 import raven.messenger.plugin.sound.CaptureData;
 import raven.messenger.plugin.sound.WaveFormData;
+import raven.messenger.plugin.sound.player.Mp3Player;
 import raven.messenger.plugin.swing.scroll.ScrollRefreshModel;
 import raven.messenger.socket.ChatType;
 import raven.messenger.socket.MessageType;
@@ -292,10 +293,18 @@ public class Home extends JPanel {
                                 .setSeen(true)
                                 .build();
                     } else {
-                        m = chatPanel.getChatModel().myself()
-                                .setFileData(new ChatFileData(file.getFile()))
-                                .setSeen(true)
-                                .build();
+                        boolean isMp3File = Mp3Player.isMp3File(file.getFile().getName());
+                        if (isMp3File) {
+                            m = chatPanel.getChatModel().myself()
+                                    .setVoice(new ChatSoundData(file.getFile()))
+                                    .setSeen(true)
+                                    .build();
+                        } else {
+                            m = chatPanel.getChatModel().myself()
+                                    .setFileData(new ChatFileData(file.getFile()))
+                                    .setSeen(true)
+                                    .build();
+                        }
                     }
                     myselfMap.put(file, m);
                     leftPanel.userMessage(user.getChatType(), user.getId(), new ModelLastMessage(file.getType()));
@@ -315,12 +324,14 @@ public class Home extends JPanel {
                                 new ModelFileDataInfo();
                         //  upload file to server
                         ModelFile fileResponse = SocketService.getInstance().getServiceMessage().sendFile(file.getFile(), fileInfo);
+                        String fileName = fileResponse.getName();
                         ModelSendMessage fileMessage = new ModelSendMessage(user.getChatType(), user.getId(), MessageType.toMessageType(file.getType().toString()), "", fileResponse.getId());
                         //  send message by socket to server
                         SocketService.getInstance().sendMessage(fileMessage, objects -> {
                             Myself ms = myselfMap.get(file);
                             if (ms != null) {
                                 Date date = MethodUtil.stringToDate(objects[0].toString());
+                                ms.setFileName(fileName);
                                 ms.setDate(date);
                                 ms.setSent(true);
                             }

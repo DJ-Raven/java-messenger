@@ -89,6 +89,15 @@ public class Myself extends ChatItemOption {
         return this;
     }
 
+    public Myself setFileName(String fileName) {
+        if (voice != null) {
+            voice.setName(fileName);
+        } else if (file != null) {
+            file.setName(fileName);
+        }
+        return this;
+    }
+
     @Override
     public Myself build() {
         chatModel.add(this);
