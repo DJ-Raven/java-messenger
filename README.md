@@ -19,10 +19,11 @@ Run demo with `java -jar messenger-test-<version>.jar` or `double-click` (Requir
 | MiG Layout | https://github.com/mikaelgrev/miglayout |
 | REST Assured | https://github.com/rest-assured/rest-assured |
 | Socket.IO Java client | https://github.com/socketio/socket.io-client-java |
-| SON-Java | https://github.com/stleary/JSON-java?tab=readme-ov-file |
+| JSON-Java | https://github.com/stleary/JSON-java?tab=readme-ov-file |
+| JLayer | https://github.com/umjammer/jlayer |
+| mp3agic | https://github.com/mpatric/mp3agic |
 | Thumbnailator | https://github.com/coobird/thumbnailator |
-| Swing Glasspane Popup | https://github.com/DJ-Raven/swing-glasspane-popup |
-| Swing-Toast-Notifications | https://github.com/DJ-Raven/swing-toast-notifications |
+| Swing Modal Dialog | https://github.com/DJ-Raven/swing-modal-dialog |
 ### Server libraries used (Nodejs)
 | Name | GitHub |
 | ------------ | ------------ |
