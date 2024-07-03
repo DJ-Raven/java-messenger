@@ -1,8 +1,6 @@
 package raven.messenger.component.chat;
 
 import com.formdev.flatlaf.FlatClientProperties;
-import com.formdev.flatlaf.util.ScaledEmptyBorder;
-import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.MigLayout;
 import raven.messenger.component.SoundPlayerControl;
 import raven.messenger.component.layout.ChatViewportLayout;
@@ -12,7 +10,6 @@ import raven.messenger.plugin.swing.scroll.ScrollRefreshModel;
 import raven.messenger.util.ScrollAnimation;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.AdjustmentEvent;
 
@@ -31,7 +28,7 @@ public class ChatPanel extends JLayeredPane {
 
     private void init() {
         setOpaque(true);
-        setLayout(new MigLayout("hidemode 2,wrap,fill", "[fill,400::]", "[fill][shrink 0,grow 0]"));
+        setLayout(new MigLayout("wrap,fill", "[fill,400::]", "[fill][shrink 0,grow 0]"));
         putClientProperty(FlatClientProperties.STYLE, "" +
                 "background:$Chat.background");
         scrollAnimation = new ScrollAnimation();
@@ -87,7 +84,7 @@ public class ChatPanel extends JLayeredPane {
         soundPlayerControl.setVisible(false);
         SoundManager.getInstance().setSoundPlayerControl(soundPlayerControl);
         setLayer(soundPlayerControl, JLayeredPane.MODAL_LAYER);
-        add(soundPlayerControl, "pos 0 0 visual.x2-5 n");
+        add(soundPlayerControl, "pos 0 0 100%");
     }
 
     private void removeEmptyDataLabel() {
