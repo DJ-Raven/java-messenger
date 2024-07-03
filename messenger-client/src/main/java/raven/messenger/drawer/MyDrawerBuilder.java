@@ -80,6 +80,6 @@ public class MyDrawerBuilder extends SimpleDrawerBuilder {
     public SimpleFooterData getSimpleFooterData() {
         return new SimpleFooterData()
                 .setTitle("Java Messenger")
-                .setDescription("Version 1.2.3");
+                .setDescription("Version 1.4.0");
     }
 }
