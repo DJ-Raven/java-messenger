@@ -1,6 +1,8 @@
 package raven.messenger.component.chat;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.util.ScaledEmptyBorder;
+import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.MigLayout;
 import raven.messenger.component.SoundPlayerControl;
 import raven.messenger.component.layout.ChatViewportLayout;
@@ -10,6 +12,7 @@ import raven.messenger.plugin.swing.scroll.ScrollRefreshModel;
 import raven.messenger.util.ScrollAnimation;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.AdjustmentEvent;
 
@@ -45,7 +48,7 @@ public class ChatPanel extends JLayeredPane {
         scroll = new ScrollRefresh(scrollRefreshModel, panel);
         scroll.getViewport().setLayout(new ChatViewportLayout());
         panel.putClientProperty(FlatClientProperties.STYLE, "" +
-                "border:3,0,3,0;" +
+                "border:33,0,3,0;" +
                 "background:$Chat.background");
         panelBottom.putClientProperty(FlatClientProperties.STYLE, "" +
                 "background:$Chat.background");

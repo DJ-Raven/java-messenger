@@ -84,6 +84,7 @@ public class SoundManager {
                 if (itemSound != null) {
                     itemSound.stopButton();
                     soundPlayerControl.stopButton();
+                    soundPlayerControl.lengthChanged(0, 0);
                     soundPlayerControl.setVisible(false);
                 }
             }
