@@ -13,7 +13,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.AdjustmentEvent;
 
-public class ChatPanel extends JPanel {
+public class ChatPanel extends JLayeredPane {
 
     private final ChatActionListener event;
     private EmptyChatData emptyChatData;
@@ -28,7 +28,7 @@ public class ChatPanel extends JPanel {
 
     private void init() {
         setOpaque(true);
-        setLayout(new MigLayout("hidemode 2,wrap,fill", "[fill,400::]", "3[grow 0]0[fill][shrink 0,grow 0]"));
+        setLayout(new MigLayout("hidemode 2,wrap,fill", "[fill,400::]", "[fill][shrink 0,grow 0]"));
         putClientProperty(FlatClientProperties.STYLE, "" +
                 "background:$Chat.background");
         scrollAnimation = new ScrollAnimation();
@@ -83,7 +83,8 @@ public class ChatPanel extends JPanel {
         SoundPlayerControl soundPlayerControl = new SoundPlayerControl();
         soundPlayerControl.setVisible(false);
         SoundManager.getInstance().setSoundPlayerControl(soundPlayerControl);
-        add(soundPlayerControl);
+        setLayer(soundPlayerControl, JLayeredPane.MODAL_LAYER);
+        add(soundPlayerControl, "pos 0 0 visual.x2-5 n");
     }
 
     private void removeEmptyDataLabel() {
@@ -175,6 +176,13 @@ public class ChatPanel extends JPanel {
         panelBottom.add(messageInput);
         panelBottom.repaint();
         panelBottom.revalidate();
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        g.setColor(UIManager.getColor("Chat.background"));
+        g.fillRect(0, 0, getWidth(), getHeight());
+        super.paintComponent(g);
     }
 
     private ChatComponentBuilder chatComponentBuilder;

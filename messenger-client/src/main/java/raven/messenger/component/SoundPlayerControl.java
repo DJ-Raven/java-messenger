@@ -18,9 +18,9 @@ public class SoundPlayerControl extends JPanel {
     }
 
     private void init() {
-        setLayout(new MigLayout("wrap 4, insets 3", "[grow 0][fill,grow][][]", "[center]"));
+        setLayout(new MigLayout("wrap 4", "[grow 0][fill,grow][][]", "[center]3[]3"));
         putClientProperty(FlatClientProperties.STYLE, "" +
-                "background:null;");
+                "background:$Chat.background;");
         labelText = new JTextField("Player name");
         labelText.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         labelText.setBorder(BorderFactory.createEmptyBorder());
