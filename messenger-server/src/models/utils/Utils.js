@@ -3,7 +3,7 @@ const sharp = require("sharp");
 const fs = require("fs");
 const path = require("path");
 
-const music_extensions = [".mp3", ".wav", ".ogg", ".flac", ".aac", ".m4a"];
+const music_extensions = [".mp3"];
 
 exports.getImageInfo = (image) => {
   return new Promise((resolve, rejects) => {
