@@ -9,13 +9,18 @@ import raven.messenger.plugin.sound.AudioUtil;
 import raven.messenger.plugin.sound.WaveFormListener;
 import raven.messenger.plugin.sound.WaveFormPanel;
 import raven.messenger.store.StoreManager;
+import raven.messenger.util.ComponentUtil;
 import raven.messenger.util.MethodUtil;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 
 public class ItemSound extends JPanel implements ProgressChat {
 
+    private JPopupMenu popupMenu;
     private ChatSoundData data;
     private int type;
     private WaveFormPanel waveFormPanel;
@@ -71,6 +76,24 @@ public class ItemSound extends JPanel implements ProgressChat {
                 "borderWidth:0;" +
                 "focusWidth:0;" +
                 "innerFocusWidth:0");
+
+        MouseAdapter mouseAdapter = new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (SwingUtilities.isRightMouseButton(e)) {
+                    File file = StoreManager.getInstance().getFile(data.getName());
+                    if (file != null) {
+                        getPopupMenu().show((Component) e.getSource(), e.getX(), e.getY());
+                    }
+                }
+            }
+        };
+
+        addMouseListener(mouseAdapter);
+        buttonPlay.addMouseListener(mouseAdapter);
+        if (waveFormPanel != null) {
+            waveFormPanel.addMouseListener(mouseAdapter);
+        }
         buttonPlay.addActionListener(e -> {
             if (SoundManager.getInstance().checkSound(this)) {
                 if (SoundManager.getInstance().isRunning()) {
@@ -82,7 +105,9 @@ public class ItemSound extends JPanel implements ProgressChat {
                 play();
             }
         });
-        JLabel lbDuration = new JLabel(MethodUtil.convertSecondsToTime(data.getDuration()) + ", " + MethodUtil.formatSize(data.getSize()));
+
+        String duration = data.getData() == null ? MethodUtil.formatSize(data.getSize()) : (MethodUtil.convertSecondsToTime(data.getDuration()) + ", " + MethodUtil.formatSize(data.getSize()));
+        JLabel lbDuration = new JLabel(duration);
         lbDuration.putClientProperty(FlatClientProperties.STYLE, "" +
                 "font:-1;" +
                 "foreground:$Text.lowForeground");
@@ -95,6 +120,13 @@ public class ItemSound extends JPanel implements ProgressChat {
             add(lbName, "wrap,width 184!,height 30");
         }
         add(lbDuration);
+    }
+
+    private JPopupMenu getPopupMenu() {
+        if (popupMenu == null) {
+            popupMenu = ComponentUtil.createOpenAndSavePopup(data.getName(), data.getOriginalName());
+        }
+        return popupMenu;
     }
 
     private void play() {

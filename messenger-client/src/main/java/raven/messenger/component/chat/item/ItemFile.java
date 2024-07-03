@@ -4,9 +4,8 @@ import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
 import raven.messenger.component.ButtonProgress;
 import raven.messenger.component.chat.model.ChatFileData;
-import raven.messenger.manager.DialogManager;
-import raven.messenger.manager.ErrorManager;
 import raven.messenger.store.StoreManager;
+import raven.messenger.util.ComponentUtil;
 import raven.messenger.util.MethodUtil;
 
 import javax.swing.*;
@@ -14,7 +13,6 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.nio.file.Files;
 
 public class ItemFile extends JPanel implements ProgressChat {
 
@@ -52,7 +50,7 @@ public class ItemFile extends JPanel implements ProgressChat {
                 if (SwingUtilities.isRightMouseButton(e)) {
                     File file = StoreManager.getInstance().getFile(data.getName());
                     if (file != null) {
-                        getPopupMenu().show(ItemFile.this, e.getX(), e.getY());
+                        getPopupMenu().show((Component) e.getSource(), e.getX(), e.getY());
                     }
                 }
             }
@@ -72,40 +70,9 @@ public class ItemFile extends JPanel implements ProgressChat {
 
     private JPopupMenu getPopupMenu() {
         if (popupMenu == null) {
-            popupMenu = new JPopupMenu();
-            JMenuItem menuOpen = new JMenuItem("Open", MethodUtil.createIcon("raven/messenger/icon/view.svg", 0.4f));
-            JMenuItem menuSave = new JMenuItem("Save", MethodUtil.createIcon("raven/messenger/icon/save.svg", 0.4f));
-            menuOpen.addActionListener(e -> {
-                File file = StoreManager.getInstance().getFile(data.getName());
-                if (file != null) {
-                    openFile(file);
-                }
-            });
-            menuSave.addActionListener(e -> {
-                File saveFile = DialogManager.getInstance().showSaveDialog(data.getOriginalName());
-                if (saveFile != null) {
-                    File file = StoreManager.getInstance().getFile(data.getName());
-                    if (file != null) {
-                        try {
-                            Files.copy(file.toPath(), saveFile.toPath());
-                        } catch (Exception ex) {
-                            ErrorManager.getInstance().showError(ex);
-                        }
-                    }
-                }
-            });
-            popupMenu.add(menuOpen);
-            popupMenu.add(menuSave);
+            popupMenu = ComponentUtil.createOpenAndSavePopup(data.getName(), data.getOriginalName());
         }
         return popupMenu;
-    }
-
-    private void openFile(File file) {
-        try {
-            Desktop.getDesktop().open(file);
-        } catch (Exception e) {
-            ErrorManager.getInstance().showError(e);
-        }
     }
 
     private void eventClick() {
@@ -114,7 +81,7 @@ public class ItemFile extends JPanel implements ProgressChat {
             file = StoreManager.getInstance().createFile(data.getName());
             ProgressChat.download(this, data.getName(), file);
         } else {
-            openFile(file);
+            ComponentUtil.openFile(file);
         }
     }
 
