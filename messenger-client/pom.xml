@@ -16,6 +16,10 @@
 
     <repositories>
         <repository>
+            <id>sonatype-oss-snapshots</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
+        </repository>
+        <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
@@ -25,12 +29,12 @@
         <dependency>
             <groupId>com.formdev</groupId>
             <artifactId>flatlaf</artifactId>
-            <version>3.4.1</version>
+            <version>3.5.1</version>
         </dependency>
         <dependency>
             <groupId>com.formdev</groupId>
             <artifactId>flatlaf-extras</artifactId>
-            <version>3.4.1</version>
+            <version>3.5.1</version>
         </dependency>
         <dependency>
             <groupId>com.formdev</groupId>
@@ -59,25 +63,9 @@
         </dependency>
 
         <dependency>
-            <groupId>raven.modaldialog</groupId>
+            <groupId>io.github.dj-raven</groupId>
             <artifactId>modal-dialog</artifactId>
-            <version>1.0.2</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/library/modal-dialog-1.0.2.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>com.miglayout</groupId>
-            <artifactId>miglayout-core</artifactId>
-            <version>5.3</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/library/miglayout-core.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>com.miglayout</groupId>
-            <artifactId>miglayout-swing</artifactId>
-            <version>5.3</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/library/miglayout-swing.jar</systemPath>
+            <version>1.2.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
