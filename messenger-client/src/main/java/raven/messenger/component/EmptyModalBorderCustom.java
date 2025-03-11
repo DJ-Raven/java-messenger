@@ -28,7 +28,7 @@ public class EmptyModalBorderCustom extends Modal {
         buttonClose.putClientProperty(FlatClientProperties.STYLE, "" +
                 "arc:999;" +
                 "margin:50,50,50,50;");
-        buttonClose.addActionListener(e -> getController().close());
+        buttonClose.addActionListener(e -> getController().closeModal());
         panel.add(buttonClose);
         return panel;
     }
