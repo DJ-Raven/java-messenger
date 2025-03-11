@@ -5,8 +5,6 @@ import io.restassured.response.Response;
 import raven.messenger.manager.FormsManager;
 import raven.modal.Toast;
 
-import java.net.ConnectException;
-
 public class ConnectionManager {
 
     private static ConnectionManager instance;

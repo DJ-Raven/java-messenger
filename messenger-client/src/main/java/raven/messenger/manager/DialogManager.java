@@ -83,7 +83,7 @@ public class DialogManager {
 
         // option
         Option option = ModalDialog.createOption();
-        option.setRound(0);
+        option.getBorderOption().setRound(0);
         option.getLayoutOption().setSize(-1, -1);
         ModalDialog.showModal(frame, new EmptyModalBorderCustom(scrollPane), option);
     }

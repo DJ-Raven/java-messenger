@@ -7,36 +7,28 @@ import raven.messenger.login.Login;
 import raven.messenger.manager.FormsManager;
 import raven.messenger.option.OptionManager;
 import raven.modal.Drawer;
-import raven.modal.drawer.data.Item;
-import raven.modal.drawer.data.MenuItem;
+import raven.modal.drawer.item.Item;
+import raven.modal.drawer.item.MenuItem;
 import raven.modal.drawer.menu.MenuOption;
 import raven.modal.drawer.simple.SimpleDrawerBuilder;
+import raven.modal.drawer.simple.footer.SimpleFooter;
 import raven.modal.drawer.simple.footer.SimpleFooterData;
+import raven.modal.drawer.simple.header.SimpleHeader;
 import raven.modal.drawer.simple.header.SimpleHeaderData;
 import raven.modal.drawer.simple.header.SimpleHeaderStyle;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class MyDrawerBuilder extends SimpleDrawerBuilder {
 
-    @Override
-    public SimpleHeaderData getSimpleHeaderData() {
-        FlatSVGIcon icon = new FlatSVGIcon("raven/messenger/icon/account.svg", 50, 50);
-        return new SimpleHeaderData()
-                .setIcon(icon)
-                .setTitle("Ra Ven")
-                .setDescription("raven@gmail.com")
-                .setHeaderStyle(new SimpleHeaderStyle() {
-                    @Override
-                    public void styleProfile(JLabel label) {
-                        label.putClientProperty(FlatClientProperties.STYLE, "" +
-                                "font:bold +5");
-                    }
-                });
+    public MyDrawerBuilder() {
+        super(createSimpleMenuOption());
     }
 
-    @Override
-    public MenuOption getSimpleMenuOption() {
+    public static MenuOption createSimpleMenuOption() {
+        // create simple menu option
+        MenuOption simpleMenuOption = new MenuOption();
 
         MenuItem[] menus = new MenuItem[]{
                 new Item("New group", "group.svg"),
@@ -44,12 +36,11 @@ public class MyDrawerBuilder extends SimpleDrawerBuilder {
                 new Item("Local storage", "storage.svg"),
                 new Item("Log Out", "logout.svg")
         };
-
-        MenuOption menuOption = new MenuOption()
-                .setMenus(menus)
+        simpleMenuOption.setMenus(menus)
                 .setBaseIconPath("raven/messenger/icon/drawer")
                 .setIconScale(0.5f);
-        menuOption.addMenuEvent((menuAction, index) -> {
+
+        simpleMenuOption.addMenuEvent((menuAction, index) -> {
             if (index.length == 1) {
                 int i = index[0];
                 if (i == 0) {
@@ -68,7 +59,25 @@ public class MyDrawerBuilder extends SimpleDrawerBuilder {
                 }
             }
         });
-        return menuOption;
+        return simpleMenuOption;
+    }
+
+    @Override
+    public SimpleHeaderData getSimpleHeaderData() {
+        FlatSVGIcon icon = new FlatSVGIcon("raven/messenger/icon/account.svg", 50, 50);
+        return new SimpleHeaderData()
+                .setIcon(icon)
+                .setTitle("Ra Ven")
+                .setDescription("raven@gmail.com")
+                .setHeaderStyle(new SimpleHeaderStyle() {
+                    @Override
+                    public void styleComponent(JComponent component, int styleType) {
+                        if (styleType == SimpleHeader.LABEL_TITLE_STYLE) {
+                            component.putClientProperty(FlatClientProperties.STYLE, "" +
+                                    "font:bold +1");
+                        }
+                    }
+                });
     }
 
     @Override
@@ -77,9 +86,14 @@ public class MyDrawerBuilder extends SimpleDrawerBuilder {
     }
 
     @Override
+    public Component getFooter() {
+        return new SimpleFooter(getSimpleFooterData());
+    }
+
+    @Override
     public SimpleFooterData getSimpleFooterData() {
         return new SimpleFooterData()
                 .setTitle("Java Messenger")
-                .setDescription("Version 1.4.0");
+                .setDescription("Version 1.4.1");
     }
 }
