@@ -25,7 +25,7 @@ public class ConnectionPromise {
         ToastOption toastOption = Toast.createOption();
         toastOption.setPauseDelayOnHover(false);
         toastOption.getStyle().setShowCloseButton(false);
-        Toast.showPromise(FormsManager.getInstance().getMainFrame(), "Disconnected", ToastLocation.BOTTOM_LEADING, toastOption, toastPromise);
+        Toast.showPromise(FormsManager.getInstance().getMainFrame(), "Disconnected", ToastLocation.BOTTOM_TRAILING, toastOption, toastPromise);
     }
 
     public void reconnected() {

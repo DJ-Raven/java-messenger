@@ -15,8 +15,8 @@ import java.awt.*;
 
 public class ItemMember extends JButton {
 
-    private ModelMember data;
-    private boolean owner;
+    private final ModelMember data;
+    private final boolean owner;
 
     public ItemMember(ModelMember data, boolean owner) {
         this.data = data;
@@ -29,7 +29,7 @@ public class ItemMember extends JButton {
                 "background:null;" +
                 "borderWidth:0;" +
                 "focusWidth:0;" +
-                "innerFocusWidth:0");
+                "innerFocusWidth:0;");
         setLayout(new MigLayout("wrap,fill,insets 3", "[fill]"));
         panelLabel = new PanelLabel();
         if (data.getProfile() != null) {
@@ -69,12 +69,12 @@ public class ItemMember extends JButton {
             lbStatus = new JLabel(owner ? "owner" : "");
 
             lbName.putClientProperty(FlatClientProperties.STYLE, "" +
-                    "font:bold");
+                    "font:bold;");
             lbStatus.putClientProperty(FlatClientProperties.STYLE, "" +
-                    "foreground:$Text.lowForeground");
+                    "foreground:$Text.lowForeground;");
 
             lbDescription.putClientProperty(FlatClientProperties.STYLE, "" +
-                    "foreground:$Text.middleForeground");
+                    "foreground:$Text.middleForeground;");
 
             add(lbName);
             add(lbDescriptionName);

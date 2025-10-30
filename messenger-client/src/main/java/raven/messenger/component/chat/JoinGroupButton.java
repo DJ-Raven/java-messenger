@@ -27,7 +27,7 @@ public class JoinGroupButton extends JPanel {
                 "[dark]background:lighten(@background,10%);" +
                 "borderWidth:0;" +
                 "focusWidth:0;" +
-                "innerFocusWidth:0");
+                "innerFocusWidth:0;");
 
         add(button);
     }

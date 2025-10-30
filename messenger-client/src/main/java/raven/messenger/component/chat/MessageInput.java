@@ -33,7 +33,7 @@ public class MessageInput extends JPanel {
     private void init() {
         setLayout(new MigLayout("fill", "[grow 0]0[fill][grow 0]", "[::200,bottom]"));
         putClientProperty(FlatClientProperties.STYLE, "" +
-                "arc:10");
+                "arc:10;");
         input = new TextPaneCustom();
         input.setPlaceholderText("Write a message...");
         input.setEditorKit(new AutoWrapText());
@@ -41,11 +41,11 @@ public class MessageInput extends JPanel {
         scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         input.putClientProperty(FlatClientProperties.STYLE, "" +
                 "background:null;" +
-                "margin:4,4,4,4");
+                "margin:4,4,4,4;");
         scroll.putClientProperty(FlatClientProperties.STYLE, "" +
-                "border:0,0,0,0");
+                "border:0,0,0,0;");
         scroll.getVerticalScrollBar().putClientProperty(FlatClientProperties.STYLE, "" +
-                "width:3");
+                "width:3;");
         scroll.getVerticalScrollBar().setUnitIncrement(10);
         soundCapture.addSoundCaptureListener(new SoundCaptureListener() {
             @Override
@@ -87,7 +87,7 @@ public class MessageInput extends JPanel {
                 }
             }
         });
-        JButton buttonFile = createActionButton(MethodUtil.createIcon("raven/messenger/icon/attach.svg", 0.8f));
+        JButton buttonFile = createActionButton(MethodUtil.createIcon("raven/messenger/icon/attach.svg", 0.4f));
         buttonFile.setCursor(new Cursor(Cursor.HAND_CURSOR));
         buttonFile.addActionListener(e -> sendFile());
         add(buttonFile);
@@ -97,8 +97,8 @@ public class MessageInput extends JPanel {
 
     private Component createActionButton() {
         JPanel panel = new JPanel(new MigLayout("insets 0,gap 3"));
-        JButton buttonSend = createActionButton(MethodUtil.createIcon("raven/messenger/icon/sent.svg", 0.8f));
-        JButton buttonSound = createActionButton(MethodUtil.createIcon("raven/messenger/icon/microphone.svg", 0.8f));
+        JButton buttonSend = createActionButton(MethodUtil.createIcon("raven/messenger/icon/sent.svg", 0.4f));
+        JButton buttonSound = createActionButton(MethodUtil.createIcon("raven/messenger/icon/microphone.svg", 0.4f));
         buttonSend.setCursor(new Cursor(Cursor.HAND_CURSOR));
         buttonSound.setCursor(new Cursor(Cursor.HAND_CURSOR));
         buttonSend.setFocusable(false);
@@ -117,9 +117,7 @@ public class MessageInput extends JPanel {
                 input.useInput(true);
                 soundCapture.stop();
             } else if (status == EventMouseHold.HoldStatus.MOUSE_ENTER) {
-
             } else if (status == EventMouseHold.HoldStatus.MOUSE_EXIT) {
-
             }
         });
         panel.add(buttonSound);
@@ -134,7 +132,7 @@ public class MessageInput extends JPanel {
                 "arc:15;" +
                 "borderWidth:0;" +
                 "focusWidth:0;" +
-                "innerFocusWidth:0");
+                "innerFocusWidth:0;");
         return button;
     }
 
@@ -148,7 +146,7 @@ public class MessageInput extends JPanel {
     }
 
     private void sendFile() {
-        File files[] = DialogManager.getInstance().showOpenDialogMulti();
+        File[] files = DialogManager.getInstance().showOpenDialogMulti();
         if (files != null) {
             String title = getTitle(files);
             DialogSelectFile dialogSelectFile = new DialogSelectFile(files, input.getText());

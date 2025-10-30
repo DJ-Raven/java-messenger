@@ -91,7 +91,7 @@ public class SoundCapture {
         } catch (IOException e) {
             throw new RuntimeException(e.toString());
         }
-        byte audioBytes[] = out.toByteArray();
+        byte[] audioBytes = out.toByteArray();
         audioData = audioBytes;
     }
 

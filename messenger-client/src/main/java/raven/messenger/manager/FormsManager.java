@@ -2,14 +2,14 @@ package raven.messenger.manager;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
+import com.formdev.flatlaf.util.SystemFileChooser;
+import raven.messenger.Application;
 import raven.messenger.api.ApiService;
 import raven.messenger.connection.ConnectionManager;
 import raven.messenger.connection.FormUpdate;
-import raven.messenger.drawer.MenuDrawer;
 import raven.messenger.home.Home;
 import raven.messenger.login.Login;
-import raven.messenger.Application;
-import raven.modal.Drawer;
+import raven.messenger.models.response.ModelProfile;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,6 +18,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.prefs.Preferences;
 
 public class FormsManager {
     private Application application;
@@ -35,6 +36,7 @@ public class FormsManager {
     }
 
     public void init() {
+        initSystemFileChooserStateStorage();
         boolean signed = ApiService.getInstance().init();
         if (signed) {
             showHome();
@@ -50,8 +52,33 @@ public class FormsManager {
         }
     }
 
+    private void initSystemFileChooserStateStorage() {
+        SystemFileChooser.setStateStore(new SystemFileChooser.StateStore() {
+            private static final String KEY_PREFIX = "fileChooser.";
+
+            private final Preferences state = Preferences.userRoot().node("java-messenger-client");
+
+            @Override
+            public String get(String key, String def) {
+                return state.get(KEY_PREFIX + key, def);
+            }
+
+            @Override
+            public void put(String key, String value) {
+                if (value != null)
+                    state.put(KEY_PREFIX + key, value);
+                else
+                    state.remove(KEY_PREFIX + key);
+            }
+        });
+    }
+
     private void showLogin() {
         showForm(new Login(null));
+    }
+
+    public void updateProfile(ModelProfile profile) {
+        home.updateProfile(profile);
     }
 
     public void initApplication(Application application) {
@@ -63,7 +90,6 @@ public class FormsManager {
         if (home == null) {
             home = new Home();
         }
-        MenuDrawer.getInstance().setVisible(true);
         showForm(home);
         home.initHome();
     }
@@ -102,30 +128,21 @@ public class FormsManager {
         for (int i = 0; i < textFields.length; i++) {
             JTextField textField = textFields[i];
             if (textField != null) {
-                if (textField instanceof JTextField) {
-                    if (textField.getText().trim().isEmpty()) {
-                        components.add(textField);
-                    } else {
-                        clearOutline(textField);
-                    }
-                } else if (textField instanceof JPasswordField) {
-                    JPasswordField passwordField = (JPasswordField) textField;
-                    if (String.valueOf(passwordField.getPassword()).isEmpty()) {
-                        components.add(textField);
-                    } else {
-                        clearOutline(textField);
-                    }
+                if (textField.getText().trim().isEmpty()) {
+                    components.add(textField);
+                } else {
+                    clearOutline(textField);
                 }
             }
         }
         if (!components.isEmpty()) {
-            applyErrorOutline(components.toArray(new JComponent[components.size()]));
+            applyErrorOutline(components.toArray(new JComponent[0]));
             components.get(0).grabFocus();
         }
         return components.isEmpty();
     }
 
-    public void autoFocus(Consumer consumer, JComponent... components) {
+    public void autoFocus(Consumer<Object> consumer, JComponent... components) {
         for (int i = 0; i < components.length; i++) {
             final int index = i;
             components[i].addKeyListener(new KeyAdapter() {

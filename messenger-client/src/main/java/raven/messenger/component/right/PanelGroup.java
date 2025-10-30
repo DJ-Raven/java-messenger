@@ -4,7 +4,6 @@ import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
 import raven.messenger.api.exception.ResponseException;
 import raven.messenger.component.chat.AutoWrapText;
-import raven.messenger.component.left.Item;
 import raven.messenger.manager.ErrorManager;
 import raven.messenger.models.response.ModelGroup;
 import raven.messenger.models.response.ModelMember;
@@ -49,7 +48,7 @@ public class PanelGroup extends JPanel {
         textPane.setEditorKit(new AutoWrapText());
 
         textPane.putClientProperty(FlatClientProperties.STYLE, "" +
-                "foreground:$Text.upperForeground");
+                "foreground:$Text.upperForeground;");
         panelDescription.add(textPane);
         add(panelDescription);
     }
@@ -65,7 +64,7 @@ public class PanelGroup extends JPanel {
         scrollRefresh.getScrollRefreshModel().stop();
 
         scrollRefresh.getVerticalScrollBar().putClientProperty(FlatClientProperties.STYLE, "" +
-                "width:3");
+                "width:3;");
 
         add(scrollRefresh);
     }
@@ -110,7 +109,7 @@ public class PanelGroup extends JPanel {
         JPanel separator = new JPanel();
         separator.putClientProperty(FlatClientProperties.STYLE, "" +
                 "[light]background:darken(@background,3%);" +
-                "[dark]background:lighten(@background,3%)");
+                "[dark]background:lighten(@background,3%);");
         panel.add(separator, "height 7!");
     }
 
@@ -137,7 +136,7 @@ public class PanelGroup extends JPanel {
         int count = panelMember.getComponentCount();
         for (int i = 0; i < count; i++) {
             Component component = panelMember.getComponent(i);
-            if (component instanceof Item) {
+            if (component instanceof ItemMember) {
                 ItemMember item = (ItemMember) component;
                 if (item.getData().getUserId() == data.getUserId()) {
                     return false;

@@ -16,7 +16,6 @@ public class EmptyIcon implements Icon {
 
     @Override
     public void paintIcon(Component c, Graphics g, int x, int y) {
-
     }
 
     @Override

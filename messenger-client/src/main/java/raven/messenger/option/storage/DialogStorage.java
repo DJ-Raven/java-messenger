@@ -26,11 +26,11 @@ public class DialogStorage extends JPanel {
     }
 
     private void init() {
-        setLayout(new MigLayout("fill,wrap,insets 30 0 30 0", "fill", "[]20[][]"));
+        setLayout(new MigLayout("fill,wrap,insets n 0 0 0", "fill", "[]20[][]"));
         chart = new Chart();
         panelDetail = new JPanel(new MigLayout("fill,wrap,gapy 0,insets 0 30 0 30", "fill"));
-        add(chart, "height 150!");
-        add(ComponentUtil.createInfoText("The application stores cached data from the server on your", "computer's storage."));
+        add(chart, "height 140!");
+        add(ComponentUtil.createInfoText("The application stores cached data from the server on", "your computer's storage."));
         add(panelDetail);
         add(ComponentUtil.createInfoText("Here are the total file size and details of the stored data.", "You have the option to clear this data."));
         updateDate();
@@ -61,11 +61,11 @@ public class DialogStorage extends JPanel {
         private void init() {
             setLayout(new MigLayout("al center center"));
             putClientProperty(FlatClientProperties.STYLE, "" +
-                    "background:null");
+                    "background:null;");
             labelName = new JLabel();
             labelName.putClientProperty(FlatClientProperties.STYLE, "" +
                     "font:bold +3;" +
-                    "foreground:$Text.upperForeground");
+                    "foreground:$Text.upperForeground;");
             add(labelName);
         }
 
@@ -175,24 +175,24 @@ public class DialogStorage extends JPanel {
                     "borderWidth:0;" +
                     "focusWidth:0;" +
                     "innerFocusWidth:0;" +
-                    "disabledBackground:null");
+                    "disabledBackground:null;");
             labelName.putClientProperty(FlatClientProperties.STYLE, "" +
-                    "foreground:$Text.upperForeground");
+                    "foreground:$Text.upperForeground;");
             labelSize.putClientProperty(FlatClientProperties.STYLE, "" +
                     "foreground:$Text.lowForeground;" +
-                    "font:-2");
+                    "font:-2;");
             add(labelName, "cell 1 0");
             add(labelSize, "cell 1 1,push");
-            add(buttonClear, "al trailing,cell 2 0,span 1 2,gap 8 8 8 8");
+            add(buttonClear, "al trailing,cell 2 0,span 1 2,gap 8 0 8 8");
         }
     }
 
-    private class LabelColor extends JLabel {
+    private static class LabelColor extends JLabel {
 
         public LabelColor(Icon icon, Color color) {
             super(icon);
             putClientProperty(FlatClientProperties.STYLE, "" +
-                    "border:4,4,4,4");
+                    "border:4,4,4,4;");
             setBackground(color);
         }
 

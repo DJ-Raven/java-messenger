@@ -3,6 +3,7 @@ const jwtVerify = require("../models/JwtVerify");
 const message = require("../models/Message");
 const group = require("../models/Group");
 const users = require("./UserData");
+const utils = require("../models/utils/Utils");
 
 module.exports = function (server) {
   const io = new Server(server);
@@ -53,6 +54,10 @@ module.exports = function (server) {
 };
 
 function emitToTarget(io, socketId, data) {
+  if (data.message_type === 'f') {
+    const fileType = data.file && utils.isMusicFile(data.file.name) ? "v" : data.file.type;
+    data.message_type = fileType;
+  }
   if (data.type === "user") {
     const toSocketId = users[data.target];
     if (toSocketId) {

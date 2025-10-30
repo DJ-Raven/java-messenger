@@ -23,8 +23,8 @@ import java.nio.file.Files;
 
 public class ItemImage extends ChatItem implements ProgressChat {
 
+    private final ChatPhotoData photo;
     private JPopupMenu popupMenu;
-    private ChatPhotoData photo;
     private NetworkIcon networkIcon;
     private ButtonProgressTransparent buttonProgress;
     private PanelTransparent timePanel;
@@ -101,7 +101,7 @@ public class ItemImage extends ChatItem implements ProgressChat {
     }
 
     private void createDownloadButton() {
-        buttonProgress = new ButtonProgressTransparent(MethodUtil.createIcon("raven/messenger/icon/download.svg", 0.8f, new Color(220, 220, 220)));
+        buttonProgress = new ButtonProgressTransparent(MethodUtil.createIcon("raven/messenger/icon/download.svg", 0.35f, new Color(220, 220, 220)));
         buttonProgress.addActionListener(e -> {
             if (photo.getPath() == null) {
                 eventClick();

@@ -2,26 +2,22 @@ package raven.messenger.manager;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.util.ScaledEmptyBorder;
-import com.formdev.flatlaf.util.UIScale;
-import raven.messenger.Application;
+import com.formdev.flatlaf.util.SystemFileChooser;
 import raven.messenger.component.EmptyModalBorderCustom;
 import raven.messenger.component.ModalBorderCustom;
 import raven.messenger.component.NetworkIcon;
 import raven.messenger.component.chat.model.ChatPhotoData;
 import raven.messenger.plugin.swing.scroll.ScrollOverlay;
-import raven.messenger.util.MethodUtil;
 import raven.modal.ModalDialog;
 import raven.modal.Toast;
 import raven.modal.component.SimpleModalBorder;
 import raven.modal.listener.ModalCallback;
+import raven.modal.option.BorderOption;
 import raven.modal.option.Option;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.io.File;
-import java.util.prefs.Preferences;
 
 public class DialogManager {
 
@@ -36,8 +32,12 @@ public class DialogManager {
     }
 
     private DialogManager() {
-        ModalDialog.getDefaultOption().setAnimationEnabled(false);
-        Toast.getDefaultOption().getLayoutOption().setMargin(20, 7, 7, 7);
+        ModalDialog.getDefaultOption().setAnimationEnabled(false)
+                .setOpacity(0.3f)
+                .getBorderOption().setShadow(BorderOption.Shadow.MEDIUM);
+
+        Toast.getDefaultOption().getLayoutOption().setMargin(20, 15, 7, 15);
+        Toast.getDefaultOption().getStyle().setShowIcon(false);
     }
 
     public void init(JFrame frame) {
@@ -90,76 +90,40 @@ public class DialogManager {
 
     public File showOpenDialog(ShowOpenType type) {
         String key = type.toString();
-        JFileChooser chooser = new JFileChooser(getLastSelectedFile(key));
-        chooser.setFileFilter(new FileFilter() {
-            @Override
-            public boolean accept(File f) {
-                String fileName = f.getName();
-                if (type == ShowOpenType.PHOTO) {
-                    return f.isDirectory() || MethodUtil.isImageFile(fileName);
-                } else {
-                    return true;
-                }
-            }
-
-            @Override
-            public String getDescription() {
-                if (type == ShowOpenType.PHOTO) {
-                    return "Photo";
-                } else {
-                    return "";
-                }
-            }
-        });
-        chooser.setPreferredSize(UIScale.scale(new Dimension(900, 500)));
-        int act = chooser.showOpenDialog(frame);
-        if (act == JFileChooser.APPROVE_OPTION) {
-            File file = chooser.getSelectedFile();
-            updateLastSelectedFile(key, file);
-            return file;
+        SystemFileChooser fc = new SystemFileChooser();
+        fc.setStateStoreID("photo");
+        if (type == ShowOpenType.PHOTO) {
+            fc.addChoosableFileFilter(new SystemFileChooser.FileNameExtensionFilter("Photo", "png", "jpg", "jpeg", "gif", "bmp"));
+        }
+        int act = fc.showOpenDialog(frame);
+        if (act == SystemFileChooser.APPROVE_OPTION) {
+            return fc.getSelectedFile();
         }
         return null;
     }
 
     public File[] showOpenDialogMulti() {
-        final String key = "select";
-        JFileChooser chooser = new JFileChooser(getLastSelectedFile(key));
-        chooser.setPreferredSize(UIScale.scale(new Dimension(820, 480)));
-        chooser.setMultiSelectionEnabled(true);
-        int act = chooser.showOpenDialog(frame);
-        if (act == JFileChooser.APPROVE_OPTION) {
-            File files[] = chooser.getSelectedFiles();
-            updateLastSelectedFile(key, files[0]);
-            return files;
+        SystemFileChooser fc = new SystemFileChooser();
+        fc.setStateStoreID("file");
+        fc.setMultiSelectionEnabled(true);
+        int act = fc.showOpenDialog(frame);
+        if (act == SystemFileChooser.APPROVE_OPTION) {
+            return fc.getSelectedFiles();
         }
         return null;
     }
 
     public File showSaveDialog(String fileName) {
-        final String KEY = "save";
-        JFileChooser chooser = new JFileChooser(getLastSelectedFile(KEY));
+        SystemFileChooser fc = new SystemFileChooser();
+        fc.setStateStoreID("file");
         if (fileName != null) {
-            chooser.setSelectedFile(new File(fileName));
+            fc.setSelectedFile(new File(fileName));
         }
-        chooser.setPreferredSize(UIScale.scale(new Dimension(900, 500)));
-        int act = chooser.showSaveDialog(frame);
-        if (act == JFileChooser.APPROVE_OPTION) {
-            File file = chooser.getSelectedFile();
-            updateLastSelectedFile(KEY, file);
-            return file;
+        int act = fc.showSaveDialog(frame);
+        if (act == SystemFileChooser.APPROVE_OPTION) {
+            return fc.getSelectedFile();
         }
         return null;
-    }
-
-    public File getLastSelectedFile(String key) {
-        Preferences prefs = Preferences.userNodeForPackage(Application.class);
-        String lastUsedDirectory = prefs.get("java_chooser_" + key, FileSystemView.getFileSystemView().getHomeDirectory().getAbsolutePath());
-        return new File(lastUsedDirectory);
-    }
-
-    public void updateLastSelectedFile(String key, File file) {
-        Preferences prefs = Preferences.userNodeForPackage(Application.class);
-        prefs.put("java_chooser_" + key, file.getParent());
     }
 
     public enum ShowOpenType {

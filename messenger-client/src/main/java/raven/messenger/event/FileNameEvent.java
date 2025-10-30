@@ -4,11 +4,11 @@ import java.util.function.Consumer;
 
 public abstract class FileNameEvent {
 
-    private Consumer eventFileNameChange;
+    private Consumer<Object> eventFileNameChange;
 
     public abstract void setName(String name);
 
-    public void setEventFileNameChanged(Consumer event) {
+    public void setEventFileNameChanged(Consumer<Object> event) {
         this.eventFileNameChange = event;
     }
 

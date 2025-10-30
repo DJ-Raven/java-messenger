@@ -20,9 +20,9 @@ import java.io.File;
 
 public class ItemSound extends JPanel implements ProgressChat {
 
+    private final ChatSoundData data;
+    private final int type;
     private JPopupMenu popupMenu;
-    private ChatSoundData data;
-    private int type;
     private WaveFormPanel waveFormPanel;
     private ButtonProgress buttonPlay;
 
@@ -74,16 +74,16 @@ public class ItemSound extends JPanel implements ProgressChat {
         } else {
             icon = "download.svg";
             data.setEventFileNameChanged(o -> {
-                buttonPlay.setIcon(MethodUtil.createIcon("raven/messenger/icon/play.svg", 0.8f));
+                buttonPlay.setIcon(MethodUtil.createIcon("raven/messenger/icon/play.svg", 0.3f));
             });
         }
-        buttonPlay = new ButtonProgress(MethodUtil.createIcon("raven/messenger/icon/" + icon, 0.8f));
+        buttonPlay = new ButtonProgress(MethodUtil.createIcon("raven/messenger/icon/" + icon, 0.3f));
         buttonPlay.putClientProperty(FlatClientProperties.STYLE, "" +
                 "arc:999;" +
                 "margin:7,7,7,7;" +
                 "borderWidth:0;" +
                 "focusWidth:0;" +
-                "innerFocusWidth:0");
+                "innerFocusWidth:0;");
 
         MouseAdapter mouseAdapter = new MouseAdapter() {
             @Override
@@ -118,7 +118,7 @@ public class ItemSound extends JPanel implements ProgressChat {
         JLabel lbDuration = new JLabel(duration);
         lbDuration.putClientProperty(FlatClientProperties.STYLE, "" +
                 "font:-1;" +
-                "foreground:$Text.lowForeground");
+                "foreground:$Text.lowForeground;");
 
         add(buttonPlay, "span 1 2");
         if (waveFormPanel != null) {
@@ -149,11 +149,11 @@ public class ItemSound extends JPanel implements ProgressChat {
     }
 
     public void stopButton() {
-        buttonPlay.setIcon(MethodUtil.createIcon("raven/messenger/icon/play.svg", 0.8f));
+        buttonPlay.setIcon(MethodUtil.createIcon("raven/messenger/icon/play.svg", 0.3f));
     }
 
     public void playButton() {
-        buttonPlay.setIcon(MethodUtil.createIcon("raven/messenger/icon/pause.svg", 0.8f));
+        buttonPlay.setIcon(MethodUtil.createIcon("raven/messenger/icon/pause.svg", 0.3f));
     }
 
     public void setProgress(float progress) {

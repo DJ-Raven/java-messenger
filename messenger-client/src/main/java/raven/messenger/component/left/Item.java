@@ -6,9 +6,9 @@ import net.miginfocom.swing.MigLayout;
 import raven.messenger.component.PictureBox;
 import raven.messenger.component.ProfileStatus;
 import raven.messenger.component.StringIcon;
+import raven.messenger.models.other.ModelImage;
 import raven.messenger.models.response.ModelChatListItem;
 import raven.messenger.models.response.ModelLastMessage;
-import raven.messenger.models.other.ModelImage;
 import raven.messenger.socket.MessageType;
 import raven.messenger.util.MethodUtil;
 import raven.messenger.util.NetworkDataUtil;
@@ -18,7 +18,7 @@ import java.awt.*;
 
 public class Item extends JButton {
 
-    private ModelChatListItem data;
+    private final ModelChatListItem data;
 
     public Item(ModelChatListItem data) {
         this.data = data;
@@ -30,7 +30,7 @@ public class Item extends JButton {
                 "background:null;" +
                 "borderWidth:0;" +
                 "focusWidth:0;" +
-                "innerFocusWidth:0");
+                "innerFocusWidth:0;");
         setLayout(new MigLayout("wrap,fill,insets 3", "[fill]"));
         panelLabel = new PanelLabel();
         if (data.getProfile() != null) {
@@ -88,12 +88,12 @@ public class Item extends JButton {
             lbStatus = new JLabel();
 
             lbName.putClientProperty(FlatClientProperties.STYLE, "" +
-                    "font:bold");
+                    "font:bold;");
             lbStatus.putClientProperty(FlatClientProperties.STYLE, "" +
-                    "foreground:$Text.lowForeground");
+                    "foreground:$Text.lowForeground;");
 
             lbDescription.putClientProperty(FlatClientProperties.STYLE, "" +
-                    "foreground:$Text.middleForeground");
+                    "foreground:$Text.middleForeground;");
 
             add(lbName);
             add(lbDescriptionName);
@@ -110,13 +110,13 @@ public class Item extends JButton {
                     lbDescription.setIcon(null);
                 } else if (lastMessage.getMessageType() == MessageType.VOICE) {
                     lbDescription.setText("Voice");
-                    lbDescription.setIcon(MethodUtil.createIcon("raven/messenger/icon/voice.svg", 0.6f));
+                    lbDescription.setIcon(MethodUtil.createIcon("raven/messenger/icon/voice.svg", 0.3f));
                 } else if (lastMessage.getMessageType() == MessageType.PHOTO) {
                     lbDescription.setText("Photo");
-                    lbDescription.setIcon(MethodUtil.createIcon("raven/messenger/icon/photo.svg", 0.6f));
+                    lbDescription.setIcon(MethodUtil.createIcon("raven/messenger/icon/photo.svg", 0.3f));
                 } else if (lastMessage.getMessageType() == MessageType.FILE) {
                     lbDescription.setText("File");
-                    lbDescription.setIcon(MethodUtil.createIcon("raven/messenger/icon/file.svg", 0.6f));
+                    lbDescription.setIcon(MethodUtil.createIcon("raven/messenger/icon/file.svg", 0.3f));
                 }
             } else {
                 if (data.isGroup()) {

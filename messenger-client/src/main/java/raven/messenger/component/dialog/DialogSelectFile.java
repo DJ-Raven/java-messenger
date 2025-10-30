@@ -1,7 +1,6 @@
 package raven.messenger.component.dialog;
 
 import com.formdev.flatlaf.FlatClientProperties;
-import com.formdev.flatlaf.util.ScaledEmptyBorder;
 import net.miginfocom.swing.MigLayout;
 import raven.messenger.component.LabelRound;
 import raven.messenger.component.PictureBox;
@@ -42,12 +41,12 @@ public class DialogSelectFile extends JPanel {
         JPanel panel = new JPanel(new MigLayout("fill,insets 0", "[fill][grow 0]", "fill"));
         panelFiles = new JPanel(new MigLayout("fillx,wrap,insets 0", "fill"));
         panelFiles.putClientProperty(FlatClientProperties.STYLE, "" +
-                "background:null");
+                "background:null;");
         scrollPane = new JScrollPane(panelFiles);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         scrollPane.getVerticalScrollBar().putClientProperty(FlatClientProperties.STYLE, "" +
-                "width:5");
+                "width:5;");
         scrollPane.getVerticalScrollBar().setUnitIncrement(10);
         panel.add(scrollPane);
         panel.add(scrollPane.getVerticalScrollBar());
@@ -106,14 +105,14 @@ public class DialogSelectFile extends JPanel {
         JPanel inputPanel = new JPanel(new MigLayout("fill,wrap,insets 3", "fill", "fill,22::110"));
         inputPanel.putClientProperty(FlatClientProperties.STYLE, "" +
                 "arc:10;" +
-                "background:$TextField.background");
+                "background:$TextField.background;");
 
         JScrollPane scroll = new JScrollPane(txtCaption);
         scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scroll.putClientProperty(FlatClientProperties.STYLE, "" +
-                "border:0,0,0,0");
+                "border:0,0,0,0;");
         scroll.getVerticalScrollBar().putClientProperty(FlatClientProperties.STYLE, "" +
-                "width:3");
+                "width:3;");
         scroll.getVerticalScrollBar().setUnitIncrement(10);
         inputPanel.add(scroll);
         add(inputPanel, "gap 0 " + (insetRight));
@@ -151,7 +150,7 @@ public class DialogSelectFile extends JPanel {
         cmdDelete.putClientProperty(FlatClientProperties.STYLE_CLASS, "myButton");
         cmdDelete.putClientProperty(FlatClientProperties.STYLE, "" +
                 "[dark]background:lighten(@background,3%);" +
-                "[light]background:darken(@background,3%)");
+                "[light]background:darken(@background,3%);");
         cmdDelete.addActionListener(e -> {
             if (panelFiles.getComponentCount() > 1) {
                 panelFiles.remove(component);
@@ -167,7 +166,7 @@ public class DialogSelectFile extends JPanel {
     public ModelFileWithType[] getSelectedFiles() {
         try {
             int count = panelFiles.getComponentCount();
-            ModelFileWithType files[] = new ModelFileWithType[count];
+            ModelFileWithType[] files = new ModelFileWithType[count];
             for (int i = 0; i < count; i++) {
                 Component com = panelFiles.getComponent(i);
                 if (com instanceof ItemPhoto) {
@@ -208,14 +207,14 @@ public class DialogSelectFile extends JPanel {
         private void init() {
             setLayout(new MigLayout("fill,gapy 0", "[grow 0,50,fill][fill][grow 0]", "fill"));
 
-            LabelRound lbIcon = new LabelRound(MethodUtil.createIcon("raven/messenger/icon/file.svg", 1f));
+            LabelRound lbIcon = new LabelRound(MethodUtil.createIcon("raven/messenger/icon/file.svg", 0.35f));
             JLabel lbName = new JLabel(file.getName());
             JLabel lbSize = new JLabel(MethodUtil.formatSize(file.length()));
             lbIcon.putClientProperty(FlatClientProperties.STYLE, "" +
                     "[dark]background:lighten(@background,10%);" +
-                    "[light]background:darken(@background,10%)");
+                    "[light]background:darken(@background,10%);");
             lbSize.putClientProperty(FlatClientProperties.STYLE, "" +
-                    "foreground:$Text.lowForeground");
+                    "foreground:$Text.lowForeground;");
             JButton cmdDelete = createDeleteButton(this);
             add(lbIcon, "span 1 2");
             add(lbName, "cell 1 0,width ::245");

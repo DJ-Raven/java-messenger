@@ -48,7 +48,7 @@ public class ScrollRefresh extends JScrollPane {
             scrollRefreshModel.hasNext = scrollRefreshModel.onRefreshNext();
             scrollRefreshModel.nextPage();
             scrollRefreshModel.onFinishRefresh();
-            if (scrollRefreshModel.hasNext == false) {
+            if (!scrollRefreshModel.hasNext) {
                 scrollRefreshModel.onFinishData();
             }
             if (scrollRefreshModel.hasNext) {
@@ -64,7 +64,7 @@ public class ScrollRefresh extends JScrollPane {
                 thread.join();
             }
         } catch (Exception e) {
-            System.err.println(e);
+            System.err.println(e.getMessage());
         }
     }
 

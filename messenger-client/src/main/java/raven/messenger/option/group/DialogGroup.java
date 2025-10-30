@@ -41,24 +41,25 @@ public class DialogGroup extends JPanel {
             }
         });
         txtDescription = new JTextArea();
+        txtDescription.setRows(6);
         txtDescription.setLineWrap(true);
         txtDescription.setWrapStyleWord(true);
         txtName.putClientProperty(FlatClientProperties.STYLE, "" +
-                "background:null");
+                "background:null;");
         txtDescription.putClientProperty(FlatClientProperties.STYLE, "" +
-                "background:null");
+                "background:null;");
 
         txtName.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Group name");
         JScrollPane scroll = new JScrollPane(txtDescription);
         scroll.getVerticalScrollBar().putClientProperty(FlatClientProperties.STYLE, "" +
                 "trackInsets:0,0,0,3;" +
                 "thumbInsets:0,0,0,3;" +
-                "width:8");
+                "width:8;");
 
         panel.add(new JLabel("Name"), "gapy 8");
         panel.add(txtName);
         panel.add(new JLabel("Description"), "gapy 8");
-        panel.add(scroll, "height 80");
+        panel.add(scroll);
         add(panel, "grow 1");
     }
 

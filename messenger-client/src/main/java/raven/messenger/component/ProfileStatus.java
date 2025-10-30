@@ -16,7 +16,7 @@ public class ProfileStatus extends JLabel {
         setForeground(Color.WHITE);
         setHorizontalAlignment(SwingConstants.CENTER);
         putClientProperty(FlatClientProperties.STYLE, "" +
-                "font:bold +5");
+                "font:bold +5;");
     }
 
     @Override

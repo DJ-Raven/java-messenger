@@ -66,12 +66,12 @@ public class EventMouseHold {
         try {
             Thread.sleep(l);
         } catch (InterruptedException e) {
-            System.err.println(e);
+            System.err.println(e.getMessage());
         }
     }
 
     public interface HoleAction {
-        public void onAction(HoldStatus status);
+        void onAction(HoldStatus status);
     }
 
 

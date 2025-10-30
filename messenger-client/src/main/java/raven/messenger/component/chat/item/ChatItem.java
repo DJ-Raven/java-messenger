@@ -44,7 +44,7 @@ public class ChatItem extends JPanel {
             labelName.putClientProperty(FlatClientProperties.STYLE, "" +
                     "border:0,5,0,5;" +
                     "foreground:$Component.accentColor;" +
-                    "font:bold");
+                    "font:bold;");
             add(labelName, 0);
         }
     }

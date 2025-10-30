@@ -17,11 +17,11 @@ public class ComponentUtil {
         JPanel panel = new JPanel(new MigLayout("wrap,fillx,insets 10 35 10 35,gap 0", "fill"));
         panel.putClientProperty(FlatClientProperties.STYLE, "" +
                 "[dark]background:lighten($Panel.background,2%);" +
-                "[light]background:darken($Panel.background,4%)");
+                "[light]background:darken($Panel.background,4%);");
         for (String st : text) {
             JLabel lb = new JLabel(st);
             lb.putClientProperty(FlatClientProperties.STYLE, "" +
-                    "foreground:$Text.lowForeground");
+                    "foreground:$Text.lowForeground;");
             panel.add(lb);
         }
         return panel;

@@ -15,10 +15,11 @@ import java.awt.event.AdjustmentEvent;
 
 public class ChatPanel extends JLayeredPane {
 
+    private LookAndFeel oldTheme = UIManager.getLookAndFeel();
     private final ChatActionListener event;
+    private final ScrollRefreshModel scrollRefreshModel;
     private EmptyChatData emptyChatData;
     private ScrollAnimation scrollAnimation;
-    private ScrollRefreshModel scrollRefreshModel;
 
     public ChatPanel(ChatActionListener event, ScrollRefreshModel scrollRefreshModel) {
         this.event = event;
@@ -30,7 +31,7 @@ public class ChatPanel extends JLayeredPane {
         setOpaque(true);
         setLayout(new MigLayout("wrap,fill", "[fill,400::]", "[fill][shrink 0,grow 0]"));
         putClientProperty(FlatClientProperties.STYLE, "" +
-                "background:$Chat.background");
+                "background:$Chat.background;");
         scrollAnimation = new ScrollAnimation();
         panel = new JPanel(new MigLayout("insets 0,wrap,fillx"));
 
@@ -46,9 +47,9 @@ public class ChatPanel extends JLayeredPane {
         scroll.getViewport().setLayout(new ChatViewportLayout());
         panel.putClientProperty(FlatClientProperties.STYLE, "" +
                 "border:33,0,3,0;" +
-                "background:$Chat.background");
+                "background:$Chat.background;");
         panelBottom.putClientProperty(FlatClientProperties.STYLE, "" +
-                "background:$Chat.background");
+                "background:$Chat.background;");
         scroll.getVerticalScrollBar().putClientProperty(FlatClientProperties.STYLE, "" +
                 "width:5;" +
                 "background:$Chat.background;");
@@ -183,6 +184,13 @@ public class ChatPanel extends JLayeredPane {
         g.setColor(UIManager.getColor("Chat.background"));
         g.fillRect(0, 0, getWidth(), getHeight());
         super.paintComponent(g);
+    }
+
+    public final void formCheck() {
+        if (oldTheme != UIManager.getLookAndFeel()) {
+            oldTheme = UIManager.getLookAndFeel();
+            SwingUtilities.updateComponentTreeUI(this);
+        }
     }
 
     private ChatComponentBuilder chatComponentBuilder;

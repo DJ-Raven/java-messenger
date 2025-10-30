@@ -36,6 +36,6 @@ public class Debounce {
 
     public interface Callback {
 
-        public void call(KeyEvent ke, String text);
+        void call(KeyEvent ke, String text);
     }
 }

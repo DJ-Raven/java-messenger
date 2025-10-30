@@ -50,17 +50,17 @@ public class DialogProfile extends JPanel {
 
 
     private void createInfo() {
-        JPanel panel = new JPanel(new MigLayout("wrap,insets 0 0 15 0,fillx", "center", "[]20[][]"));
-        buttonUpdateBio = new JButton(MethodUtil.createIcon("raven/messenger/icon/edit.svg", 0.7f));
+        JPanel panel = new JPanel(new MigLayout("wrap,insets 0,fillx", "center", "[]20[][]"));
+        buttonUpdateBio = new JButton(MethodUtil.createIcon("raven/messenger/icon/edit.svg", 0.35f));
         buttonUpdateBio.setVisible(false);
         bioLength = new JLabel("40");
         bioLength.putClientProperty(FlatClientProperties.STYLE, "" +
                 "foreground:$Text.lowForeground;" +
-                "border:0,5,0,0");
+                "border:0,5,0,0;");
         labelName = new JLabel("Ra Ven");
         txtBio = new JTextField();
         labelName.putClientProperty(FlatClientProperties.STYLE, "" +
-                "font:+5");
+                "font:+5;");
         txtBio.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Bio");
         JToolBar toolBar = new JToolBar();
         toolBar.add(buttonUpdateBio);
@@ -69,7 +69,7 @@ public class DialogProfile extends JPanel {
         txtBio.putClientProperty(FlatClientProperties.STYLE, "" +
                 "font:+1;" +
                 "border:5,1,5,1;" +
-                "background:null");
+                "background:null;");
 
         buttonUpdateBio.addActionListener(e -> {
             try {
@@ -112,7 +112,7 @@ public class DialogProfile extends JPanel {
         panelInfo.add(fieldGender);
         panelInfo.add(fieldPhone);
         panel.add(panelInfo, "grow 1");
-        panel.add(ComponentUtil.createInfoText("Username for display to another people, and also people can", "contact you with phone number if you provide here"), "grow 1");
+        panel.add(ComponentUtil.createInfoText("Username for display to another people, and also people", "can contact you with phone number."), "grow 1");
     }
 
     private void bioChanged() {
@@ -153,9 +153,9 @@ public class DialogProfile extends JPanel {
         JTextField txtFirstName = new JTextField(profile.getName().getFirstName());
         JTextField txtLastName = new JTextField(profile.getName().getLastName());
         txtFirstName.putClientProperty(FlatClientProperties.STYLE, "" +
-                "background:null");
+                "background:null;");
         txtLastName.putClientProperty(FlatClientProperties.STYLE, "" +
-                "background:null");
+                "background:null;");
         panel.add(new JLabel("First name"));
         panel.add(txtFirstName);
         panel.add(new JLabel("Last name"));
@@ -226,7 +226,7 @@ public class DialogProfile extends JPanel {
         JPanel panel = new JPanel(new MigLayout("wrap,fill,insets 5 25 5 25", "[fill]"));
         JTextField txtPhone = new JTextField(profile.getPhoneNumber());
         txtPhone.putClientProperty(FlatClientProperties.STYLE, "" +
-                "background:null");
+                "background:null;");
         panel.add(new JLabel("Phone number"));
         panel.add(txtPhone);
 
@@ -251,11 +251,10 @@ public class DialogProfile extends JPanel {
     }
 
     private SimpleModalBorder.Option[] getOptions() {
-        SimpleModalBorder.Option[] options = new SimpleModalBorder.Option[]{
+        return new SimpleModalBorder.Option[]{
                 new SimpleModalBorder.Option("Cancel", SimpleModalBorder.CANCEL_OPTION),
                 new SimpleModalBorder.Option("Save", SimpleModalBorder.OK_OPTION)
         };
-        return options;
     }
 
     private JLabel labelName;
@@ -266,10 +265,10 @@ public class DialogProfile extends JPanel {
     private ButtonField fieldGender;
     private ButtonField fieldPhone;
 
-    private class ButtonField extends JButton {
+    private static class ButtonField extends JButton {
 
-        private String icon;
-        private String name;
+        private final String icon;
+        private final String name;
         private String description;
 
         public void setDescription(String description) {
@@ -290,8 +289,9 @@ public class DialogProfile extends JPanel {
 
         private void init() {
             setCursor(new Cursor(Cursor.HAND_CURSOR));
-            setLayout(new MigLayout("fill,insets 5 35 5 35", "[]10[]push[]"));
+            setLayout(new MigLayout("fillx,insets 5 35 5 35", "[]10[]push[]"));
             putClientProperty(FlatClientProperties.STYLE, "" +
+                    "arc:0;" +
                     "margin:2,0,2,0;" +
                     "borderWidth:0;" +
                     "focusWidth:0;" +
@@ -302,9 +302,9 @@ public class DialogProfile extends JPanel {
             labelName = new JLabel(name);
             labelDescription = new JLabel(description);
             labelName.putClientProperty(FlatClientProperties.STYLE, "" +
-                    "font:+1");
+                    "font:+1;");
             labelDescription.putClientProperty(FlatClientProperties.STYLE, "" +
-                    "font:+1");
+                    "font:+1;");
 
             add(labelName);
             add(labelDescription);
@@ -315,7 +315,7 @@ public class DialogProfile extends JPanel {
         private JLabel labelDescription;
     }
 
-    private class ButtonGender extends JToggleButton {
+    private static class ButtonGender extends JToggleButton {
 
         public ButtonGender(Icon icon) {
             super(icon);

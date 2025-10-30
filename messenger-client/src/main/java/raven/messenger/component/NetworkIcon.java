@@ -16,8 +16,8 @@ import java.util.Map;
 
 public class NetworkIcon implements Icon {
 
+    private final IconResource resource;
     private Shape shape;
-    private IconResource resource;
     private Image image;
     private Image imageHash;
     private int width = -1;
@@ -41,7 +41,7 @@ public class NetworkIcon implements Icon {
 
     @Override
     public void paintIcon(Component c, Graphics g, int x, int y) {
-        if (resource.updateImage == false && !resource.component.containsKey(c)) {
+        if (!resource.updateImage && !resource.component.containsKey(c)) {
             resource.component.put(c, this);
         }
         updateImage();
@@ -65,8 +65,8 @@ public class NetworkIcon implements Icon {
     }
 
     private synchronized void updateImage() {
-        if (resource.updateImage == false || resource.updateImageHash == false || !updatedHash) {
-            if (resource.updateImageHash == false || !updatedHash) {
+        if (!resource.updateImage || !resource.updateImageHash || !updatedHash) {
+            if (!resource.updateImageHash || !updatedHash) {
                 if (resource.isImageHashAble()) {
                     imageHash = resizeImage(resource.imageHash, width, height);
                     imageWidth = imageHash.getWidth(null);
@@ -77,7 +77,7 @@ public class NetworkIcon implements Icon {
                     imageHash = null;
                 }
             }
-            if (resource.updateImage == false || !updated) {
+            if (!resource.updateImage || !updated) {
                 if (resource.isImageAble()) {
                     image = resizeImage(resource.image, width, height);
                     imageWidth = image.getWidth(null);
@@ -100,8 +100,8 @@ public class NetworkIcon implements Icon {
         int w;
         int h;
         if (fill) {
-            w = width > -1 ? width : -1;
-            h = height > -1 ? height : -1;
+            w = Math.max(width, -1);
+            h = Math.max(height, -1);
         } else {
             w = width > -1 ? Math.min(width, icon.getWidth(null)) : -1;
             h = height > -1 ? Math.min(height, icon.getHeight(null)) : -1;
@@ -254,7 +254,7 @@ public class NetworkIcon implements Icon {
         }
     }
 
-    private class IconComponent {
+    private static class IconComponent {
         protected Component component;
         protected NetworkIcon icon;
     }

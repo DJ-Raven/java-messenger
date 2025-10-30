@@ -39,7 +39,7 @@ public class SoundPlayerControl extends JPanel {
     }
 
     private JButton createPlayButton() {
-        JButton button = new JButton(new FlatSVGIcon("raven/messenger/icon/play.svg", 0.7f));
+        JButton button = new JButton(new FlatSVGIcon("raven/messenger/icon/play.svg", 0.28f));
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         button.addActionListener(e -> {
             if (SoundManager.getInstance().isRunning()) {
@@ -50,16 +50,16 @@ public class SoundPlayerControl extends JPanel {
         });
         button.putClientProperty(FlatClientProperties.STYLE, "" +
                 "arc:999;" +
-                "margin:2,2,2,2;" +
+                "margin:3,3,3,3;" +
                 "background:null;" +
                 "borderWidth:0;" +
                 "focusWidth:0;" +
-                "innerFocusWidth:0");
+                "innerFocusWidth:0;");
         return button;
     }
 
     private JButton createCloseButton() {
-        JButton button = new JButton(new FlatSVGIcon("raven/messenger/icon/close.svg", 0.55f));
+        JButton button = new JButton(new FlatSVGIcon("raven/messenger/icon/close.svg", 0.28f));
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         button.addActionListener(e -> {
             SoundManager.getInstance().stop();
@@ -70,7 +70,7 @@ public class SoundPlayerControl extends JPanel {
                 "background:null;" +
                 "borderWidth:0;" +
                 "focusWidth:0;" +
-                "innerFocusWidth:0");
+                "innerFocusWidth:0;");
         return button;
     }
 
@@ -103,11 +103,11 @@ public class SoundPlayerControl extends JPanel {
     }
 
     public void playButton() {
-        buttonPlay.setIcon(MethodUtil.createIcon("raven/messenger/icon/pause.svg", 0.7f));
+        buttonPlay.setIcon(MethodUtil.createIcon("raven/messenger/icon/pause.svg", 0.28f));
     }
 
     public void stopButton() {
-        buttonPlay.setIcon(MethodUtil.createIcon("raven/messenger/icon/play.svg", 0.7f));
+        buttonPlay.setIcon(MethodUtil.createIcon("raven/messenger/icon/play.svg", 0.28f));
     }
 
     private String formatDuration(long lengthInSeconds) {

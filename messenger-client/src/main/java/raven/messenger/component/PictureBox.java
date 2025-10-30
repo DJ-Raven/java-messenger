@@ -6,7 +6,6 @@ import com.formdev.flatlaf.util.Animator;
 import com.formdev.flatlaf.util.UIScale;
 import raven.messenger.plugin.blurhash.BlurHash;
 
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -250,7 +249,7 @@ public class PictureBox extends JPanel {
 
     }
 
-    public static enum BoxFit {
+    public enum BoxFit {
         CONTAIN, COVER
     }
 }

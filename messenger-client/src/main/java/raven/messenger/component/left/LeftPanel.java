@@ -3,7 +3,6 @@ package raven.messenger.component.left;
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
 import raven.messenger.api.exception.ResponseException;
-import raven.messenger.drawer.MenuDrawer;
 import raven.messenger.manager.ErrorManager;
 import raven.messenger.models.response.ModelChatListItem;
 import raven.messenger.models.response.ModelLastMessage;
@@ -13,7 +12,6 @@ import raven.messenger.plugin.swing.scroll.ScrollRefreshModel;
 import raven.messenger.service.ServiceUser;
 import raven.messenger.socket.ChatType;
 import raven.messenger.util.Debounce;
-import raven.messenger.util.MethodUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,15 +29,15 @@ public class LeftPanel extends JPanel {
     }
 
     private void init() {
-        setLayout(new MigLayout("wrap,fill,insets 0 0 3 0", "[fill,270::]", "[grow 0]0[fill]"));
-        panel = new JPanel(new MigLayout("wrap,fillx,gapy 3", "[fill]"));
+        setLayout(new MigLayout("wrap,fill,insets 15 0 3 0", "[fill,270::]", "[grow 0]0[fill]"));
+        panel = new JPanel(new MigLayout("wrap,fillx,gapy 3,insets n 3 n n", "[fill]"));
         scroll = new ScrollRefresh(createScrollRefreshModel(), panel);
         scroll.setBorder(BorderFactory.createEmptyBorder());
         scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scroll.getVerticalScrollBar().setUnitIncrement(10);
 
         scroll.getVerticalScrollBar().putClientProperty(FlatClientProperties.STYLE, "" +
-                "width:4");
+                "width:4;");
         createHeader();
         add(scroll);
     }
@@ -66,32 +64,20 @@ public class LeftPanel extends JPanel {
 
             @Override
             public void onFinishData() {
-
             }
 
             @Override
             public void onError(Exception e) {
-
             }
         };
         return model;
     }
 
     private void createHeader() {
-        header = new JPanel(new MigLayout("fill", "[grow 0][fill]"));
-        JButton button = new JButton(MethodUtil.createIcon("raven/messenger/icon/menu.svg", 1f));
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        header = new JPanel(new MigLayout("fill", "[fill]"));
         JTextField text = new JTextField();
-        button.addActionListener(e -> {
-            MenuDrawer.getInstance().showDrawer();
-        });
-        button.putClientProperty(FlatClientProperties.STYLE_CLASS, "myButton");
-        button.putClientProperty(FlatClientProperties.STYLE, "" +
-                "arc:999;" +
-                "background:null");
         text.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Search ...");
         text.putClientProperty(FlatClientProperties.STYLE, "" +
-                "arc:999;" +
                 "margin:5,10,5,10;" +
                 "borderWidth:0;" +
                 "background:darken($Panel.background,2%);");
@@ -105,7 +91,6 @@ public class LeftPanel extends JPanel {
             }
             initData();
         }, 300);
-        header.add(button);
         header.add(text);
         add(header);
     }
@@ -116,7 +101,7 @@ public class LeftPanel extends JPanel {
             Component component = panel.getComponent(i);
             if (component instanceof Item) {
                 Item item = (Item) component;
-                if (item.getData().isGroup() == false && item.getData().getId() == userId) {
+                if (!item.getData().isGroup() && item.getData().getId() == userId) {
                     item.setActiveStatus(status);
                     break;
                 }

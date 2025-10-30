@@ -25,7 +25,7 @@ public class FormUpdate extends JPanel {
                 try {
                     Desktop.getDesktop().browse(new URI("https://github.com/DJ-Raven/java-messenger"));
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    System.err.println(e.getMessage());
                 }
             }
         });

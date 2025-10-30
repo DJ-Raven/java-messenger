@@ -16,9 +16,9 @@ import java.io.File;
 
 public class ItemFile extends JPanel implements ProgressChat {
 
+    private final ChatFileData data;
+    private final int type;
     private JPopupMenu popupMenu;
-    private ChatFileData data;
-    private int type;
 
     public ItemFile(ChatFileData data, int type) {
         this.data = data;
@@ -38,16 +38,16 @@ public class ItemFile extends JPanel implements ProgressChat {
         } else {
             icon = "download.svg";
             data.setEventFileNameChanged(o -> {
-                buttonProgress.setIcon(MethodUtil.createIcon("raven/messenger/icon/play.svg", 0.8f));
+                buttonProgress.setIcon(MethodUtil.createIcon("raven/messenger/icon/file.svg", 0.35f));
             });
         }
-        buttonProgress = new ButtonProgress(MethodUtil.createIcon("raven/messenger/icon/" + icon, 0.8f));
+        buttonProgress = new ButtonProgress(MethodUtil.createIcon("raven/messenger/icon/" + icon, 0.35f));
         buttonProgress.putClientProperty(FlatClientProperties.STYLE, "" +
                 "arc:999;" +
                 "margin:7,7,7,7;" +
                 "borderWidth:0;" +
                 "focusWidth:0;" +
-                "innerFocusWidth:0");
+                "innerFocusWidth:0;");
         buttonProgress.addActionListener(actionEvent -> {
             eventClick();
         });
@@ -70,7 +70,7 @@ public class ItemFile extends JPanel implements ProgressChat {
         JLabel lbName = new JLabel(data.getOriginalName());
         JLabel lbSize = new JLabel(MethodUtil.formatSize(data.getSize()));
         lbSize.putClientProperty(FlatClientProperties.STYLE, "" +
-                "foreground:$Text.lowForeground");
+                "foreground:$Text.lowForeground;");
         add(buttonProgress, "span 1 2");
         add(lbName, "cell 1 0,width 187!");
         add(lbSize, "cell 1 1");
@@ -100,7 +100,7 @@ public class ItemFile extends JPanel implements ProgressChat {
 
     @Override
     public void onFinish(File file) {
-        buttonProgress.setIcon(MethodUtil.createIcon("raven/messenger/icon/file.svg", 0.8f));
+        buttonProgress.setIcon(MethodUtil.createIcon("raven/messenger/icon/file.svg", 0.35f));
         buttonProgress.setProgress(0);
     }
 

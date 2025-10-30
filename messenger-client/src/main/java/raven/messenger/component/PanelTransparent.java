@@ -8,8 +8,8 @@ import java.awt.*;
 
 public class PanelTransparent extends JPanel {
 
-    private float alpha;
-    private int round;
+    private final float alpha;
+    private final int round;
 
     public PanelTransparent(int round, float alpha) {
         this.round = round;

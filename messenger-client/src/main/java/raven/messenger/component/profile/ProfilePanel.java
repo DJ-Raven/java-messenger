@@ -54,7 +54,7 @@ public class ProfilePanel extends JPanel {
     }
 
     private JButton createEditProfile() {
-        JButton button = new JButton(MethodUtil.createIcon("raven/messenger/icon/edit.svg", 0.75f));
+        JButton button = new JButton(MethodUtil.createIcon("raven/messenger/icon/edit.svg", 0.35f));
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         button.addActionListener(e -> {
             editProfile();

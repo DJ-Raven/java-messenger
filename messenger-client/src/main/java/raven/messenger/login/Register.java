@@ -7,8 +7,8 @@ import raven.messenger.component.PasswordStrengthStatus;
 import raven.messenger.connection.ConnectionManager;
 import raven.messenger.manager.ErrorManager;
 import raven.messenger.manager.FormsManager;
-import raven.messenger.models.request.ModelRegister;
 import raven.messenger.models.other.ModelGender;
+import raven.messenger.models.request.ModelRegister;
 import raven.messenger.service.ServiceAuth;
 
 import javax.swing.*;
@@ -36,7 +36,7 @@ public class Register extends JPanel {
         panel.putClientProperty(FlatClientProperties.STYLE, "" +
                 "arc:20;" +
                 "[light]background:darken(@background,3%);" +
-                "[dark]background:lighten(@background,3%)");
+                "[dark]background:lighten(@background,3%);");
 
         txtFirstName.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "First name");
         txtLastName.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Last name");
@@ -44,24 +44,24 @@ public class Register extends JPanel {
         txtPassword.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter your password");
         txtConfirmPassword.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Re-enter your password");
         txtPassword.putClientProperty(FlatClientProperties.STYLE, "" +
-                "showRevealButton:true");
+                "showRevealButton:true;");
         txtConfirmPassword.putClientProperty(FlatClientProperties.STYLE, "" +
-                "showRevealButton:true");
+                "showRevealButton:true;");
 
         cmdRegister.putClientProperty(FlatClientProperties.STYLE, "" +
                 "[light]background:darken(@background,10%);" +
                 "[dark]background:lighten(@background,10%);" +
                 "borderWidth:0;" +
                 "focusWidth:0;" +
-                "innerFocusWidth:0");
+                "innerFocusWidth:0;");
 
         JLabel lbTitle = new JLabel("Welcome to our Chat Application");
         JLabel description = new JLabel("Join us to chat, connect, and make new friends. Sign up now and start chatting!");
         lbTitle.putClientProperty(FlatClientProperties.STYLE, "" +
-                "font:bold +10");
+                "font:bold +10;");
         description.putClientProperty(FlatClientProperties.STYLE, "" +
                 "[light]foreground:lighten(@foreground,30%);" +
-                "[dark]foreground:darken(@foreground,30%)");
+                "[dark]foreground:darken(@foreground,30%);");
 
         passwordStrengthStatus.initPasswordField(txtPassword);
         Component panelGender = createGenderPanel();
@@ -91,7 +91,7 @@ public class Register extends JPanel {
     private Component createGenderPanel() {
         JPanel panel = new JPanel(new MigLayout("insets 0"));
         panel.putClientProperty(FlatClientProperties.STYLE, "" +
-                "background:null");
+                "background:null;");
         jrMale = new JRadioButton("Male");
         jrFemale = new JRadioButton("Female");
         groupGender = new ButtonGroup();
@@ -106,10 +106,10 @@ public class Register extends JPanel {
     private Component createLoginLabel() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         panel.putClientProperty(FlatClientProperties.STYLE, "" +
-                "background:null");
+                "background:null;");
         JButton cmdLogin = new JButton("<html><a href=\"#\">Sign in here</a></html>");
         cmdLogin.putClientProperty(FlatClientProperties.STYLE, "" +
-                "border:3,3,3,3");
+                "border:3,3,3,3;");
         cmdLogin.setContentAreaFilled(false);
         cmdLogin.setCursor(new Cursor(Cursor.HAND_CURSOR));
         cmdLogin.addActionListener(e -> {
@@ -118,7 +118,7 @@ public class Register extends JPanel {
         JLabel label = new JLabel("Already have an account ?");
         label.putClientProperty(FlatClientProperties.STYLE, "" +
                 "[light]foreground:lighten(@foreground,30%);" +
-                "[dark]foreground:darken(@foreground,30%)");
+                "[dark]foreground:darken(@foreground,30%);");
         panel.add(label);
         panel.add(cmdLogin);
         return panel;

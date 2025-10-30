@@ -11,7 +11,7 @@ import java.awt.image.BufferedImage;
 
 public class StringIcon implements Icon {
 
-    private String string;
+    private final String string;
     private final int iconWidth;
     private final int iconHeight;
     private final Color color;

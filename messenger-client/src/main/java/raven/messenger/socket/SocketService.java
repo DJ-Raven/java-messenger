@@ -44,7 +44,7 @@ public class SocketService {
     }
 
     private Socket initSocket() {
-        URI uri = URI.create(ApiService.IP + ":5000");
+        URI uri = URI.create(ApiService.IP + ":" + ApiService.PORT);
         String cookie = CookieManager.getInstance().getCookieString();
         IO.Options option = IO.Options.builder()
                 .setExtraHeaders(Collections.singletonMap("cookies", Collections.singletonList(cookie)))

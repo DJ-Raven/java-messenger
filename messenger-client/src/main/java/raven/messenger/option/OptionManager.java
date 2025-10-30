@@ -48,7 +48,7 @@ public class OptionManager {
             }
         });
         Option option = ModalDialog.createOption();
-        option.getLayoutOption().setSize(430, -1);
+        option.getLayoutOption().setSize(410, -1);
         ModalDialog.showModal(FormsManager.getInstance().getMainFrame(), modalBorder, option, "group");
     }
 
@@ -56,7 +56,7 @@ public class OptionManager {
         DialogProfile dialogProfile = new DialogProfile();
         SimpleModalBorder modalBorder = new SimpleModalBorder(dialogProfile, "Edit Profile", new ModalBorderOption().setUseScroll(true));
         Option option = ModalDialog.createOption();
-        option.getLayoutOption().setSize(430, -1);
+        option.getLayoutOption().setSize(410, -1);
         ModalDialog.showModal(FormsManager.getInstance().getMainFrame(), modalBorder, option, "profile");
     }
 
@@ -64,7 +64,7 @@ public class OptionManager {
         DialogStorage dialogStorage = new DialogStorage();
         SimpleModalBorder modalBorder = new SimpleModalBorder(dialogStorage, "Local storage", new ModalBorderOption().setUseScroll(true));
         Option option = ModalDialog.createOption();
-        option.getLayoutOption().setSize(430, -1);
+        option.getLayoutOption().setSize(410, -1);
         ModalDialog.showModal(FormsManager.getInstance().getMainFrame(), modalBorder, option, "storage");
     }
 }

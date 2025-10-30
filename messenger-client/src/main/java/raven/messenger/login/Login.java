@@ -36,7 +36,7 @@ public class Login extends JPanel {
         panel.putClientProperty(FlatClientProperties.STYLE, "" +
                 "arc:20;" +
                 "[light]background:darken(@background,3%);" +
-                "[dark]background:lighten(@background,3%)");
+                "[dark]background:lighten(@background,3%);");
 
         txtPassword.putClientProperty(FlatClientProperties.STYLE, "" +
                 "showRevealButton:true");
@@ -45,7 +45,7 @@ public class Login extends JPanel {
                 "[dark]background:lighten(@background,10%);" +
                 "borderWidth:0;" +
                 "focusWidth:0;" +
-                "innerFocusWidth:0");
+                "innerFocusWidth:0;");
 
         cmdLogin.addActionListener(e -> login());
         FormsManager.getInstance().autoFocus(o -> login(), txtUsername, txtPassword);
@@ -55,9 +55,9 @@ public class Login extends JPanel {
         JLabel lbTitle = new JLabel("Welcome back!");
         JLabel description = new JLabel("Please sign in to access your account");
         lbTitle.putClientProperty(FlatClientProperties.STYLE, "" +
-                "font:bold +10");
+                "font:bold +10;");
         description.putClientProperty(FlatClientProperties.STYLE, "" +
-                "foreground:$Text.middleForeground");
+                "foreground:$Text.middleForeground;");
 
         panel.add(lbTitle);
         panel.add(description);
@@ -74,10 +74,10 @@ public class Login extends JPanel {
     private Component createSignUpLabel() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
         panel.putClientProperty(FlatClientProperties.STYLE, "" +
-                "background:null");
+                "background:null;");
         JButton cmdRegister = new JButton("<html><a href=\"#\">Sign up</a></html>");
         cmdRegister.putClientProperty(FlatClientProperties.STYLE, "" +
-                "border:3,3,3,3");
+                "border:3,3,3,3;");
         cmdRegister.setContentAreaFilled(false);
         cmdRegister.setCursor(new Cursor(Cursor.HAND_CURSOR));
         cmdRegister.addActionListener(e -> {
@@ -85,7 +85,7 @@ public class Login extends JPanel {
         });
         JLabel label = new JLabel("Don't have an account ?");
         label.putClientProperty(FlatClientProperties.STYLE, "" +
-                "foreground:$Text.middleForeground");
+                "foreground:$Text.middleForeground;");
         panel.add(label);
         panel.add(cmdRegister);
         return panel;

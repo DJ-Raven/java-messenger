@@ -25,7 +25,7 @@ public class PasswordStrengthStatus extends JPanel {
 
     private void init() {
         putClientProperty(FlatClientProperties.STYLE, "" +
-                "background:null");
+                "background:null;");
         setLayout(new MigLayout("fill,insets 0", "3[100,fill,grow0][]", "[fill,grow 0]"));
         label = new JLabel("none");
         label.setVisible(false);

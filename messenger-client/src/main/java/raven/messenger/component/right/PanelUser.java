@@ -35,7 +35,7 @@ public class PanelUser extends JPanel {
         textPane.setEditorKit(new AutoWrapText());
 
         textPane.putClientProperty(FlatClientProperties.STYLE, "" +
-                "foreground:$Text.upperForeground");
+                "foreground:$Text.upperForeground;");
         panelDescription.add(textPane);
         add(panelDescription);
     }
@@ -51,7 +51,7 @@ public class PanelUser extends JPanel {
         JPanel separator = new JPanel();
         separator.putClientProperty(FlatClientProperties.STYLE, "" +
                 "[light]background:darken(@background,3%);" +
-                "[dark]background:lighten(@background,3%)");
+                "[dark]background:lighten(@background,3%);");
         panel.add(separator, "height 7!");
     }
 

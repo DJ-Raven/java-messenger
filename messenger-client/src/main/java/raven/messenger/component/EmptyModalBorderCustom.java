@@ -33,7 +33,7 @@ public class EmptyModalBorderCustom extends Modal {
         return panel;
     }
 
-    private class ToolBarTitle extends JToolBar {
+    private static class ToolBarTitle extends JToolBar {
 
         public ToolBarTitle() {
             setBorder(new ScaledEmptyBorder(3, 3, 3, 3));
