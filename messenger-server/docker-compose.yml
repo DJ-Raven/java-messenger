@@ -1,0 +1,30 @@
+
+services:
+  app:
+    build: .
+    container_name: messenger-app
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      # Override DB_HOST to the service name inside Docker network
+      DATABASE_HOST: mysql
+    ports:
+      - "${APP_PORT}:${APP_PORT}"
+
+  mysql:
+    image: mysql:8.0
+    container_name: messenger-mysql
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      MYSQL_ROOT_PASSWORD: "${DATABASE_PASSWORD}"
+      MYSQL_DATABASE: "${DATABASE_NAME}"
+    ports:
+      - "${DATABASE_PORT}:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ../db/messenger_db.sql:/docker-entrypoint-initdb.d/messenger_db.sql:ro
+volumes:
+  mysql-data:
