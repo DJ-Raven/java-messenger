@@ -1,5 +1,5 @@
 const ms = require("ms");
-const VERSION = process.env.VERSION || 1;
+const VERSION = process.env.APP_VERSION || 1;
 
 const auth = require("../models/Auth");
 

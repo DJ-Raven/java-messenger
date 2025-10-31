@@ -20,7 +20,7 @@ auth.login = (data) => {
         if (isPasswordCorrect) {
           const uuid = user.user_uuid;
           const name = user.first_name + " " + user.last_name;
-          const jwt_key = process.env.JWT_SECRET_KEY;
+          const jwt_key = process.env.APP_JWT_SECRET_KEY;
           const token = jwt.sign(
             { id: user.user_id, uuid: uuid, user: name },
             jwt_key,
