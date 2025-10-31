@@ -7,6 +7,7 @@ import raven.extras.AvatarIcon;
 import raven.messenger.api.ApiService;
 import raven.messenger.login.Login;
 import raven.messenger.manager.FormsManager;
+import raven.messenger.manager.SoundManager;
 import raven.messenger.models.response.ModelProfile;
 import raven.messenger.option.OptionManager;
 import raven.messenger.util.NetworkDataUtil;
@@ -67,6 +68,9 @@ public class Menu extends JPanel {
     }
 
     private void logout() {
+        if (SoundManager.getInstance().isRunning()) {
+            SoundManager.getInstance().stop();
+        }
         ApiService.getInstance().closeAll();
         FormsManager.getInstance().showForm(new Login(null));
     }

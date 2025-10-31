@@ -27,9 +27,11 @@ public class RightPanel extends JPanel {
 
     public void setUser(ModelUserInfo user) {
         removeAll();
-        PanelUser panelUser = new PanelUser();
-        panelUser.setUser(user);
-        add(panelUser);
+        if (user != null) {
+            PanelUser panelUser = new PanelUser();
+            panelUser.setUser(user);
+            add(panelUser);
+        }
         repaint();
         revalidate();
     }

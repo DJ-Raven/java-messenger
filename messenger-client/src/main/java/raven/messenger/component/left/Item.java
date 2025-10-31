@@ -80,7 +80,7 @@ public class Item extends JButton {
             lbName = new JLabel(data.getName());
             if (data.isGroup()) {
                 lbName.setHorizontalTextPosition(SwingConstants.LEADING);
-                lbName.setIcon(MethodUtil.createIcon("raven/messenger/icon/group.svg", 0.35f));
+                lbName.setIcon(MethodUtil.createIcon("raven/messenger/icon/group.svg", 0.33f));
             }
             lbDescriptionName = new JLabel();
             lbDescription = new JLabel();

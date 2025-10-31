@@ -201,6 +201,7 @@ public class Home extends JPanel {
         try {
             ProfileManager.getInstance().initProfile();
             leftPanel.initData();
+            initAndClear();
         } catch (ConnectException e) {
             // do not show reconnect button because it auto from the socket
             ConnectionManager.getInstance().showError(() -> callBackConnection(), false);
@@ -423,6 +424,14 @@ public class Home extends JPanel {
 
             }
         };
+    }
+
+    private void initAndClear() {
+        chatBody.removeAll();
+        chatBody.repaint();
+        chatBody.revalidate();
+        rightPanel.setUser(null);
+        user = null;
     }
 
     /*

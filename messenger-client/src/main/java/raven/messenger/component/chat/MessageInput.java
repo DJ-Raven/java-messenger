@@ -87,7 +87,7 @@ public class MessageInput extends JPanel {
                 }
             }
         });
-        JButton buttonFile = createActionButton(MethodUtil.createIcon("raven/messenger/icon/attach.svg", 0.4f));
+        JButton buttonFile = createActionButton(MethodUtil.createIcon("raven/messenger/icon/attach.svg", 0.35f));
         buttonFile.setCursor(new Cursor(Cursor.HAND_CURSOR));
         buttonFile.addActionListener(e -> sendFile());
         add(buttonFile);
@@ -97,8 +97,8 @@ public class MessageInput extends JPanel {
 
     private Component createActionButton() {
         JPanel panel = new JPanel(new MigLayout("insets 0,gap 3"));
-        JButton buttonSend = createActionButton(MethodUtil.createIcon("raven/messenger/icon/sent.svg", 0.4f));
-        JButton buttonSound = createActionButton(MethodUtil.createIcon("raven/messenger/icon/microphone.svg", 0.4f));
+        JButton buttonSend = createActionButton(MethodUtil.createIcon("raven/messenger/icon/sent.svg", 0.35f));
+        JButton buttonSound = createActionButton(MethodUtil.createIcon("raven/messenger/icon/microphone.svg", 0.35f));
         buttonSend.setCursor(new Cursor(Cursor.HAND_CURSOR));
         buttonSound.setCursor(new Cursor(Cursor.HAND_CURSOR));
         buttonSend.setFocusable(false);
