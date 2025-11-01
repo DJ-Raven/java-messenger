@@ -154,7 +154,7 @@ public class DialogProfile extends JPanel {
 
     private void editName() {
         ModelProfile profile = ProfileManager.getInstance().getProfile();
-        JPanel panel = new JPanel(new MigLayout("wrap,fill,insets 5 25 5 25", "[fill]"));
+        JPanel panel = new JPanel(new MigLayout("wrap,fill,insets 5 30 5 30", "[fill]"));
         JTextField txtFirstName = new JTextField(profile.getName().getFirstName());
         JTextField txtLastName = new JTextField(profile.getName().getLastName());
 
@@ -193,7 +193,7 @@ public class DialogProfile extends JPanel {
 
     private void editGender() {
         ModelProfile profile = ProfileManager.getInstance().getProfile();
-        JPanel panel = new JPanel(new MigLayout("fill,insets 5 25 5 25", "[fill]"));
+        JPanel panel = new JPanel(new MigLayout("fill,insets 5 30 5 30", "[fill]"));
         ButtonGroup buttonGroup = new ButtonGroup();
         JToggleButton cmdMale = new ButtonGender(MethodUtil.createIcon("raven/messenger/icon/male.svg", 1f));
         JToggleButton cmdFemale = new ButtonGender(MethodUtil.createIcon("raven/messenger/icon/female.svg", 1f));
@@ -230,7 +230,7 @@ public class DialogProfile extends JPanel {
 
     private void editPhone() {
         ModelProfile profile = ProfileManager.getInstance().getProfile();
-        JPanel panel = new JPanel(new MigLayout("wrap,fill,insets 5 25 5 25", "[fill]"));
+        JPanel panel = new JPanel(new MigLayout("wrap,fill,insets 5 30 5 30", "[fill]"));
         JTextField txtPhone = new JTextField(profile.getPhoneNumber());
 
         StyleUtil.applyStyleTextField(txtPhone);

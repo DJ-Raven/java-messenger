@@ -79,14 +79,14 @@ public class SoundPlayerControl extends JPanel {
         progressBar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         progressBar.putClientProperty(FlatClientProperties.STYLE, "" +
                 "arc:0;" +
-                "[dark]background:lighten($Chat.background,2%);" +
-                "[light]background:darken($Chat.background,2%);" +
-                "[dark]foreground:lighten($Chat.background,8%);" +
-                "[light]foreground:darken($Chat.background,8%);");
+                "[dark]background:tint($Chat.background,8%);" +
+                "[light]background:shade($Chat.background,8%);" +
+                "[dark]foreground:tint($Chat.background,25%);" +
+                "[light]foreground:shade($Chat.background,25%);");
         progressBar.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                float f = (float) e.getX() / getWidth();
+                float f = (float) e.getX() / progressBar.getWidth();
                 SoundManager.getInstance().skip(f);
             }
         });
