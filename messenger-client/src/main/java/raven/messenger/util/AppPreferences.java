@@ -17,7 +17,9 @@ public class AppPreferences {
 
     public static final String PREFERENCES_ROOT_PATH = "java-messenger-client";
     public static final String KEY_LAF = "laf";
+    public static final String KEY_ACCENT_COLOR = "accent";
 
+    public static Color accentColor;
     private static Preferences state;
 
     public static Preferences getState() {
@@ -31,6 +33,12 @@ public class AppPreferences {
     public static void setupLaf() {
         // set look and feel
         try {
+            String rgbAccentColor = state.get(KEY_ACCENT_COLOR, null);
+            if (rgbAccentColor != null) {
+                accentColor = new Color(Integer.parseInt(rgbAccentColor), true);
+            }
+            FlatLaf.setSystemColorGetter(name -> name.equals("accent") ? AppPreferences.accentColor : null);
+
             String lafClassName = state.get(KEY_LAF, FlatLightLaf.class.getName());
             UIManager.put("defaultFont", FontUtils.getCompositeFont(FlatRobotoFont.FAMILY, Font.PLAIN, 13));
             UIManager.setLookAndFeel(lafClassName);
@@ -64,5 +72,14 @@ public class AppPreferences {
             }
             return c;
         });
+    }
+
+    public static void updateAccentColor(Color color) {
+        if (color != null) {
+            String rgb = color.getRGB() + "";
+            state.put(KEY_ACCENT_COLOR, rgb);
+        } else {
+            state.remove(KEY_ACCENT_COLOR);
+        }
     }
 }

@@ -76,6 +76,11 @@
             <artifactId>modal-dialog</artifactId>
             <version>2.6.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>io.github.dj-raven</groupId>
+            <artifactId>swing-color-picker</artifactId>
+            <version>1.0.0</version>
+        </dependency>
 
         <dependency>
             <groupId>com.github.umjammer</groupId>

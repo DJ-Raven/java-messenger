@@ -20,6 +20,7 @@ import java.awt.*;
 public class DialogSetting extends JPanel {
 
     private ThemesSelection themesSelection;
+    private AccentColorPanel accentColorPanel;
 
     public DialogSetting() {
         init();
@@ -31,6 +32,10 @@ public class DialogSetting extends JPanel {
 
     private void init() {
         setLayout(new MigLayout("fill,wrap,insets n 0 0 0", "[fill,450]", "[][]"));
+
+        createAccentColor();
+        add(ComponentUtil.createInfoText("Choose the theme accent color to add your personal touch to the interface."));
+
         createThemes();
         add(ComponentUtil.createInfoText("Change the appearance by selecting from the available themes."));
 
@@ -67,6 +72,11 @@ public class DialogSetting extends JPanel {
         add(panel);
     }
 
+    private void createAccentColor() {
+        accentColorPanel = new AccentColorPanel();
+        add(accentColorPanel);
+    }
+
     private void createZooming() {
         JPanel panel = new JPanel(new MigLayout("insets n 30 n 30", "[fill]"));
         JComboBox<Object> comboUIScale = new JComboBox<>(new Object[]{"100%", "125%"});
@@ -93,6 +103,7 @@ public class DialogSetting extends JPanel {
             FlatAnimatedLafChange.showSnapshot();
             try {
                 UIManager.setLookAndFeel(theme.getClass().getName());
+                accentColorPanel.updateAccentColorButtons();
             } catch (Exception err) {
                 LoggingFacade.INSTANCE.logSevere(null, err);
             }

@@ -4,6 +4,7 @@ import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.IntelliJTheme;
 import com.formdev.flatlaf.icons.FlatAbstractIcon;
 import com.formdev.flatlaf.util.UIScale;
+import raven.messenger.util.AppPreferences;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,6 +13,7 @@ import java.awt.geom.RoundRectangle2D;
 public class FlatLafThemeIcon extends FlatAbstractIcon {
 
     private final FlatLaf theme;
+    private boolean coreThemes;
     private Color background;
     private Color accentColor;
     private Color borderColor;
@@ -34,8 +36,7 @@ public class FlatLafThemeIcon extends FlatAbstractIcon {
                     accentColor = uiDefaults.getColor("Button.default.endBackground");
                 }
             } else {
-                // core themes
-                accentColor = uiDefaults.getColor("Component.accentColor");
+                coreThemes = true;
             }
         }
     }
@@ -52,7 +53,7 @@ public class FlatLafThemeIcon extends FlatAbstractIcon {
             float arc = 10;
             g.setColor(background);
             g.fill(new RoundRectangle2D.Float(0, 0, width, height, arc, arc));
-            g.setColor(accentColor);
+            g.setColor(getPaintAccentColor());
             g.fill(new RoundRectangle2D.Float(5, 5, width - 10, 8, arc / 2f, arc / 2f));
             g.setColor(borderColor);
             g.fill(new RoundRectangle2D.Float(5, 18, (width - 10) * 0.6f, 8, arc / 2f, arc / 2f));
@@ -60,5 +61,15 @@ public class FlatLafThemeIcon extends FlatAbstractIcon {
         } finally {
             g.dispose();
         }
+    }
+
+    protected Color getPaintAccentColor() {
+        if (!coreThemes || (UIManager.getLookAndFeel() instanceof IntelliJTheme.ThemeLaf && !coreThemes)) {
+            return accentColor;
+        }
+        if (AppPreferences.accentColor != null) {
+            return AppPreferences.accentColor;
+        }
+        return theme.getDefaults().getColor("Component.accentColor");
     }
 }

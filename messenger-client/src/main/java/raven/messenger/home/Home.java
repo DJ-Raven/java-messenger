@@ -235,7 +235,7 @@ public class Home extends JPanel {
                 return null;
             }
         } catch (ResponseException e) {
-            return new StringIcon(name.getProfileString(), Color.decode("#41AED7"), 35, 35);
+            return new StringIcon(name.getProfileString(), UIManager.getColor("Component.accentColor"), 35, 35);
         }
     }
 
@@ -330,7 +330,6 @@ public class Home extends JPanel {
                         //  upload file to server
                         ModelFile fileResponse = SocketService.getInstance().getServiceMessage().sendFile(file.getFile(), fileInfo);
                         String fileName = fileResponse.getName();
-                        System.out.println(file.getType().toString());
                         ModelSendMessage fileMessage = new ModelSendMessage(user.getChatType(), user.getId(), MessageType.toMessageType(file.getType().toString()), "", fileResponse.getId());
                         //  send message by socket to server
                         SocketService.getInstance().sendMessage(fileMessage, objects -> {

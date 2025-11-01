@@ -1,6 +1,8 @@
 package raven.messenger.util;
 
-import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.*;
+import com.formdev.flatlaf.themes.FlatMacDarkLaf;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
 
 import javax.swing.*;
 import javax.swing.text.JTextComponent;
@@ -35,5 +37,14 @@ public class StyleUtil {
                 "focusWidth:0;" +
                 "background:$Item.component.background;" +
                 "focusedBackground:$Item.component.focusedBackground;");
+    }
+
+    public static boolean isCoreThemes(Class<? extends LookAndFeel> lafClass) {
+        return lafClass == FlatLightLaf.class ||
+                lafClass == FlatDarkLaf.class ||
+                lafClass == FlatIntelliJLaf.class ||
+                lafClass == FlatDarculaLaf.class ||
+                lafClass == FlatMacLightLaf.class ||
+                lafClass == FlatMacDarkLaf.class;
     }
 }

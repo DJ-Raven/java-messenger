@@ -42,7 +42,7 @@ public class Item extends JButton {
             picture.setImageHash(image.getHash(), 180, 180, image.getImage());
             profile = new ProfileStatus(NetworkDataUtil.getNetworkIcon(data.getProfile(), data.getProfileString(), 50, 50, 999));
         } else {
-            profile = new ProfileStatus(new StringIcon(data.getProfileString(), Color.decode("#41AED7"), 50, 50));
+            profile = new ProfileStatus(new StringIcon(data.getProfileString(), UIManager.getColor("Component.accentColor"), 50, 50));
         }
         profile.setActiveStatus(data.isActiveStatus());
         add(profile, "dock west,width 50,height 50,gap 6 10");
