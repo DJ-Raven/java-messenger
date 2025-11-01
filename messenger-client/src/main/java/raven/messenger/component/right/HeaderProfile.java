@@ -43,7 +43,8 @@ public class HeaderProfile extends JPanel {
         });
 
         labelProfile.putClientProperty(FlatClientProperties.STYLE, "" +
-                "font:+10 bold;");
+                "font:bold +10;" +
+                "foreground:$Profile.foreground;");
         labelName.putClientProperty(FlatClientProperties.STYLE, "" +
                 "font:+5 bold;");
 

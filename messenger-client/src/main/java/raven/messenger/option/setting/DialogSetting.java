@@ -7,7 +7,9 @@ import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
 import com.formdev.flatlaf.intellijthemes.*;
 import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTGitHubDarkIJTheme;
-import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTGitHubIJTheme;
+import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTSolarizedLightIJTheme;
+import com.formdev.flatlaf.themes.FlatMacDarkLaf;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import com.formdev.flatlaf.util.LoggingFacade;
 import net.miginfocom.swing.MigLayout;
 import raven.messenger.util.ComponentUtil;
@@ -17,8 +19,14 @@ import java.awt.*;
 
 public class DialogSetting extends JPanel {
 
+    private ThemesSelection themesSelection;
+
     public DialogSetting() {
         init();
+    }
+
+    public void open() {
+        themesSelection.scrollToSelected();
     }
 
     private void init() {
@@ -32,18 +40,27 @@ public class DialogSetting extends JPanel {
 
     private void createThemes() {
         JPanel panel = new JPanel(new MigLayout("fillx, insets n 30 n 30", "[fill]"));
-        ThemesSelection themesSelection = new ThemesSelection(
+        themesSelection = new ThemesSelection(
+                // core themes
+                new FlatMacDarkLaf(),
+                new FlatMacLightLaf(),
                 new FlatDarculaLaf(),
                 new FlatIntelliJLaf(),
+
+                // dark themes
                 new FlatXcodeDarkIJTheme(),
                 new FlatVuesionIJTheme(),
                 new FlatSpacegrayIJTheme(),
                 new FlatMTGitHubDarkIJTheme(),
                 new FlatGruvboxDarkHardIJTheme(),
-                new FlatMTGitHubIJTheme(),
-                new FlatGrayIJTheme(),
+                new FlatMaterialDesignDarkIJTheme(),
+                new FlatArcDarkOrangeIJTheme(),
+                new FlatDarkPurpleIJTheme(),
                 new FlatCobalt2IJTheme(),
-                new FlatMaterialDesignDarkIJTheme()
+
+                // light themes
+                new FlatMTSolarizedLightIJTheme(),
+                new FlatCyanLightIJTheme()
         );
         themesSelection.setCallback(theme -> changeThemes(theme));
         panel.add(createScroll(themesSelection));

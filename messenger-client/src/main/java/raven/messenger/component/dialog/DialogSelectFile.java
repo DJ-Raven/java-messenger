@@ -4,6 +4,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
 import raven.messenger.component.LabelRound;
 import raven.messenger.component.PictureBox;
+import raven.messenger.component.ScrollForTextArea;
 import raven.messenger.component.chat.AutoWrapText;
 import raven.messenger.component.chat.TextPaneCustom;
 import raven.messenger.manager.ErrorManager;
@@ -36,9 +37,13 @@ public class DialogSelectFile extends JPanel {
         loadFiles();
     }
 
+    public void open() {
+        txtCaption.grabFocus();
+    }
+
     private void init() {
-        setLayout(new MigLayout("fill,wrap,insets 5 35 5 25", "fill", "[shrinkprio 2,100::]15[][shrinkprio 1]"));
-        JPanel panel = new JPanel(new MigLayout("fill,insets 0", "[fill][grow 0]", "fill"));
+        setLayout(new MigLayout("fill,wrap,insets 5 30 5 15", "[fill]", "[shrinkprio 2,100::]15[][shrinkprio 1]"));
+        JPanel panel = new JPanel(new MigLayout("fill,insets 0 0 0 5", "[fill][grow 0]", "fill"));
         panelFiles = new JPanel(new MigLayout("fillx,wrap,insets 0", "fill"));
         panelFiles.putClientProperty(FlatClientProperties.STYLE, "" +
                 "background:null;");
@@ -46,7 +51,8 @@ public class DialogSelectFile extends JPanel {
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         scrollPane.getVerticalScrollBar().putClientProperty(FlatClientProperties.STYLE, "" +
-                "width:5;");
+                "width:5;" +
+                "background:null;");
         scrollPane.getVerticalScrollBar().setUnitIncrement(10);
         panel.add(scrollPane);
         panel.add(scrollPane.getVerticalScrollBar());
@@ -74,6 +80,9 @@ public class DialogSelectFile extends JPanel {
         txtCaption = new TextPaneCustom();
         txtCaption.setEditorKit(new AutoWrapText());
         txtCaption.setText(message);
+        txtCaption.putClientProperty(FlatClientProperties.STYLE, "" +
+                "margin:5,5,5,5;" +
+                "background:$Item.component.background;");
         txtCaption.setPlaceholderText("Write a caption...");
         txtCaption.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -102,18 +111,10 @@ public class DialogSelectFile extends JPanel {
                 }
             }
         });
-        JPanel inputPanel = new JPanel(new MigLayout("fill,wrap,insets 3", "fill", "fill,22::110"));
+        JPanel inputPanel = new JPanel(new MigLayout("fill,wrap,insets 0", "fill", "fill,22::110"));
         inputPanel.putClientProperty(FlatClientProperties.STYLE, "" +
-                "arc:10;" +
-                "background:$TextField.background;");
-
-        JScrollPane scroll = new JScrollPane(txtCaption);
-        scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scroll.putClientProperty(FlatClientProperties.STYLE, "" +
-                "border:0,0,0,0;");
-        scroll.getVerticalScrollBar().putClientProperty(FlatClientProperties.STYLE, "" +
-                "width:3;");
-        scroll.getVerticalScrollBar().setUnitIncrement(10);
+                "background:null;");
+        JScrollPane scroll = new ScrollForTextArea(txtCaption);
         inputPanel.add(scroll);
         add(inputPanel, "gap 0 " + (insetRight));
     }
@@ -145,12 +146,13 @@ public class DialogSelectFile extends JPanel {
     }
 
     private JButton createDeleteButton(Component component) {
-        JButton cmdDelete = new JButton(MethodUtil.createIcon("raven/messenger/icon/delete.svg", 0.6f));
+        JButton cmdDelete = new JButton(MethodUtil.createIcon("raven/messenger/icon/close.svg", 0.2f));
+        cmdDelete.setFocusable(false);
         cmdDelete.setCursor(new Cursor(Cursor.HAND_CURSOR));
         cmdDelete.putClientProperty(FlatClientProperties.STYLE_CLASS, "myButton");
         cmdDelete.putClientProperty(FlatClientProperties.STYLE, "" +
-                "[dark]background:lighten(@background,3%);" +
-                "[light]background:darken(@background,3%);");
+                "[dark]background:tint(@background,5%);" +
+                "[light]background:shade(@background,5%);");
         cmdDelete.addActionListener(e -> {
             if (panelFiles.getComponentCount() > 1) {
                 panelFiles.remove(component);
@@ -205,14 +207,14 @@ public class DialogSelectFile extends JPanel {
         }
 
         private void init() {
-            setLayout(new MigLayout("fill,gapy 0", "[grow 0,50,fill][fill][grow 0]", "fill"));
+            setLayout(new MigLayout("fill,gapy 0,insets n 0 n n", "[grow 0,50,fill][fill][grow 0]", "fill"));
 
             LabelRound lbIcon = new LabelRound(MethodUtil.createIcon("raven/messenger/icon/file.svg", 0.35f));
             JLabel lbName = new JLabel(file.getName());
             JLabel lbSize = new JLabel(MethodUtil.formatSize(file.length()));
             lbIcon.putClientProperty(FlatClientProperties.STYLE, "" +
-                    "[dark]background:lighten(@background,10%);" +
-                    "[light]background:darken(@background,10%);");
+                    "[dark]background:tint(@background,10%);" +
+                    "[light]background:shade(@background,10%);");
             lbSize.putClientProperty(FlatClientProperties.STYLE, "" +
                     "foreground:$Text.middleForeground;");
             JButton cmdDelete = createDeleteButton(this);

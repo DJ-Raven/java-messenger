@@ -12,6 +12,8 @@ import raven.messenger.plugin.swing.scroll.ScrollRefreshModel;
 import raven.messenger.service.ServiceUser;
 import raven.messenger.socket.ChatType;
 import raven.messenger.util.Debounce;
+import raven.messenger.util.MethodUtil;
+import raven.messenger.util.StyleUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -77,11 +79,8 @@ public class LeftPanel extends JPanel {
         header = new JPanel(new MigLayout("fill", "[fill]"));
         JTextField text = new JTextField();
         text.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Search ...");
-        text.putClientProperty(FlatClientProperties.STYLE, "" +
-                "margin:5,10,5,10;" +
-                "borderWidth:0;" +
-                "background:$Item.component.background;");
-
+        StyleUtil.applyStyleTextFieldWithClear(text);
+        text.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON, MethodUtil.createIcon("raven/messenger/icon/search.svg", 0.35f));
         Debounce.add(text, (ke, search) -> {
             search = search.trim();
             if (search.isEmpty()) {
@@ -90,7 +89,7 @@ public class LeftPanel extends JPanel {
                 textSearch = search;
             }
             initData();
-        }, 300);
+        });
         header.add(text);
         add(header);
     }

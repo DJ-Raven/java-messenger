@@ -165,6 +165,8 @@ public class MessageInput extends JPanel {
                             event.onSendFileMessage(list, text);
                         }
                     });
+                } else if (action == SimpleModalBorder.OPENED) {
+                    dialogSelectFile.open();
                 }
             }, "select_file");
         }

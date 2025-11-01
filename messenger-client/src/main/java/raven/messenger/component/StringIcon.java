@@ -36,8 +36,9 @@ public class StringIcon implements Icon {
         int ty = y + fm.getAscent() + ((height - fm.getHeight()) / 2);
         g2.setPaint(new GradientPaint(x, y, color, x, height, colorGradient));
         g2.fill(new Ellipse2D.Double(x, y, width, height));
+        g2.setColor(c.getForeground());
+        FlatUIUtils.drawString((JComponent) c, g2, string, tx, ty);
         g2.dispose();
-        FlatUIUtils.drawString((JComponent) c, g, string, tx, ty);
     }
 
     @Override

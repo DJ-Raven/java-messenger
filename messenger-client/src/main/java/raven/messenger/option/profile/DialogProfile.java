@@ -15,6 +15,7 @@ import raven.messenger.models.response.ModelProfile;
 import raven.messenger.util.ComponentUtil;
 import raven.messenger.util.MethodUtil;
 import raven.messenger.util.NetworkDataUtil;
+import raven.messenger.util.StyleUtil;
 import raven.modal.ModalDialog;
 import raven.modal.component.SimpleModalBorder;
 import raven.modal.option.Option;
@@ -39,6 +40,10 @@ public class DialogProfile extends JPanel {
         initData();
     }
 
+    public void open() {
+        txtBio.grabFocus();
+    }
+
     private void createProfile() {
         ProfilePanel profilePanel = new ProfilePanel();
         profilePanel.setEventProfileSelected(image -> editProfile(image));
@@ -47,7 +52,6 @@ public class DialogProfile extends JPanel {
         profilePanel.setIcon(icon);
         add(profilePanel);
     }
-
 
     private void createInfo() {
         JPanel panel = new JPanel(new MigLayout("wrap,insets 0,fillx", "center", "[]20[][]"));
@@ -66,6 +70,7 @@ public class DialogProfile extends JPanel {
         toolBar.add(buttonUpdateBio);
         toolBar.add(bioLength);
         txtBio.putClientProperty(FlatClientProperties.TEXT_FIELD_TRAILING_COMPONENT, toolBar);
+        txtBio.putClientProperty(FlatClientProperties.SELECT_ALL_ON_FOCUS_POLICY, FlatClientProperties.SELECT_ALL_ON_FOCUS_POLICY_NEVER);
         txtBio.putClientProperty(FlatClientProperties.STYLE, "" +
                 "font:+1;" +
                 "border:5,1,5,1;" +
@@ -97,7 +102,7 @@ public class DialogProfile extends JPanel {
         });
 
         panel.add(labelName);
-        panel.add(txtBio, "grow 1,gapx 35 35");
+        panel.add(txtBio, "grow 1,gapx 30 30");
 
         panel.add(ComponentUtil.createInfoText("Provide a short description about yourself.", "Example: Passionate about photography and nature lover."), "grow 1");
         add(panel, "grow 1");
@@ -152,10 +157,10 @@ public class DialogProfile extends JPanel {
         JPanel panel = new JPanel(new MigLayout("wrap,fill,insets 5 25 5 25", "[fill]"));
         JTextField txtFirstName = new JTextField(profile.getName().getFirstName());
         JTextField txtLastName = new JTextField(profile.getName().getLastName());
-        txtFirstName.putClientProperty(FlatClientProperties.STYLE, "" +
-                "background:null;");
-        txtLastName.putClientProperty(FlatClientProperties.STYLE, "" +
-                "background:null;");
+
+        StyleUtil.applyStyleTextField(txtFirstName);
+        StyleUtil.applyStyleTextField(txtLastName);
+
         panel.add(new JLabel("First name"));
         panel.add(txtFirstName);
         panel.add(new JLabel("Last name"));
@@ -177,6 +182,8 @@ public class DialogProfile extends JPanel {
                 } else {
                     callback.consume();
                 }
+            } else if (action == SimpleModalBorder.OPENED) {
+                txtFirstName.grabFocus();
             }
         });
         Option option = ModalDialog.createOption();
@@ -225,8 +232,9 @@ public class DialogProfile extends JPanel {
         ModelProfile profile = ProfileManager.getInstance().getProfile();
         JPanel panel = new JPanel(new MigLayout("wrap,fill,insets 5 25 5 25", "[fill]"));
         JTextField txtPhone = new JTextField(profile.getPhoneNumber());
-        txtPhone.putClientProperty(FlatClientProperties.STYLE, "" +
-                "background:null;");
+
+        StyleUtil.applyStyleTextField(txtPhone);
+
         panel.add(new JLabel("Phone number"));
         panel.add(txtPhone);
 
@@ -243,6 +251,8 @@ public class DialogProfile extends JPanel {
                 } else {
                     callback.consume();
                 }
+            } else if (action == SimpleModalBorder.OPENED) {
+                txtPhone.grabFocus();
             }
         });
         Option option = ModalDialog.createOption();
@@ -289,7 +299,7 @@ public class DialogProfile extends JPanel {
 
         private void init() {
             setCursor(new Cursor(Cursor.HAND_CURSOR));
-            setLayout(new MigLayout("fillx,insets 5 35 5 35", "[]10[]push[]"));
+            setLayout(new MigLayout("fillx,insets 5 30 5 30", "[]10[]push[]"));
             putClientProperty(FlatClientProperties.STYLE, "" +
                     "arc:0;" +
                     "margin:2,0,2,0;" +

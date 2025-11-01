@@ -7,6 +7,7 @@ import raven.messenger.component.chat.model.ChatFileData;
 import raven.messenger.store.StoreManager;
 import raven.messenger.util.ComponentUtil;
 import raven.messenger.util.MethodUtil;
+import raven.messenger.util.StyleUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -38,16 +39,11 @@ public class ItemFile extends JPanel implements ProgressChat {
         } else {
             icon = "download.svg";
             data.setEventFileNameChanged(o -> {
-                buttonProgress.setIcon(MethodUtil.createIcon("raven/messenger/icon/file.svg", 0.35f));
+                buttonProgress.setIcon(MethodUtil.createIcon("raven/messenger/icon/file.svg", 0.3f));
             });
         }
-        buttonProgress = new ButtonProgress(MethodUtil.createIcon("raven/messenger/icon/" + icon, 0.35f));
-        buttonProgress.putClientProperty(FlatClientProperties.STYLE, "" +
-                "arc:999;" +
-                "margin:7,7,7,7;" +
-                "borderWidth:0;" +
-                "focusWidth:0;" +
-                "innerFocusWidth:0;");
+        buttonProgress = new ButtonProgress(MethodUtil.createIcon("raven/messenger/icon/" + icon, 0.3f));
+        StyleUtil.applyStyleItemButton(buttonProgress, type);
         buttonProgress.addActionListener(actionEvent -> {
             eventClick();
         });
@@ -100,7 +96,7 @@ public class ItemFile extends JPanel implements ProgressChat {
 
     @Override
     public void onFinish(File file) {
-        buttonProgress.setIcon(MethodUtil.createIcon("raven/messenger/icon/file.svg", 0.35f));
+        buttonProgress.setIcon(MethodUtil.createIcon("raven/messenger/icon/file.svg", 0.3f));
         buttonProgress.setProgress(0);
     }
 

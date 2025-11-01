@@ -101,7 +101,7 @@ public class ItemImage extends ChatItem implements ProgressChat {
     }
 
     private void createDownloadButton() {
-        buttonProgress = new ButtonProgressTransparent(MethodUtil.createIcon("raven/messenger/icon/download.svg", 0.35f, new Color(220, 220, 220)));
+        buttonProgress = new ButtonProgressTransparent(MethodUtil.createIcon("raven/messenger/icon/download.svg", 0.35f));
         buttonProgress.addActionListener(e -> {
             if (photo.getPath() == null) {
                 eventClick();

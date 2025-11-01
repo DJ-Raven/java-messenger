@@ -58,6 +58,7 @@ public class Menu extends JPanel {
     private JButton createItem(String icon, ActionListener action) {
         JButton button = new JButton(new FlatSVGIcon("raven/messenger/icon/drawer/" + icon, 0.45f));
         button.putClientProperty(FlatClientProperties.STYLE, "" +
+                "background:null;" +
                 "margin:5,10,5,10;" +
                 "borderWidth:0;" +
                 "focusWidth:0;" +

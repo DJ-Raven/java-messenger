@@ -111,13 +111,13 @@ public class Item extends JButton {
                     lbDescription.setIcon(null);
                 } else if (lastMessage.getMessageType() == MessageType.VOICE) {
                     lbDescription.setText("Voice");
-                    lbDescription.setIcon(MethodUtil.createIcon("raven/messenger/icon/voice.svg", 0.3f));
+                    lbDescription.setIcon(MethodUtil.createIcon("raven/messenger/icon/voice.svg", 0.3f, lbDescription));
                 } else if (lastMessage.getMessageType() == MessageType.PHOTO) {
                     lbDescription.setText("Photo");
-                    lbDescription.setIcon(MethodUtil.createIcon("raven/messenger/icon/photo.svg", 0.3f));
+                    lbDescription.setIcon(MethodUtil.createIcon("raven/messenger/icon/photo.svg", 0.3f, lbDescription));
                 } else if (lastMessage.getMessageType() == MessageType.FILE) {
                     lbDescription.setText("File");
-                    lbDescription.setIcon(MethodUtil.createIcon("raven/messenger/icon/file.svg", 0.3f));
+                    lbDescription.setIcon(MethodUtil.createIcon("raven/messenger/icon/file.svg", 0.3f, lbDescription));
                 }
             } else {
                 if (data.isGroup()) {

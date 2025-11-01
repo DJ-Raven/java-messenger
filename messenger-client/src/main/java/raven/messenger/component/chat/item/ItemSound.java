@@ -11,6 +11,7 @@ import raven.messenger.plugin.sound.WaveFormPanel;
 import raven.messenger.store.StoreManager;
 import raven.messenger.util.ComponentUtil;
 import raven.messenger.util.MethodUtil;
+import raven.messenger.util.StyleUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -78,12 +79,7 @@ public class ItemSound extends JPanel implements ProgressChat {
             });
         }
         buttonPlay = new ButtonProgress(MethodUtil.createIcon("raven/messenger/icon/" + icon, 0.3f));
-        buttonPlay.putClientProperty(FlatClientProperties.STYLE, "" +
-                "arc:999;" +
-                "margin:7,7,7,7;" +
-                "borderWidth:0;" +
-                "focusWidth:0;" +
-                "innerFocusWidth:0;");
+        StyleUtil.applyStyleItemButton(buttonPlay, type);
 
         MouseAdapter mouseAdapter = new MouseAdapter() {
             @Override

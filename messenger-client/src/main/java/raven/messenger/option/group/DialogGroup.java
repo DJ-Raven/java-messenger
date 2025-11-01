@@ -3,11 +3,13 @@ package raven.messenger.option.group;
 import com.formdev.flatlaf.FlatClientProperties;
 import net.coobird.thumbnailator.Thumbnails;
 import net.miginfocom.swing.MigLayout;
+import raven.messenger.component.ScrollForTextArea;
 import raven.messenger.component.StringIcon;
 import raven.messenger.component.profile.ProfilePanel;
 import raven.messenger.manager.FormsManager;
 import raven.messenger.models.request.ModelCreateGroup;
 import raven.messenger.util.MethodUtil;
+import raven.messenger.util.StyleUtil;
 
 import javax.swing.*;
 import java.awt.event.KeyAdapter;
@@ -31,9 +33,13 @@ public class DialogGroup extends JPanel {
         createDetail();
     }
 
+    public void open() {
+        txtName.grabFocus();
+    }
+
     private void createDetail() {
-        JPanel panel = new JPanel(new MigLayout("fillx,wrap,insets 3 35 3 35", "fill"));
-        txtName = new JTextField();
+        JPanel panel = new JPanel(new MigLayout("fillx,wrap,insets 3 30 3 30", "fill"));
+        txtName = new JTextField("Group Name");
         txtName.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
@@ -42,25 +48,20 @@ public class DialogGroup extends JPanel {
         });
         txtDescription = new JTextArea();
         txtDescription.setRows(6);
+        txtDescription.setColumns(6);
         txtDescription.setLineWrap(true);
         txtDescription.setWrapStyleWord(true);
-        txtName.putClientProperty(FlatClientProperties.STYLE, "" +
-                "background:null;");
-        txtDescription.putClientProperty(FlatClientProperties.STYLE, "" +
-                "background:null;");
+        StyleUtil.applyStyleTextField(txtName);
 
         txtName.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Group name");
-        JScrollPane scroll = new JScrollPane(txtDescription);
-        scroll.getVerticalScrollBar().putClientProperty(FlatClientProperties.STYLE, "" +
-                "trackInsets:0,0,0,3;" +
-                "thumbInsets:0,0,0,3;" +
-                "width:8;");
+        JScrollPane scroll = new ScrollForTextArea(txtDescription);
 
         panel.add(new JLabel("Name"), "gapy 8");
         panel.add(txtName);
         panel.add(new JLabel("Description"), "gapy 8");
         panel.add(scroll);
         add(panel, "grow 1");
+        nameChanged();
     }
 
     private void nameChanged() {

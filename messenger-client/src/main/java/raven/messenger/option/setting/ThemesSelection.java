@@ -43,6 +43,15 @@ public class ThemesSelection extends JPanel {
         return UIManager.getLookAndFeel().getName().equals(theme.getName());
     }
 
+    public void scrollToSelected() {
+        for (int i = 0; i < getComponentCount(); i++) {
+            ThemeButton button = (ThemeButton) getComponent(i);
+            if (button.isSelected()) {
+                SwingUtilities.invokeLater(() -> scrollRectToVisible(button.getBounds()));
+            }
+        }
+    }
+
     public void setCallback(Consumer<FlatLaf> callback) {
         this.callback = callback;
     }

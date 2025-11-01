@@ -14,10 +14,10 @@ import java.nio.file.Files;
 public class ComponentUtil {
 
     public static JPanel createInfoText(String... text) {
-        JPanel panel = new JPanel(new MigLayout("wrap,fillx,insets 10 35 10 35,gap 0", "fill"));
+        JPanel panel = new JPanel(new MigLayout("wrap,fillx,insets 10 30 10 30,gap 0", "fill"));
         panel.putClientProperty(FlatClientProperties.STYLE, "" +
-                "[dark]background:lighten($Panel.background,2%);" +
-                "[light]background:darken($Panel.background,4%);");
+                "[dark]background:tint($Panel.background,5%);" +
+                "[light]background:shade($Panel.background,5%);");
         for (String st : text) {
             JLabel lb = new JLabel(st);
             lb.putClientProperty(FlatClientProperties.STYLE, "" +
@@ -25,6 +25,14 @@ public class ComponentUtil {
             panel.add(lb);
         }
         return panel;
+    }
+
+    public static void addSeparatorTo(JPanel panel) {
+        JPanel separator = new JPanel();
+        separator.putClientProperty(FlatClientProperties.STYLE, "" +
+                "[light]background:darken(@background,3%);" +
+                "[dark]background:lighten(@background,3%);");
+        panel.add(separator, "height 7!");
     }
 
     public static JPopupMenu createOpenAndSavePopup(String name, String originalName) {

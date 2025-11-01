@@ -48,7 +48,9 @@ public class ProfilePanel extends JPanel {
     private void init() {
         setLayout(new MigLayout("wrap,fillx"));
         labelProfile = new JLabel();
-        labelProfile.putClientProperty(FlatClientProperties.STYLE, "" + "font:bold +10");
+        labelProfile.putClientProperty(FlatClientProperties.STYLE, "" +
+                "font:bold +10;" +
+                "foreground:$Profile.foreground;");
         add(createEditProfile(), "pos 1al 1al");
         add(labelProfile);
     }

@@ -46,6 +46,8 @@ public class OptionManager {
                 } else {
                     callback.consume();
                 }
+            } else if (action == SimpleModalBorder.OPENED) {
+                dialogGroup.open();
             }
         });
         Option option = ModalDialog.createOption();
@@ -55,7 +57,11 @@ public class OptionManager {
 
     public void showProfile() {
         DialogProfile dialogProfile = new DialogProfile();
-        SimpleModalBorder modalBorder = new SimpleModalBorder(dialogProfile, "Edit Profile", new ModalBorderOption().setUseScroll(true));
+        SimpleModalBorder modalBorder = new SimpleModalBorder(dialogProfile, "Edit Profile", new ModalBorderOption().setUseScroll(true), null, (controller, action) -> {
+            if (action == SimpleModalBorder.OPENED) {
+                dialogProfile.open();
+            }
+        });
         Option option = ModalDialog.createOption();
         option.getLayoutOption().setSize(410, -1);
         ModalDialog.showModal(FormsManager.getInstance().getMainFrame(), modalBorder, option, "profile");
@@ -71,7 +77,11 @@ public class OptionManager {
 
     public void showSetting() {
         DialogSetting dialogStorage = new DialogSetting();
-        SimpleModalBorder modalBorder = new SimpleModalBorder(dialogStorage, "Setting", new ModalBorderOption().setUseScroll(true));
+        SimpleModalBorder modalBorder = new SimpleModalBorder(dialogStorage, "Setting", new ModalBorderOption().setUseScroll(true), null, (controller, action) -> {
+            if (action == SimpleModalBorder.OPENED) {
+                dialogStorage.open();
+            }
+        });
         Option option = ModalDialog.createOption();
         ModalDialog.showModal(FormsManager.getInstance().getMainFrame(), modalBorder, option, "setting");
     }

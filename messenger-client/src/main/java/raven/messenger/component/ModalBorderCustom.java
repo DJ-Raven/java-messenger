@@ -23,17 +23,18 @@ public class ModalBorderCustom extends SimpleModalBorder {
         JButton button = super.createButtonOption(option);
         if (button.isDefaultButton()) {
             button.putClientProperty(FlatClientProperties.STYLE, "" +
-                    "arc:999;" +
+                    "arc:10;" +
                     "borderWidth:0;" +
                     "focusWidth:0;" +
                     "innerFocusWidth:0;");
         } else {
             button.putClientProperty(FlatClientProperties.STYLE, "" +
-                    "arc:999;" +
+                    "arc:10;" +
                     "borderWidth:0;" +
                     "focusWidth:0;" +
                     "innerFocusWidth:0;" +
-                    "background:null;");
+                    "[light]background:shade($Panel.background,5%);" +
+                    "[dark]background:tint($Panel.background,3%);");
         }
         return button;
     }

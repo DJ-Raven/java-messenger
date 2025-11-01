@@ -10,6 +10,7 @@ import raven.messenger.models.response.ModelMember;
 import raven.messenger.plugin.swing.scroll.ScrollRefresh;
 import raven.messenger.plugin.swing.scroll.ScrollRefreshModel;
 import raven.messenger.socket.SocketService;
+import raven.messenger.util.ComponentUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -42,20 +43,20 @@ public class PanelGroup extends JPanel {
 
     private void createDescription() {
         panelDescription = new JPanel(new MigLayout("wrap,fillx,insets 0", "[fill]"));
-        createSeparator(panelDescription);
+        ComponentUtil.addSeparatorTo(panelDescription);
         textPane = new JTextPane();
         textPane.setEditable(false);
         textPane.setEditorKit(new AutoWrapText());
 
         textPane.putClientProperty(FlatClientProperties.STYLE, "" +
-                "foreground:$Text.middleForeground;");
+                "foreground:$Text.lowForeground;");
         panelDescription.add(textPane);
         add(panelDescription);
     }
 
     private void createMember() {
         panelMember = new JPanel(new MigLayout("wrap,fillx,insets 3,gapy 3", "[fill]"));
-        createSeparator(this);
+        ComponentUtil.addSeparatorTo(this);
 
         scrollRefresh = new ScrollRefresh(getScrollModel(), panelMember);
         scrollRefresh.setBorder(BorderFactory.createEmptyBorder());
@@ -103,14 +104,6 @@ public class PanelGroup extends JPanel {
         panelMember.repaint();
         panelMember.revalidate();
         scrollRefresh.getScrollRefreshModel().resetPage();
-    }
-
-    private void createSeparator(JPanel panel) {
-        JPanel separator = new JPanel();
-        separator.putClientProperty(FlatClientProperties.STYLE, "" +
-                "[light]background:darken(@background,3%);" +
-                "[dark]background:lighten(@background,3%);");
-        panel.add(separator, "height 7!");
     }
 
     public boolean loadData() {

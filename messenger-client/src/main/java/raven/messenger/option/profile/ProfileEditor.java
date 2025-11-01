@@ -18,7 +18,7 @@ public class ProfileEditor extends JPanel {
     }
 
     private void init() {
-        setLayout(new MigLayout("fill", "[center]", ""));
+        setLayout(new MigLayout("fill,insets n 30 n 30", "[center]", ""));
 
         profileImageEditor = new ProfileImageEditor();
         profileImageEditor.setProfile(file.getAbsolutePath());
