@@ -35,7 +35,7 @@ public class PanelUser extends JPanel {
         textPane.setEditorKit(new AutoWrapText());
 
         textPane.putClientProperty(FlatClientProperties.STYLE, "" +
-                "foreground:$Text.upperForeground;");
+                "foreground:$Text.middleForeground;");
         panelDescription.add(textPane);
         add(panelDescription);
     }

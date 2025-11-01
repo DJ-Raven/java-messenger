@@ -26,7 +26,6 @@ public class Menu extends JPanel {
     }
 
     private void init() {
-        setBorder(new DropShadowBorder(new Insets(0, 0, 0, 10), 0));
         setLayout(new MigLayout("wrap", "[center,60]", "15[]push[][][]push[][]15"));
 
         labelProfile = new JLabel(createAvatar());
@@ -36,7 +35,7 @@ public class Menu extends JPanel {
         add(createItem("group.svg", e -> OptionManager.getInstance().newGroup()));
         add(createItem("storage.svg", e -> OptionManager.getInstance().showStorage()));
 
-        add(createItem("settings.svg", e -> showSettings()));
+        add(createItem("settings.svg", e -> OptionManager.getInstance().showSetting()));
         add(createItem("logout.svg", e -> logout()));
     }
 
@@ -59,7 +58,7 @@ public class Menu extends JPanel {
     private JButton createItem(String icon, ActionListener action) {
         JButton button = new JButton(new FlatSVGIcon("raven/messenger/icon/drawer/" + icon, 0.45f));
         button.putClientProperty(FlatClientProperties.STYLE, "" +
-                "margin:5,8,5,8;" +
+                "margin:5,10,5,10;" +
                 "borderWidth:0;" +
                 "focusWidth:0;" +
                 "innerFocusWidth:0;");
@@ -75,6 +74,9 @@ public class Menu extends JPanel {
         FormsManager.getInstance().showForm(new Login(null));
     }
 
-    private void showSettings() {
+    @Override
+    public void updateUI() {
+        super.updateUI();
+        setBorder(new DropShadowBorder(new Insets(0, 0, 0, 10), 0));
     }
 }

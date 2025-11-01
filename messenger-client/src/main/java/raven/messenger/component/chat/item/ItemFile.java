@@ -70,7 +70,7 @@ public class ItemFile extends JPanel implements ProgressChat {
         JLabel lbName = new JLabel(data.getOriginalName());
         JLabel lbSize = new JLabel(MethodUtil.formatSize(data.getSize()));
         lbSize.putClientProperty(FlatClientProperties.STYLE, "" +
-                "foreground:$Text.lowForeground;");
+                "foreground:$Text.middleForeground;");
         add(buttonProgress, "span 1 2");
         add(lbName, "cell 1 0,width 187!");
         add(lbSize, "cell 1 1");

@@ -7,6 +7,7 @@ import raven.messenger.manager.ErrorManager;
 import raven.messenger.manager.FormsManager;
 import raven.messenger.option.group.DialogGroup;
 import raven.messenger.option.profile.DialogProfile;
+import raven.messenger.option.setting.DialogSetting;
 import raven.messenger.option.storage.DialogStorage;
 import raven.messenger.socket.SocketService;
 import raven.modal.ModalDialog;
@@ -66,5 +67,12 @@ public class OptionManager {
         Option option = ModalDialog.createOption();
         option.getLayoutOption().setSize(410, -1);
         ModalDialog.showModal(FormsManager.getInstance().getMainFrame(), modalBorder, option, "storage");
+    }
+
+    public void showSetting() {
+        DialogSetting dialogStorage = new DialogSetting();
+        SimpleModalBorder modalBorder = new SimpleModalBorder(dialogStorage, "Setting", new ModalBorderOption().setUseScroll(true));
+        Option option = ModalDialog.createOption();
+        ModalDialog.showModal(FormsManager.getInstance().getMainFrame(), modalBorder, option, "setting");
     }
 }

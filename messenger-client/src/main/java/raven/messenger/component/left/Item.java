@@ -30,7 +30,8 @@ public class Item extends JButton {
                 "background:null;" +
                 "borderWidth:0;" +
                 "focusWidth:0;" +
-                "innerFocusWidth:0;");
+                "innerFocusWidth:0;" +
+                "selectedBackground:fade($Button.selectedBackground,40%);");
         setLayout(new MigLayout("wrap,fill,insets 3", "[fill]"));
         panelLabel = new PanelLabel();
         if (data.getProfile() != null) {
@@ -90,7 +91,7 @@ public class Item extends JButton {
             lbName.putClientProperty(FlatClientProperties.STYLE, "" +
                     "font:bold;");
             lbStatus.putClientProperty(FlatClientProperties.STYLE, "" +
-                    "foreground:$Text.lowForeground;");
+                    "foreground:$Text.middleForeground;");
 
             lbDescription.putClientProperty(FlatClientProperties.STYLE, "" +
                     "foreground:$Text.middleForeground;");

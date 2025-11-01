@@ -3,11 +3,10 @@ package raven.messenger;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
-import com.formdev.flatlaf.intellijthemes.FlatGruvboxDarkHardIJTheme;
-import com.formdev.flatlaf.util.FontUtils;
 import com.formdev.flatlaf.util.UIScale;
 import raven.messenger.manager.DialogManager;
 import raven.messenger.manager.FormsManager;
+import raven.messenger.util.AppPreferences;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,10 +36,10 @@ public class Application extends JFrame {
     }
 
     public static void main(String[] args) {
+        AppPreferences.init();
         FlatRobotoFont.install();
         FlatLaf.registerCustomDefaultsSource("raven.messenger.themes");
-        UIManager.put("defaultFont", FontUtils.getCompositeFont(FlatRobotoFont.FAMILY, Font.PLAIN, 13));
-        FlatGruvboxDarkHardIJTheme.setup();
+        AppPreferences.setupLaf();
         EventQueue.invokeLater(() -> new Application().setVisible(true));
     }
 }

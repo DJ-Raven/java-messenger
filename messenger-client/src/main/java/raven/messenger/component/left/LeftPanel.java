@@ -80,7 +80,7 @@ public class LeftPanel extends JPanel {
         text.putClientProperty(FlatClientProperties.STYLE, "" +
                 "margin:5,10,5,10;" +
                 "borderWidth:0;" +
-                "background:darken($Panel.background,2%);");
+                "background:$Item.component.background;");
 
         Debounce.add(text, (ke, search) -> {
             search = search.trim();

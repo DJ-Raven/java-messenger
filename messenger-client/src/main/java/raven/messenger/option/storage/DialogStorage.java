@@ -65,7 +65,7 @@ public class DialogStorage extends JPanel {
             labelName = new JLabel();
             labelName.putClientProperty(FlatClientProperties.STYLE, "" +
                     "font:bold +3;" +
-                    "foreground:$Text.upperForeground;");
+                    "foreground:$Text.middleForeground;");
             add(labelName);
         }
 
@@ -170,16 +170,16 @@ public class DialogStorage extends JPanel {
             });
             buttonClear.putClientProperty(FlatClientProperties.STYLE, "" +
                     "background:null;" +
-                    "foreground:$Text.upperForeground;" +
+                    "foreground:$Text.middleForeground;" +
                     "margin:5,10,5,10;" +
                     "borderWidth:0;" +
                     "focusWidth:0;" +
                     "innerFocusWidth:0;" +
                     "disabledBackground:null;");
             labelName.putClientProperty(FlatClientProperties.STYLE, "" +
-                    "foreground:$Text.upperForeground;");
+                    "foreground:$Text.middleForeground;");
             labelSize.putClientProperty(FlatClientProperties.STYLE, "" +
-                    "foreground:$Text.lowForeground;" +
+                    "foreground:$Text.middleForeground;" +
                     "font:-2;");
             add(labelName, "cell 1 0");
             add(labelSize, "cell 1 1,push");

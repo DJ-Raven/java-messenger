@@ -190,6 +190,7 @@ public class ChatPanel extends JLayeredPane {
         if (oldTheme != UIManager.getLookAndFeel()) {
             oldTheme = UIManager.getLookAndFeel();
             SwingUtilities.updateComponentTreeUI(this);
+            SwingUtilities.updateComponentTreeUI(messageInput);
         }
     }
 
