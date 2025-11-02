@@ -20,7 +20,7 @@ public class EmptyChatData extends JPanel {
         add(new JLabel(MethodUtil.createIcon("raven/messenger/icon/empty_message.svg", 1.5f, Color.decode("#C8C8C8"), Color.decode("#414141"))));
         JLabel label = new JLabel("Empty Chart");
         label.putClientProperty(FlatClientProperties.STYLE, "" +
-                "foreground:$Text.middleForeground;" +
+                "foreground:$Text.mediumForeground;" +
                 "font:+1;");
         add(label);
     }

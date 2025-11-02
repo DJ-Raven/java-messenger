@@ -31,7 +31,7 @@ public class HeaderProfile extends JPanel {
         labelStatus = new JLabel();
 
         labelStatus.putClientProperty(FlatClientProperties.STYLE, "" +
-                "foreground:$Text.middleForeground;");
+                "foreground:$Text.mediumForeground;");
 
         labelProfile.addActionListener(e -> {
             if (profile != null) {

@@ -60,7 +60,7 @@ public class DialogProfile extends JPanel {
         buttonUpdateBio.setVisible(false);
         bioLength = new JLabel("40");
         bioLength.putClientProperty(FlatClientProperties.STYLE, "" +
-                "foreground:$Text.middleForeground;" +
+                "foreground:$Text.mediumForeground;" +
                 "border:0,5,0,0;");
         labelName = new JLabel("Ra Ven");
         txtBio = new JTextField();

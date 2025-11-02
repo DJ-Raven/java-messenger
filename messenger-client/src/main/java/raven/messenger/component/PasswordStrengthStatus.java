@@ -1,7 +1,6 @@
 package raven.messenger.component;
 
 import com.formdev.flatlaf.FlatClientProperties;
-import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.MigLayout;
@@ -101,7 +100,7 @@ public class PasswordStrengthStatus extends JPanel {
             int gap = UIScale.scale(5);
             int w = (width - gap * 2) / 3;
             int y = (height - size) / 2;
-            Color disableColor = Color.decode(FlatLaf.isLafDark() ? "#404040" : "#CECECE");
+            Color disableColor = UIManager.getColor("Item.component.mediumBackground");
             if (type >= 1) {
                 g2.setColor(getStrengthColor(1));
             } else {

@@ -170,7 +170,7 @@ public class DialogStorage extends JPanel {
             });
             buttonClear.putClientProperty(FlatClientProperties.STYLE, "" +
                     "background:null;" +
-                    "foreground:$Text.middleForeground;" +
+                    "foreground:$Text.mediumForeground;" +
                     "margin:4,8,4,8;" +
                     "borderWidth:0;" +
                     "focusWidth:0;" +

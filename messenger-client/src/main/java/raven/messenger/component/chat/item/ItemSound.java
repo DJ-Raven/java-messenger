@@ -113,7 +113,7 @@ public class ItemSound extends JPanel implements ProgressChat {
         JLabel lbDuration = new JLabel(duration);
         lbDuration.putClientProperty(FlatClientProperties.STYLE, "" +
                 "font:-1;" +
-                "foreground:$Text.middleForeground;");
+                "foreground:$Text.mediumForeground;");
 
         add(buttonPlay, "span 1 2");
         if (waveFormPanel != null) {

@@ -21,7 +21,7 @@ public class ComponentUtil {
         for (String st : text) {
             JLabel lb = new JLabel(st);
             lb.putClientProperty(FlatClientProperties.STYLE, "" +
-                    "foreground:$Text.middleForeground;");
+                    "foreground:$Text.mediumForeground;");
             panel.add(lb);
         }
         return panel;

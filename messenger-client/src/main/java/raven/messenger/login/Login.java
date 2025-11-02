@@ -9,6 +9,7 @@ import raven.messenger.manager.ErrorManager;
 import raven.messenger.manager.FormsManager;
 import raven.messenger.service.ServiceAuth;
 import raven.messenger.store.CookieManager;
+import raven.messenger.util.StyleUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,37 +32,43 @@ public class Login extends JPanel {
         txtUsername = new JTextField();
         txtPassword = new JPasswordField();
         chRememberMe = new JCheckBox("Remember me");
-        cmdLogin = new JButton("Login");
+        cmdLogin = new JButton("Login") {
+            @Override
+            public boolean isDefaultButton() {
+                return true;
+            }
+        };
         JPanel panel = new JPanel(new MigLayout("wrap,fillx,insets 35 45 30 45", "fill,250:280"));
         panel.putClientProperty(FlatClientProperties.STYLE, "" +
                 "arc:20;" +
-                "[light]background:darken(@background,3%);" +
-                "[dark]background:lighten(@background,3%);");
+                "[light]background:shade(@background,5%);" +
+                "[dark]background:tint(@background,3%);");
 
-        txtPassword.putClientProperty(FlatClientProperties.STYLE, "" +
-                "showRevealButton:true");
         cmdLogin.putClientProperty(FlatClientProperties.STYLE, "" +
-                "[light]background:darken(@background,10%);" +
-                "[dark]background:lighten(@background,10%);" +
                 "borderWidth:0;" +
                 "focusWidth:0;" +
-                "innerFocusWidth:0;");
+                "innerFocusWidth:0;" +
+                "default.borderWidth:0;");
 
         cmdLogin.addActionListener(e -> login());
         FormsManager.getInstance().autoFocus(o -> login(), txtUsername, txtPassword);
         txtUsername.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter your username or email");
         txtPassword.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter your password");
 
+        StyleUtil.applyStyleTextFieldMedium(txtUsername);
+        StyleUtil.applyStyleTextFieldMedium(txtPassword);
+        StyleUtil.applyStyleCheckBox(chRememberMe);
+
         JLabel lbTitle = new JLabel("Welcome back!");
         JLabel description = new JLabel("Please sign in to access your account");
         lbTitle.putClientProperty(FlatClientProperties.STYLE, "" +
                 "font:bold +10;");
         description.putClientProperty(FlatClientProperties.STYLE, "" +
-                "foreground:$Text.middleForeground;");
+                "foreground:$Text.lowForeground;");
 
         panel.add(lbTitle);
         panel.add(description);
-        panel.add(new JLabel("Username"), "gapy 8");
+        panel.add(new JLabel("Username"), "gapy 15");
         panel.add(txtUsername);
         panel.add(new JLabel("Password"), "gapy 8");
         panel.add(txtPassword);
@@ -85,7 +92,7 @@ public class Login extends JPanel {
         });
         JLabel label = new JLabel("Don't have an account ?");
         label.putClientProperty(FlatClientProperties.STYLE, "" +
-                "foreground:$Text.middleForeground;");
+                "foreground:$Text.lowForeground;");
         panel.add(label);
         panel.add(cmdRegister);
         return panel;

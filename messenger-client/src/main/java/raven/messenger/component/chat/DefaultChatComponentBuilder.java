@@ -162,7 +162,7 @@ public class DefaultChatComponentBuilder implements ChatComponentBuilder {
     protected JLabel buildTime(String time) {
         JLabel label = new JLabel(time);
         label.putClientProperty(FlatClientProperties.STYLE, "" +
-                "foreground:$Text.middleForeground;" +
+                "foreground:$Text.mediumForeground;" +
                 "font:-1;");
         return label;
     }

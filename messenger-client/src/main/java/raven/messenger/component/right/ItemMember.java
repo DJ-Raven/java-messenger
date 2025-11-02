@@ -71,10 +71,10 @@ public class ItemMember extends JButton {
             lbName.putClientProperty(FlatClientProperties.STYLE, "" +
                     "font:bold;");
             lbStatus.putClientProperty(FlatClientProperties.STYLE, "" +
-                    "foreground:$Text.middleForeground;");
+                    "foreground:$Text.mediumForeground;");
 
             lbDescription.putClientProperty(FlatClientProperties.STYLE, "" +
-                    "foreground:$Text.middleForeground;");
+                    "foreground:$Text.mediumForeground;");
 
             add(lbName);
             add(lbDescriptionName);

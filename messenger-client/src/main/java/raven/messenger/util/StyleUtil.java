@@ -39,6 +39,33 @@ public class StyleUtil {
                 "focusedBackground:$Item.component.focusedBackground;");
     }
 
+    public static void applyStyleTextFieldMedium(JTextComponent text) {
+        text.putClientProperty(FlatClientProperties.STYLE, "" +
+                "margin:5,10,5,10;" +
+                "borderWidth:0;" +
+                "focusWidth:0;" +
+                "background:$Item.component.mediumBackground;" +
+                "focusedBackground:$Item.component.mediumFocusedBackground;");
+    }
+
+    public static void applyStyleTextFieldMedium(JPasswordField text) {
+        text.putClientProperty(FlatClientProperties.STYLE, "" +
+                "margin:5,10,5,10;" +
+                "borderWidth:0;" +
+                "focusWidth:0;" +
+                "showRevealButton:true;" +
+                "background:$Item.component.mediumBackground;" +
+                "focusedBackground:$Item.component.mediumFocusedBackground;");
+    }
+
+    public static void applyStyleCheckBox(JCheckBox checkBox) {
+        checkBox.putClientProperty(FlatClientProperties.STYLE, "" +
+                "icon.borderWidth:0;" +
+                "icon.focusWidth:0;" +
+                "icon.background:$Item.component.mediumBackground;" +
+                "icon.hoverBackground:$Item.component.mediumFocusedBackground;");
+    }
+
     public static boolean isCoreThemes(Class<? extends LookAndFeel> lafClass) {
         return lafClass == FlatLightLaf.class ||
                 lafClass == FlatDarkLaf.class ||

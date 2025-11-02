@@ -216,7 +216,7 @@ public class DialogSelectFile extends JPanel {
                     "[dark]background:tint(@background,10%);" +
                     "[light]background:shade(@background,10%);");
             lbSize.putClientProperty(FlatClientProperties.STYLE, "" +
-                    "foreground:$Text.middleForeground;");
+                    "foreground:$Text.mediumForeground;");
             JButton cmdDelete = createDeleteButton(this);
             add(lbIcon, "span 1 2");
             add(lbName, "cell 1 0,width ::245");
