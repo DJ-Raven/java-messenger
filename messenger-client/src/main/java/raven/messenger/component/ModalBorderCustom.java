@@ -26,7 +26,8 @@ public class ModalBorderCustom extends SimpleModalBorder {
                     "arc:10;" +
                     "borderWidth:0;" +
                     "focusWidth:0;" +
-                    "innerFocusWidth:0;");
+                    "innerFocusWidth:0;" +
+                    "default.borderWidth:0;");
         } else {
             button.putClientProperty(FlatClientProperties.STYLE, "" +
                     "arc:10;" +

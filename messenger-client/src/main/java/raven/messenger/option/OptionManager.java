@@ -57,7 +57,7 @@ public class OptionManager {
 
     public void showProfile() {
         DialogProfile dialogProfile = new DialogProfile();
-        SimpleModalBorder modalBorder = new SimpleModalBorder(dialogProfile, "Edit Profile", new ModalBorderOption().setUseScroll(true), null, (controller, action) -> {
+        ModalBorderCustom modalBorder = new ModalBorderCustom(dialogProfile, "Edit Profile", new ModalBorderOption().setUseScroll(true), null, (controller, action) -> {
             if (action == SimpleModalBorder.OPENED) {
                 dialogProfile.open();
             }

@@ -1,12 +1,15 @@
 package raven.messenger.plugin.sound;
 
+import raven.messenger.plugin.sound.player.AbstractPlayer;
+import raven.messenger.plugin.sound.player.PlayerEvent;
+
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SoundPlayback {
+public class SoundPlayback extends AbstractPlayer {
 
     private List<SoundPlaybackListener> events = new ArrayList<>();
     private AudioInputStream audioInputStream;
@@ -27,14 +30,20 @@ public class SoundPlayback {
                     while (clip.isRunning()) {
                         sleep(1);
                         runEventChanged(clip.getFramePosition(), clip.getFrameLength());
+                        fireLengthChanged(getEvent());
                     }
                 } else if (event.getType() == LineEvent.Type.STOP) {
-                    runEventStop();
                     finished = clip.getFramePosition() >= clip.getFrameLength();
+                    if (finished) {
+                        runEventStop();
+                        fireFinished(getEvent());
+                    } else {
+                        firePaused(getEvent());
+                    }
                 }
             });
         } catch (LineUnavailableException e) {
-            System.err.println(e);
+            System.err.println(e.getMessage());
         }
     }
 
@@ -47,12 +56,15 @@ public class SoundPlayback {
             if (this.audioInputStream != null && this.audioInputStream != audioInputStream) {
                 this.audioInputStream.close();
             }
-            stop();
+            stopImpl(false);
             this.audioInputStream = audioInputStream;
+            if (clip.isOpen()) {
+                clip.close();
+            }
             clip.open(audioInputStream);
             play();
         } catch (IOException | LineUnavailableException e) {
-            System.err.println(e);
+            System.err.println(e.getMessage());
         }
     }
 
@@ -62,6 +74,9 @@ public class SoundPlayback {
             pausePosition = v;
             finished = false;
             clip.setFramePosition(v);
+        }
+        if (!isRunning()) {
+            resumes();
         }
     }
 
@@ -83,6 +98,7 @@ public class SoundPlayback {
                     clip.setFramePosition(pausePosition);
                 }
                 clip.start();
+                fireStarted(getEvent());
                 return true;
             }
         }
@@ -90,10 +106,17 @@ public class SoundPlayback {
     }
 
     public boolean stop() {
+        return stopImpl(true);
+    }
+
+    private boolean stopImpl(boolean notify) {
         if (clip != null) {
             clip.stop();
             clip.setFramePosition(0);
-            clip.close();
+            pausePosition = 0;
+            if (notify && clip.isOpen()) {
+                fireFinished(getEvent());
+            }
             return true;
         }
         return false;
@@ -109,7 +132,7 @@ public class SoundPlayback {
                 clip.close();
                 audioInputStream.close();
             } catch (IOException e) {
-                System.err.println(e);
+                System.err.println(e.getMessage());
             }
         }
         events.clear();
@@ -118,13 +141,14 @@ public class SoundPlayback {
 
     private synchronized void play() {
         clip.start();
+        fireStarted(getEvent());
     }
 
     private void sleep(long l) {
         try {
             Thread.sleep(l);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
     }
 
@@ -148,5 +172,12 @@ public class SoundPlayback {
 
     public void addSoundPlaybackListener(SoundPlaybackListener event) {
         events.add(event);
+    }
+
+    private PlayerEvent getEvent() {
+        AudioFormat format = audioInputStream.getFormat();
+        int currentInSeconds = (int) (clip.getFramePosition() / format.getFrameRate());
+        float currentInPercent = clip.getLongFramePosition() / (float) clip.getFrameLength();
+        return new PlayerEvent(this, currentInSeconds, currentInPercent);
     }
 }

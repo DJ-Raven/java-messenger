@@ -353,7 +353,7 @@ public class Home extends JPanel {
             @Override
             public void onMicrophoneCapture(CaptureData captureData) {
                 WaveFormData waveFormData = AudioUtil.getWaveFormData(captureData.getAudioData(), captureData.getAudioFormat());
-                ChatSoundData chatSoundData = new ChatSoundData(waveFormData.getData(), "", 0, captureData.getDuration());
+                ChatSoundData chatSoundData = new ChatSoundData(waveFormData.getData(), "", captureData.getAudioData().length, captureData.getDuration());
                 Myself myself = chatPanel.getChatModel().myself()
                         .setVoice(chatSoundData)
                         .setSeen(true)

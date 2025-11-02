@@ -11,10 +11,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 
-public class Mp3Player {
+public class Mp3Player extends AbstractPlayer {
 
     private File path;
     private AdvancedPlayer advancedPlayer;
@@ -24,7 +22,6 @@ public class Mp3Player {
     private boolean isPlaying;
     private boolean isPause;
     private boolean skip;
-    private List<PlayerListener> listeners;
 
     protected double frameRatePerMilliseconds;
     protected int currentFrame;
@@ -152,20 +149,20 @@ public class Mp3Player {
     private void started(PlaybackEvent evt) {
         isPlaying = true;
         isPause = false;
-        started(getEvent());
+        fireStarted(getEvent());
     }
 
     private void finished(PlaybackEvent evt) {
         if (isPause) {
             currentFrame += (int) (evt.getFrame() * frameRatePerMilliseconds);
             if (!skip) {
-                paused(getEvent());
+                firePaused(getEvent());
             } else {
                 skip = false;
             }
         } else {
             currentFrame = 0;
-            finished(getEvent());
+            fireFinished(getEvent());
             close();
         }
         isPlaying = false;
@@ -186,63 +183,21 @@ public class Mp3Player {
         }
     }
 
-    public void addPlayerListener(PlayerListener listener) {
-        if (listeners == null) {
-            listeners = new ArrayList<>();
-        }
-        listeners.add(listener);
-    }
-
-    public void removePlayerListener(PlayerListener listener) {
-        if (listeners != null) {
-            listeners.remove(listener);
-        }
-    }
-
-    public void clearPlayerListener() {
-        if (listeners != null) {
-            listeners.clear();
-        }
-    }
-
     public Mp3File getMp3File() {
         return mp3File;
     }
 
     private PlayerEvent getEvent() {
-        return new PlayerEvent(this);
+        int currentInSeconds = (int) (currentFrame / frameRatePerMilliseconds + position) / 1000;
+        float currentInPercent = getCurrentInPercent();
+        return new PlayerEvent(this, currentInSeconds, currentInPercent);
     }
 
-    private void lengthChanged(PlayerEvent event) {
-        if (listeners != null) {
-            for (PlayerListener l : listeners) {
-                l.lengthChanged(event);
-            }
-        }
-    }
-
-    private void started(PlayerEvent event) {
-        if (listeners != null) {
-            for (PlayerListener l : listeners) {
-                l.started(event);
-            }
-        }
-    }
-
-    private void finished(PlayerEvent event) {
-        if (listeners != null) {
-            for (PlayerListener l : listeners) {
-                l.finished(event);
-            }
-        }
-    }
-
-    private void paused(PlayerEvent event) {
-        if (listeners != null) {
-            for (PlayerListener l : listeners) {
-                l.paused(event);
-            }
-        }
+    private float getCurrentInPercent() {
+        long lengthInMilliseconds = getMp3File().getLengthInMilliseconds();
+        double current = currentFrame / frameRatePerMilliseconds / lengthInMilliseconds;
+        double value = (double) position / lengthInMilliseconds;
+        return Math.round((current + value) * 100f) / 100f;
     }
 
     private class PlayerAudioDevice extends JavaSoundAudioDevice {
@@ -256,7 +211,7 @@ public class Mp3Player {
             if (!isPause) {
                 int seconds = (int) (currentFrame / frameRatePerMilliseconds + getPosition()) / 1000;
                 if (this.seconds != seconds) {
-                    lengthChanged(getEvent());
+                    fireLengthChanged(getEvent());
                     this.seconds = seconds;
                 }
             }

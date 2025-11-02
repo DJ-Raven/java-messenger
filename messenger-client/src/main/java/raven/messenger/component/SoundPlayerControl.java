@@ -19,8 +19,6 @@ public class SoundPlayerControl extends JPanel {
 
     private void init() {
         setLayout(new MigLayout("wrap 4", "[grow 0][fill,grow][][]", "[center]3[]3"));
-        putClientProperty(FlatClientProperties.STYLE, "" +
-                "background:$Chat.background;");
         labelText = new JTextField("Player name");
         labelText.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         labelText.setBorder(BorderFactory.createEmptyBorder());
@@ -78,11 +76,10 @@ public class SoundPlayerControl extends JPanel {
         JProgressBar progressBar = new JProgressBar();
         progressBar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         progressBar.putClientProperty(FlatClientProperties.STYLE, "" +
-                "arc:0;" +
-                "[dark]background:tint($Chat.background,8%);" +
-                "[light]background:shade($Chat.background,8%);" +
-                "[dark]foreground:tint($Chat.background,25%);" +
-                "[light]foreground:shade($Chat.background,25%);");
+                "[dark]background:tint(@background,8%);" +
+                "[light]background:shade(@background,8%);" +
+                "[dark]foreground:tint(@background,25%);" +
+                "[light]foreground:shade(@background,25%);");
         progressBar.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {

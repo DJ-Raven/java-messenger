@@ -5,6 +5,7 @@ import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.MigLayout;
 import raven.messenger.api.exception.ResponseException;
+import raven.messenger.component.ModalBorderCustom;
 import raven.messenger.component.profile.ProfilePanel;
 import raven.messenger.manager.ErrorManager;
 import raven.messenger.manager.FormsManager;
@@ -166,7 +167,7 @@ public class DialogProfile extends JPanel {
         panel.add(new JLabel("Last name"));
         panel.add(txtLastName);
 
-        SimpleModalBorder modalBorder = new SimpleModalBorder(panel, "Edit Name", getOptions(), (callback, action) -> {
+        ModalBorderCustom modalBorder = new ModalBorderCustom(panel, "Edit Name", getOptions(), (callback, action) -> {
             if (action == SimpleModalBorder.OK_OPTION) {
                 if (FormsManager.getInstance().validateEmpty(txtFirstName, txtLastName)) {
                     try {
@@ -207,7 +208,7 @@ public class DialogProfile extends JPanel {
         panel.add(cmdMale);
         panel.add(cmdFemale);
 
-        SimpleModalBorder modalBorder = new SimpleModalBorder(panel, "Edit Gender", getOptions(), (callback, action) -> {
+        ModalBorderCustom modalBorder = new ModalBorderCustom(panel, "Edit Gender", getOptions(), (callback, action) -> {
             if (action == SimpleModalBorder.OK_OPTION) {
                 ModelGender gender = new ModelGender(cmdMale.isSelected() ? "M" : "F");
                 try {
@@ -238,7 +239,7 @@ public class DialogProfile extends JPanel {
         panel.add(new JLabel("Phone number"));
         panel.add(txtPhone);
 
-        SimpleModalBorder modalBorder = new SimpleModalBorder(panel, "Edit Phone", getOptions(), (callback, action) -> {
+        ModalBorderCustom modalBorder = new ModalBorderCustom(panel, "Edit Phone", getOptions(), (callback, action) -> {
             if (action == SimpleModalBorder.OK_OPTION) {
                 if (FormsManager.getInstance().validateEmpty(txtPhone)) {
                     try {

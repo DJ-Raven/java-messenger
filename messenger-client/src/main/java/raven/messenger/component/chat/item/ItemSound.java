@@ -44,7 +44,6 @@ public class ItemSound extends JPanel implements ProgressChat {
                     }
                     if (SoundManager.getInstance().checkSound(ItemSound.this)) {
                         SoundManager.getInstance().getSoundPlayback().skip(v);
-                        SoundManager.getInstance().getSoundPlayback().resumes();
                     }
                 }
 
