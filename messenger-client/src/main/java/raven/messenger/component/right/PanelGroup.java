@@ -125,6 +125,13 @@ public class PanelGroup extends JPanel {
         }
     }
 
+    public void addGroupMember(ModelMember member) {
+        ItemMember item = new ItemMember(member, false);
+        panelMember.add(item);
+        panelMember.repaint();
+        panelMember.revalidate();
+    }
+
     private boolean isNotExist(ModelMember data) {
         int count = panelMember.getComponentCount();
         for (int i = 0; i < count; i++) {

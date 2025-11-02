@@ -383,20 +383,29 @@ public class Home extends JPanel {
                 try {
                     ModelGroup group = SocketService.getInstance().getServiceGroup().joinGroup(user.getId());
                     chatPanel.userMessageInput();
+                    rightPanel.addGroupMember(new ModelMember(ProfileManager.getInstance().getProfile()));
                     leftPanel.createNew(ChatType.GROUP, group.getGroupId());
                 } catch (ResponseException e) {
                     ErrorManager.getInstance().showError(e);
                 }
             }
         };
-        eventLeft = data -> {
-            if (chatBody.getComponentCount() == 0) {
-                chatPanel.formCheck();
-                chatBody.add(chatPanel);
-                chatBody.repaint();
-                chatBody.revalidate();
+        eventLeft = new LeftActionListener() {
+            @Override
+            public void onUserSelected(ModelChatListItem user) {
+                if (chatBody.getComponentCount() == 0) {
+                    chatPanel.formCheck();
+                    chatBody.add(chatPanel);
+                    chatBody.repaint();
+                    chatBody.revalidate();
+                }
+                changeUser(user);
             }
-            changeUser(data);
+
+            @Override
+            public ModelChatListItem getSelectedListItem() {
+                return user;
+            }
         };
         scrollRefreshModel = new ScrollRefreshModel(1, SwingConstants.TOP) {
             @Override

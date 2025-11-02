@@ -47,6 +47,13 @@ public class ModelMember {
         }
     }
 
+    public ModelMember(ModelProfile profile) {
+        this.userId = profile.getUserId();
+        this.userUuid = profile.getUserUuid();
+        this.name = profile.getName();
+        this.profile = profile.getProfile();
+    }
+
     private int userId;
     private String userUuid;
     private ModelName name;

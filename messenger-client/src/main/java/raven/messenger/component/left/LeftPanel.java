@@ -139,8 +139,13 @@ public class LeftPanel extends JPanel {
             ModelChatListItem user = serviceUser.findById(chatType, id);
             if (message != null) {
                 user.setLastMessage(new ModelLastMessage(message));
+            } else {
+                if (chatType == ChatType.GROUP) {
+                    user.setLastMessage(ModelLastMessage.createAsJoined());
+                }
             }
             Item item = new Item(user);
+            item.setSelected(true);
             item.addActionListener(e -> event.onUserSelected(user));
             removeItem(chatType, id);
             panel.add(item, 0);
@@ -195,6 +200,12 @@ public class LeftPanel extends JPanel {
                 if (isNotExist(d)) {
                     Item item = new Item(d);
                     item.addActionListener(e -> event.onUserSelected(d));
+                    ModelChatListItem select = event.getSelectedListItem();
+                    if (select != null) {
+                        if (select.isGroup() == d.isGroup() && select.getId() == d.getId()) {
+                            item.setSelected(true);
+                        }
+                    }
                     panel.add(item);
                 }
             }

@@ -2,11 +2,15 @@ package raven.messenger.component.right;
 
 import net.miginfocom.swing.MigLayout;
 import raven.messenger.models.response.ModelGroup;
+import raven.messenger.models.response.ModelMember;
 import raven.messenger.models.response.ModelUserInfo;
 
 import javax.swing.*;
 
 public class RightPanel extends JPanel {
+
+    private PanelGroup panelGroup;
+    private PanelUser panelUser;
 
     public RightPanel() {
         init();
@@ -18,9 +22,10 @@ public class RightPanel extends JPanel {
 
     public void setGroup(ModelGroup group) {
         removeAll();
-        PanelGroup panelGroup = new PanelGroup();
+        panelGroup = new PanelGroup();
         panelGroup.setGroup(group);
         add(panelGroup);
+        panelUser = null;
         repaint();
         revalidate();
     }
@@ -28,11 +33,18 @@ public class RightPanel extends JPanel {
     public void setUser(ModelUserInfo user) {
         removeAll();
         if (user != null) {
-            PanelUser panelUser = new PanelUser();
+            panelUser = new PanelUser();
             panelUser.setUser(user);
             add(panelUser);
+            panelGroup = null;
         }
         repaint();
         revalidate();
+    }
+
+    public void addGroupMember(ModelMember member) {
+        if (panelGroup != null) {
+            panelGroup.addGroupMember(member);
+        }
     }
 }

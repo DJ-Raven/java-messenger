@@ -67,6 +67,13 @@ public class ModelLastMessage {
         messageType = MessageType.toMessageType(json.getString("type"));
     }
 
+    private ModelLastMessage(boolean you, int fromUser, String message, MessageType messageType) {
+        this.you = you;
+        this.fromUser = fromUser;
+        this.message = message;
+        this.messageType = messageType;
+    }
+
     private boolean you;
     private int fromUser;
     private String message;
@@ -75,5 +82,9 @@ public class ModelLastMessage {
     @Override
     public String toString() {
         return message;
+    }
+
+    public static ModelLastMessage createAsJoined() {
+        return new ModelLastMessage(true, 0, "joined", MessageType.TEXT);
     }
 }
