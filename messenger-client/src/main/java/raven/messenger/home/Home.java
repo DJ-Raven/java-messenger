@@ -394,7 +394,7 @@ public class Home extends JPanel {
             @Override
             public void onUserSelected(ModelChatListItem user) {
                 if (chatBody.getComponentCount() == 0) {
-                    chatPanel.formCheck();
+                    chatPanel.checkUpdateUI();
                     chatBody.add(chatPanel);
                     chatBody.repaint();
                     chatBody.revalidate();

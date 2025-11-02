@@ -7,6 +7,7 @@ import com.formdev.flatlaf.util.LoggingFacade;
 import net.miginfocom.swing.MigLayout;
 import raven.color.ColorPicker;
 import raven.messenger.component.AccentColorIcon;
+import raven.messenger.component.ModalBorderCustom;
 import raven.messenger.util.AppPreferences;
 import raven.messenger.util.StyleUtil;
 import raven.modal.ModalDialog;
@@ -120,7 +121,11 @@ public class AccentColorPanel extends JPanel {
             ColorPicker colorPicker = new ColorPicker(AppPreferences.accentColor);
             colorPicker.setColorPaletteEnabled(false);
             panel.add(colorPicker);
-            SimpleModalBorder modalBorder = new SimpleModalBorder(panel, "Select Color", SimpleModalBorder.YES_NO_OPTION, (controller, action) -> {
+            SimpleModalBorder.Option[] options = new SimpleModalBorder.Option[]{
+                    new SimpleModalBorder.Option("Cancel", SimpleModalBorder.CANCEL_OPTION),
+                    new SimpleModalBorder.Option("Save", SimpleModalBorder.OK_OPTION)
+            };
+            ModalBorderCustom modalBorder = new ModalBorderCustom(panel, "Select Color", options, (controller, action) -> {
                 if (action == SimpleModalBorder.YES_OPTION) {
                     AppPreferences.accentColor = colorPicker.getSelectedColor();
                     oldSelected = null;

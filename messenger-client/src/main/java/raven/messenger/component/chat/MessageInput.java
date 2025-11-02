@@ -22,6 +22,7 @@ import java.io.File;
 
 public class MessageInput extends JPanel {
 
+    private LookAndFeel oldTheme = UIManager.getLookAndFeel();
     private final ChatActionListener event;
     private final SoundCapture soundCapture = new SoundCapture();
 
@@ -174,6 +175,13 @@ public class MessageInput extends JPanel {
 
     private String getTitle(File[] file) {
         return "Send File";
+    }
+
+    public final void checkUpdateUI() {
+        if (oldTheme != UIManager.getLookAndFeel()) {
+            oldTheme = UIManager.getLookAndFeel();
+            SwingUtilities.updateComponentTreeUI(this);
+        }
     }
 
     private TextPaneCustom input;

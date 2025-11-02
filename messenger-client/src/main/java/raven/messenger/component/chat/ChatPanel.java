@@ -166,6 +166,7 @@ public class ChatPanel extends JLayeredPane {
     }
 
     public void useJoinButton() {
+        joinGroupButton.checkUpdateUI();
         panelBottom.removeAll();
         panelBottom.add(joinGroupButton);
         panelBottom.repaint();
@@ -173,6 +174,7 @@ public class ChatPanel extends JLayeredPane {
     }
 
     public void userMessageInput() {
+        messageInput.checkUpdateUI();
         panelBottom.removeAll();
         panelBottom.add(messageInput);
         panelBottom.repaint();
@@ -186,11 +188,10 @@ public class ChatPanel extends JLayeredPane {
         super.paintComponent(g);
     }
 
-    public final void formCheck() {
+    public final void checkUpdateUI() {
         if (oldTheme != UIManager.getLookAndFeel()) {
             oldTheme = UIManager.getLookAndFeel();
             SwingUtilities.updateComponentTreeUI(this);
-            SwingUtilities.updateComponentTreeUI(messageInput);
         }
     }
 
