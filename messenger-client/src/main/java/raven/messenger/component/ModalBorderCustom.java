@@ -30,6 +30,7 @@ public class ModalBorderCustom extends SimpleModalBorder {
                     "[dark]background:tint($Panel.background,3%);");
         } else {
             button = new JButton(option.getText());
+            button.addActionListener(e -> doAction(option.getType()));
             button.putClientProperty(FlatClientProperties.STYLE_CLASS, StyleUtil.BUTTON_DEFAULT);
         }
         return button;
