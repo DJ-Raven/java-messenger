@@ -5,7 +5,7 @@ import com.formdev.flatlaf.extras.FlatSVGIcon;
 import net.miginfocom.swing.MigLayout;
 import raven.extras.AvatarIcon;
 import raven.messenger.api.ApiService;
-import raven.messenger.login.Login;
+import raven.messenger.auth.Login;
 import raven.messenger.manager.FormsManager;
 import raven.messenger.manager.SoundManager;
 import raven.messenger.models.response.ModelProfile;
@@ -29,6 +29,9 @@ public class Menu extends JPanel {
         setLayout(new MigLayout("wrap", "[center,60]", "15[]push[][][]push[][]15"));
 
         labelProfile = new JLabel(createAvatar());
+        labelProfile.putClientProperty(FlatClientProperties.STYLE, "" +
+                "background:$Component.accentColor;");
+        labelProfile.setBorder(new AvatarBorder(2f).alpha(0.6f));
         add(labelProfile);
 
         add(createItem("account.svg", e -> OptionManager.getInstance().showProfile()));
@@ -44,9 +47,7 @@ public class Menu extends JPanel {
     }
 
     private Icon createAvatar() {
-        AvatarIcon icon = new AvatarIcon(new FlatSVGIcon("raven/messenger/profile/avatar_male.svg", 100, 100), 50, 50, 3.5f);
-        icon.setType(AvatarIcon.Type.MASK_SQUIRCLE);
-        icon.setBorder(2, 2);
+        AvatarIcon icon = new AvatarIcon(new FlatSVGIcon("raven/messenger/profile/avatar_male.svg", 100, 100), 50, 50, 999f);
         changeAvatarIconBorderColor(icon);
         return icon;
     }

@@ -15,26 +15,32 @@ public class StringIcon implements Icon {
     private final int iconWidth;
     private final int iconHeight;
     private final Color color;
-    private final Color colorGradient;
+    private Color colorGradient;
+
+    public StringIcon(String string, int iconWidth, int iconHeight) {
+        this(string, null, iconWidth, iconHeight);
+    }
 
     public StringIcon(String string, Color color, int iconWidth, int iconHeight) {
         this.string = string;
         this.color = color;
-        this.colorGradient = ColorFunctions.darken(color, 0.1f);
         this.iconWidth = iconWidth;
         this.iconHeight = iconHeight;
+        if (color != null) {
+            this.colorGradient = ColorFunctions.darken(color, 0.13f);
+        }
     }
 
     @Override
     public void paintIcon(Component c, Graphics g, int x, int y) {
         Graphics2D g2 = (Graphics2D) g.create();
-        int width = c.getWidth();
-        int height = c.getHeight();
+        int width = getIconWidth();
+        int height = getIconHeight();
         FlatUIUtils.setRenderingHints(g2);
         FontMetrics fm = c.getFontMetrics(c.getFont());
         int tx = x + ((width - fm.stringWidth(string)) / 2);
         int ty = y + fm.getAscent() + ((height - fm.getHeight()) / 2);
-        g2.setPaint(new GradientPaint(x, y, color, x, height, colorGradient));
+        g2.setPaint(getPaint(c, x, y, width, height));
         g2.fill(new Ellipse2D.Double(x, y, width, height));
         g2.setColor(c.getForeground());
         FlatUIUtils.drawString((JComponent) c, g2, string, tx, ty);
@@ -49,6 +55,13 @@ public class StringIcon implements Icon {
     @Override
     public int getIconHeight() {
         return UIScale.scale(iconHeight);
+    }
+
+    private Paint getPaint(Component c, int x, int y, int width, int height) {
+        if (color == null) {
+            return new GradientPaint(x, y, c.getBackground(), x, height, ColorFunctions.darken(c.getBackground(), 0.13f));
+        }
+        return new GradientPaint(x, y, color, x, height, colorGradient);
     }
 
     public Image getImage(JComponent c) {

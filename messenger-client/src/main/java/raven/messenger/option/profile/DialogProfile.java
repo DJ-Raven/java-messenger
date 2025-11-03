@@ -47,7 +47,7 @@ public class DialogProfile extends JPanel {
 
     private void createProfile() {
         ProfilePanel profilePanel = new ProfilePanel();
-        profilePanel.setEventProfileSelected(image -> editProfile(image));
+        profilePanel.setEventProfileSelected(this::editProfile);
         ModelProfile profile = ProfileManager.getInstance().getProfile();
         Icon icon = NetworkDataUtil.getNetworkIcon(profile.getProfile(), profile.getName().getProfileString(), 100, 100, 999);
         profilePanel.setIcon(icon);

@@ -1,8 +1,7 @@
 package raven.messenger.util;
 
-import com.formdev.flatlaf.FlatIntelliJLaf;
+import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatLaf;
-import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
 import com.formdev.flatlaf.util.ColorFunctions;
@@ -39,13 +38,13 @@ public class AppPreferences {
             }
             FlatLaf.setSystemColorGetter(name -> name.equals("accent") ? AppPreferences.accentColor : null);
 
-            String lafClassName = state.get(KEY_LAF, FlatLightLaf.class.getName());
+            String lafClassName = state.get(KEY_LAF, FlatDarculaLaf.class.getName());
             UIManager.put("defaultFont", FontUtils.getCompositeFont(FlatRobotoFont.FAMILY, Font.PLAIN, 13));
             UIManager.setLookAndFeel(lafClassName);
             updateIconColor();
         } catch (Exception e) {
             LoggingFacade.INSTANCE.logSevere(null, e);
-            FlatIntelliJLaf.setup();
+            FlatDarculaLaf.setup();
         }
         initZoom();
         UIManager.addPropertyChangeListener(e -> {

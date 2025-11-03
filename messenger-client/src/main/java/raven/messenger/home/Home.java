@@ -235,7 +235,7 @@ public class Home extends JPanel {
                 return null;
             }
         } catch (ResponseException e) {
-            return new StringIcon(name.getProfileString(), UIManager.getColor("Component.accentColor"), 35, 35);
+            return new StringIcon(name.getProfileString(), 35, 35);
         }
     }
 

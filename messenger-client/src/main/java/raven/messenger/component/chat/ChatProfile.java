@@ -1,5 +1,7 @@
 package raven.messenger.component.chat;
 
+import com.formdev.flatlaf.FlatClientProperties;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -12,6 +14,9 @@ public class ChatProfile extends JPanel {
     private void init() {
         setLayout(new ChatProfileLayout());
         labelImage = new JLabel();
+        labelImage.putClientProperty(FlatClientProperties.STYLE, "" +
+                "background:$Component.accentColor;" +
+                "foreground:$Profile.foreground;");
         add(labelImage);
     }
 

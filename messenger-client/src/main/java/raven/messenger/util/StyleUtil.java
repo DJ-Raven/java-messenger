@@ -9,6 +9,15 @@ import javax.swing.text.JTextComponent;
 
 public class StyleUtil {
 
+    public static final String INPUT_SIMPLE = "simple";
+    public static final String INPUT_MEDIUM = "medium";
+
+    public static final String BUTTON_SIMPLE = "simple";
+    public static final String BUTTON_DEFAULT = "default";
+
+    public static final String ICON_SIMPLE = "icon.simple";
+    public static final String ICON_MEDIUM = "icon.medium";
+
     public static void applyStyleItemButton(JButton button, int type) {
         String buttonBackgroundKey = type == 1 ? "$Chat.item.button.background" : "$Chat.item.button.myselfBackground";
         button.putClientProperty(FlatClientProperties.STYLE, "" +
@@ -21,49 +30,21 @@ public class StyleUtil {
     }
 
     public static void applyStyleTextFieldWithClear(JTextComponent text) {
-        text.putClientProperty(FlatClientProperties.STYLE, "" +
-                "margin:5,10,5,10;" +
-                "borderWidth:0;" +
-                "focusWidth:0;" +
-                "showClearButton:true;" +
-                "background:$Item.component.background;" +
-                "focusedBackground:$Item.component.focusedBackground;");
+        text.putClientProperty(FlatClientProperties.STYLE_CLASS, INPUT_SIMPLE);
+        text.putClientProperty(FlatClientProperties.STYLE, "showClearButton:true;");
     }
 
     public static void applyStyleTextField(JTextComponent text) {
-        text.putClientProperty(FlatClientProperties.STYLE, "" +
-                "margin:5,10,5,10;" +
-                "borderWidth:0;" +
-                "focusWidth:0;" +
-                "background:$Item.component.background;" +
-                "focusedBackground:$Item.component.focusedBackground;");
+        text.putClientProperty(FlatClientProperties.STYLE_CLASS, INPUT_SIMPLE);
     }
 
     public static void applyStyleTextFieldMedium(JTextComponent text) {
-        text.putClientProperty(FlatClientProperties.STYLE, "" +
-                "margin:5,10,5,10;" +
-                "borderWidth:0;" +
-                "focusWidth:0;" +
-                "background:$Item.component.mediumBackground;" +
-                "focusedBackground:$Item.component.mediumFocusedBackground;");
+        text.putClientProperty(FlatClientProperties.STYLE_CLASS, INPUT_MEDIUM);
     }
 
     public static void applyStyleTextFieldMedium(JPasswordField text) {
-        text.putClientProperty(FlatClientProperties.STYLE, "" +
-                "margin:5,10,5,10;" +
-                "borderWidth:0;" +
-                "focusWidth:0;" +
-                "showRevealButton:true;" +
-                "background:$Item.component.mediumBackground;" +
-                "focusedBackground:$Item.component.mediumFocusedBackground;");
-    }
-
-    public static void applyStyleCheckBox(JCheckBox checkBox) {
-        checkBox.putClientProperty(FlatClientProperties.STYLE, "" +
-                "icon.borderWidth:0;" +
-                "icon.focusWidth:0;" +
-                "icon.background:$Item.component.mediumBackground;" +
-                "icon.hoverBackground:$Item.component.mediumFocusedBackground;");
+        text.putClientProperty(FlatClientProperties.STYLE_CLASS, INPUT_MEDIUM);
+        text.putClientProperty(FlatClientProperties.STYLE, "showRevealButton:true;");
     }
 
     public static boolean isCoreThemes(Class<? extends LookAndFeel> lafClass) {

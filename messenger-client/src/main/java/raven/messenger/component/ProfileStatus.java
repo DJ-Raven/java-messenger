@@ -16,6 +16,7 @@ public class ProfileStatus extends JLabel {
         setHorizontalAlignment(SwingConstants.CENTER);
         putClientProperty(FlatClientProperties.STYLE, "" +
                 "font:bold +4;" +
+                "background:$Component.accentColor;" +
                 "foreground:$Profile.foreground;");
     }
 

@@ -89,7 +89,6 @@ public class DialogManager {
     }
 
     public File showOpenDialog(ShowOpenType type) {
-        String key = type.toString();
         SystemFileChooser fc = new SystemFileChooser();
         fc.setStateStoreID("photo");
         if (type == ShowOpenType.PHOTO) {

@@ -5,10 +5,10 @@ import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
 import com.formdev.flatlaf.util.SystemFileChooser;
 import raven.messenger.Application;
 import raven.messenger.api.ApiService;
+import raven.messenger.auth.Login;
 import raven.messenger.connection.ConnectionManager;
 import raven.messenger.connection.FormUpdate;
 import raven.messenger.home.Home;
-import raven.messenger.login.Login;
 import raven.messenger.models.response.ModelProfile;
 
 import javax.swing.*;
@@ -47,7 +47,7 @@ public class FormsManager {
             } else if (type == ConnectionManager.Type.CLIENT_REQUIRED_UPDATE) {
                 showForm(new FormUpdate());
             } else {
-                ConnectionManager.getInstance().showError(() -> showLogin(), true);
+                ConnectionManager.getInstance().showError(this::showLogin, true);
             }
         }
     }
@@ -102,24 +102,38 @@ public class FormsManager {
             application.repaint();
             application.revalidate();
             FlatAnimatedLafChange.hideSnapshotWithAnimation();
+            checkFormActionForOpen(form);
         });
     }
 
-    public void applyWarningOutline(JComponent... components) {
-        applyOutline(FlatClientProperties.OUTLINE_WARNING, components);
+    public void applyWarning(JComponent... components) {
+        applyField("warning", components);
     }
 
-    public void applyErrorOutline(JComponent... components) {
-        applyOutline(FlatClientProperties.OUTLINE_ERROR, components);
+    public void applyError(JComponent... components) {
+        applyField("error", components);
     }
 
-    public void clearOutline(JComponent... components) {
-        applyOutline(null, components);
+    public void clear(JComponent... components) {
+        applyField(null, components);
     }
 
-    public void applyOutline(String keyStyle, JComponent... components) {
+    private void applyField(String keyStyle, JComponent... components) {
         for (int i = 0; i < components.length; i++) {
-            components[i].putClientProperty(FlatClientProperties.OUTLINE, keyStyle);
+            JComponent com = components[i];
+            Object oldStyle = com.getClientProperty(FlatClientProperties.STYLE_CLASS);
+            if (keyStyle == null) {
+                String st = oldStyle == null ? null : (oldStyle.toString().replace(" error", "").replace("warning", "")).trim();
+                com.putClientProperty(FlatClientProperties.STYLE_CLASS, st);
+            } else {
+                if (oldStyle != null) {
+                    if (!oldStyle.toString().contains(keyStyle)) {
+                        com.putClientProperty(FlatClientProperties.STYLE_CLASS, (oldStyle + " " + keyStyle).trim());
+                    }
+                } else {
+                    com.putClientProperty(FlatClientProperties.STYLE_CLASS, keyStyle);
+                }
+            }
         }
     }
 
@@ -131,12 +145,12 @@ public class FormsManager {
                 if (textField.getText().trim().isEmpty()) {
                     components.add(textField);
                 } else {
-                    clearOutline(textField);
+                    clear(textField);
                 }
             }
         }
         if (!components.isEmpty()) {
-            applyErrorOutline(components.toArray(new JComponent[0]));
+            applyError(components.toArray(new JComponent[0]));
             components.get(0).grabFocus();
         }
         return components.isEmpty();
@@ -166,5 +180,16 @@ public class FormsManager {
 
     public JFrame getMainFrame() {
         return application;
+    }
+
+    private void checkFormActionForOpen(JComponent form) {
+        if (form instanceof FormAction) {
+            SwingUtilities.invokeLater(() -> ((FormAction) form).formOpen());
+        }
+    }
+
+    public static abstract class FormAction extends JPanel {
+        public void formOpen() {
+        }
     }
 }

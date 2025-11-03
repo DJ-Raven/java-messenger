@@ -40,7 +40,7 @@ public class ItemMember extends JButton {
             picture.setImageHash(image.getHash(), 180, 180, image.getImage());
             profile = new ProfileStatus(NetworkDataUtil.getNetworkIcon(data.getProfile(), data.getName().getProfileString(), 50, 50, 999));
         } else {
-            profile = new ProfileStatus(new StringIcon(data.getName().getProfileString(), UIManager.getColor("Component.accentColor"), 50, 50));
+            profile = new ProfileStatus(new StringIcon(data.getName().getProfileString(), 50, 50));
         }
         add(profile, "dock west,width 50,height 50,gap 6 10");
         add(panelLabel);

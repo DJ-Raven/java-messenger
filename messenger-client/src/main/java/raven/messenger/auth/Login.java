@@ -1,4 +1,4 @@
-package raven.messenger.login;
+package raven.messenger.auth;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import io.restassured.http.Cookies;
@@ -16,7 +16,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.net.ConnectException;
 
-public class Login extends JPanel {
+public class Login extends FormsManager.FormAction {
 
     private final ServiceAuth serviceAuth = new ServiceAuth();
 
@@ -32,23 +32,14 @@ public class Login extends JPanel {
         txtUsername = new JTextField();
         txtPassword = new JPasswordField();
         chRememberMe = new JCheckBox("Remember me");
-        cmdLogin = new JButton("Login") {
-            @Override
-            public boolean isDefaultButton() {
-                return true;
-            }
-        };
+        cmdLogin = new JButton("Login");
         JPanel panel = new JPanel(new MigLayout("wrap,fillx,insets 35 45 30 45", "fill,250:280"));
         panel.putClientProperty(FlatClientProperties.STYLE, "" +
                 "arc:20;" +
                 "[light]background:shade(@background,5%);" +
                 "[dark]background:tint(@background,3%);");
 
-        cmdLogin.putClientProperty(FlatClientProperties.STYLE, "" +
-                "borderWidth:0;" +
-                "focusWidth:0;" +
-                "innerFocusWidth:0;" +
-                "default.borderWidth:0;");
+        cmdLogin.putClientProperty(FlatClientProperties.STYLE_CLASS, StyleUtil.BUTTON_DEFAULT);
 
         cmdLogin.addActionListener(e -> login());
         FormsManager.getInstance().autoFocus(o -> login(), txtUsername, txtPassword);
@@ -57,7 +48,7 @@ public class Login extends JPanel {
 
         StyleUtil.applyStyleTextFieldMedium(txtUsername);
         StyleUtil.applyStyleTextFieldMedium(txtPassword);
-        StyleUtil.applyStyleCheckBox(chRememberMe);
+        chRememberMe.putClientProperty(FlatClientProperties.STYLE_CLASS, StyleUtil.ICON_MEDIUM);
 
         JLabel lbTitle = new JLabel("Welcome back!");
         JLabel description = new JLabel("Please sign in to access your account");
@@ -116,6 +107,15 @@ public class Login extends JPanel {
             ConnectionManager.getInstance().showError(() -> FormsManager.getInstance().showForm(this), true);
         } catch (ResponseException | IOException e) {
             ErrorManager.getInstance().showError(e);
+        }
+    }
+
+    @Override
+    public void formOpen() {
+        if (txtUsername.getText().isEmpty()) {
+            txtUsername.grabFocus();
+        } else {
+            txtPassword.grabFocus();
         }
     }
 

@@ -31,8 +31,8 @@ public class LeftPanel extends JPanel {
     }
 
     private void init() {
-        setLayout(new MigLayout("wrap,fill,insets 15 0 3 0", "[fill,270::]", "[grow 0]0[fill]"));
-        panel = new JPanel(new MigLayout("wrap,fillx,gapy 3,insets n 3 n n", "[fill]"));
+        setLayout(new MigLayout("wrap,fill,insets 10 0 n 0", "[fill,270::]", "[grow 0]3[fill]"));
+        panel = new JPanel(new MigLayout("wrap,fillx,gapy 3,insets 3", "[fill]"));
         scroll = new ScrollRefresh(createScrollRefreshModel(), panel);
         scroll.setBorder(BorderFactory.createEmptyBorder());
         scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -76,7 +76,7 @@ public class LeftPanel extends JPanel {
     }
 
     private void createHeader() {
-        header = new JPanel(new MigLayout("fill", "[fill]"));
+        header = new JPanel(new MigLayout("fill,insets 3", "[fill]"));
         JTextField text = new JTextField();
         text.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Search ...");
         StyleUtil.applyStyleTextFieldWithClear(text);

@@ -6,7 +6,7 @@ import io.restassured.response.Response;
 import io.restassured.specification.FilterableRequestSpecification;
 import io.restassured.specification.FilterableResponseSpecification;
 import raven.messenger.api.ApiService;
-import raven.messenger.login.Login;
+import raven.messenger.auth.Login;
 import raven.messenger.manager.FormsManager;
 
 public class GlobalErrorHandler implements OrderedFilter {

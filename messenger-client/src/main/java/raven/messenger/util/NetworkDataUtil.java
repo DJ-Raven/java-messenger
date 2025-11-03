@@ -20,7 +20,7 @@ public class NetworkDataUtil {
 
     public static Icon getNetworkIcon(ModelImage image, String string, int width, int height, int round) {
         if (image == null) {
-            return new StringIcon(string, UIManager.getColor("Component.accentColor"), width, height);
+            return new StringIcon(string, width, height);
         } else {
             if (iconMap.containsKey(image.getImage())) {
                 return new NetworkIcon(iconMap.get(image.getImage()), width, height);

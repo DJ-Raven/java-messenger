@@ -28,7 +28,7 @@ public class DialogGroup extends JPanel {
     private void init() {
         setLayout(new MigLayout("wrap,fillx,insets 0", "center"));
         profilePanel = new ProfilePanel();
-        profilePanel.setIcon(new StringIcon(MethodUtil.getProfileString(""), UIManager.getColor("Component.accentColor"), 100, 100));
+        profilePanel.setIcon(new StringIcon(MethodUtil.getProfileString(""), 100, 100));
         add(profilePanel);
         createDetail();
     }

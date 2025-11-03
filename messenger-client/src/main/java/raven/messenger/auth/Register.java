@@ -1,4 +1,4 @@
-package raven.messenger.login;
+package raven.messenger.auth;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
@@ -17,7 +17,7 @@ import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.net.ConnectException;
 
-public class Register extends JPanel {
+public class Register extends FormsManager.FormAction {
     private final ServiceAuth serviceAuth = new ServiceAuth();
 
     public Register() {
@@ -31,12 +31,7 @@ public class Register extends JPanel {
         txtUsername = new JTextField();
         txtPassword = new JPasswordField();
         txtConfirmPassword = new JPasswordField();
-        cmdRegister = new JButton("Sign Up") {
-            @Override
-            public boolean isDefaultButton() {
-                return true;
-            }
-        };
+        cmdRegister = new JButton("Sign Up");
         passwordStrengthStatus = new PasswordStrengthStatus();
 
         JPanel panel = new JPanel(new MigLayout("wrap,fillx,insets 35 45 30 45", "[fill,360]"));
@@ -61,11 +56,7 @@ public class Register extends JPanel {
             txtConfirmPassword.setEchoChar(txtPassword.getEchoChar());
         });
 
-        cmdRegister.putClientProperty(FlatClientProperties.STYLE, "" +
-                "borderWidth:0;" +
-                "focusWidth:0;" +
-                "innerFocusWidth:0;" +
-                "default.borderWidth:0;");
+        cmdRegister.putClientProperty(FlatClientProperties.STYLE_CLASS, StyleUtil.BUTTON_DEFAULT);
 
         JLabel lbTitle = new JLabel("Welcome to Chat Application");
         JLabel description = new JLabel("Join us to chat, connect, and make new friends.");
@@ -111,6 +102,10 @@ public class Register extends JPanel {
         jrMale.setSelected(true);
         panel.add(jrMale);
         panel.add(jrFemale);
+
+        jrMale.putClientProperty(FlatClientProperties.STYLE_CLASS, StyleUtil.ICON_MEDIUM);
+        jrFemale.putClientProperty(FlatClientProperties.STYLE_CLASS, StyleUtil.ICON_MEDIUM);
+
         return panel;
     }
 
@@ -152,7 +147,7 @@ public class Register extends JPanel {
                     ErrorManager.getInstance().showError(e);
                 }
             } else {
-                FormsManager.getInstance().applyErrorOutline(txtPassword, txtConfirmPassword);
+                FormsManager.getInstance().applyError(txtPassword, txtConfirmPassword);
             }
         }
     }
@@ -161,6 +156,11 @@ public class Register extends JPanel {
         String password = String.valueOf(txtPassword.getPassword());
         String confirmPassword = String.valueOf(txtConfirmPassword.getPassword());
         return password.equals(confirmPassword);
+    }
+
+    @Override
+    public void formOpen() {
+        txtFirstName.grabFocus();
     }
 
     private JTextField txtFirstName;
