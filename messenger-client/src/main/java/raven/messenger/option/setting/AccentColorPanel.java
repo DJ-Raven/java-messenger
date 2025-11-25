@@ -117,7 +117,7 @@ public class AccentColorPanel extends JPanel {
     private JToggleButton createCustomAccentColor() {
         JToggleButton button = new JToggleButton(new FlatSVGIcon("raven/messenger/icon/color.svg", 16, 16));
         button.addActionListener(e -> {
-            JPanel panel = new JPanel(new MigLayout("insets 0 10 0 10"));
+            JPanel panel = new JPanel(new MigLayout("insets 0 20 0 20"));
             ColorPicker colorPicker = new ColorPicker(AppPreferences.accentColor);
             colorPicker.setColorPaletteEnabled(false);
             panel.add(colorPicker);

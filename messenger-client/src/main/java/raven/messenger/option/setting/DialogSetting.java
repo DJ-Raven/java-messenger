@@ -11,7 +11,9 @@ import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatMTSolarizedLig
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import com.formdev.flatlaf.util.LoggingFacade;
+import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.MigLayout;
+import raven.messenger.util.AppPreferences;
 import raven.messenger.util.ComponentUtil;
 
 import javax.swing.*;
@@ -67,7 +69,7 @@ public class DialogSetting extends JPanel {
                 new FlatMTSolarizedLightIJTheme(),
                 new FlatCyanLightIJTheme()
         );
-        themesSelection.setCallback(theme -> changeThemes(theme));
+        themesSelection.setCallback(this::changeThemes);
         panel.add(createScroll(themesSelection));
         add(panel);
     }
@@ -79,8 +81,21 @@ public class DialogSetting extends JPanel {
 
     private void createZooming() {
         JPanel panel = new JPanel(new MigLayout("insets n 30 n 30", "[fill]"));
-        JComboBox<Object> comboUIScale = new JComboBox<>(new Object[]{"100%", "125%"});
-
+        JComboBox<Object> comboUIScale = new JComboBox<>();
+        float currentZoomFactor = UIScale.getZoomFactor();
+        for (float zoomFactor : UIScale.getSupportedZoomFactors()) {
+            comboUIScale.addItem((int) (zoomFactor * 100) + "%");
+            if (zoomFactor == currentZoomFactor) {
+                comboUIScale.setSelectedIndex(comboUIScale.getItemCount() - 1);
+            }
+        }
+        comboUIScale.addActionListener(e -> {
+            Object item = comboUIScale.getSelectedItem();
+            if (item != null) {
+                changeZoom(item.toString());
+            }
+        });
+        panel.add(new JLabel("Zoom:"));
         panel.add(comboUIScale);
         add(panel);
     }
@@ -110,5 +125,13 @@ public class DialogSetting extends JPanel {
             FlatLaf.updateUI();
             FlatAnimatedLafChange.hideSnapshotWithAnimation();
         });
+    }
+
+    private void changeZoom(String zoomFactor) {
+        float zoom = Integer.parseInt(zoomFactor.substring(0, zoomFactor.length() - 1)) / 100f;
+        if (UIScale.setZoomFactor(zoom)) {
+            AppPreferences.updateZoomFactor();
+            FlatLaf.updateUI();
+        }
     }
 }
