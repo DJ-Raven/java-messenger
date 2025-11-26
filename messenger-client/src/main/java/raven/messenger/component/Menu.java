@@ -30,7 +30,8 @@ public class Menu extends JPanel {
 
         labelProfile = new JLabel(createAvatar());
         labelProfile.putClientProperty(FlatClientProperties.STYLE, "" +
-                "background:$Component.accentColor;");
+                "background:$Component.accentColor;" +
+                "foreground:$Profile.foreground;");
         labelProfile.setBorder(new AvatarBorder(2f).alpha(0.6f));
         add(labelProfile);
 

@@ -28,7 +28,7 @@ public class DialogGroup extends JPanel {
     private void init() {
         setLayout(new MigLayout("wrap,fillx,insets 0", "center"));
         profilePanel = new ProfilePanel();
-        profilePanel.setIcon(new StringIcon(MethodUtil.getProfileString(""), 100, 100));
+        profilePanel.setIcon(new StringIcon(MethodUtil.getProfileString("?"), 100, 100));
         add(profilePanel);
         createDetail();
     }
@@ -39,7 +39,7 @@ public class DialogGroup extends JPanel {
 
     private void createDetail() {
         JPanel panel = new JPanel(new MigLayout("fillx,wrap,insets 3 30 3 30", "fill"));
-        txtName = new JTextField("Group Name");
+        txtName = new JTextField();
         txtName.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
@@ -67,6 +67,9 @@ public class DialogGroup extends JPanel {
     private void nameChanged() {
         if (profilePanel.getSelectedImage() == null) {
             String name = txtName.getText().trim();
+            if (name.isEmpty()) {
+                name = "?";
+            }
             profilePanel.setIconProfileString(name);
         }
     }
