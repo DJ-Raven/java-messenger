@@ -25,6 +25,6 @@ services:
       - "${DATABASE_PORT}:3306"
     volumes:
       - mysql-data:/var/lib/mysql
-      - ../db/messenger_db.sql:/docker-entrypoint-initdb.d/messenger_db.sql:ro
+      - ./db:/docker-entrypoint-initdb.d
 volumes:
   mysql-data:
