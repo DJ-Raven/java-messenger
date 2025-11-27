@@ -3,10 +3,8 @@ package raven.messenger.component.right;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.MigLayout;
-import raven.messenger.component.PictureBox;
 import raven.messenger.component.ProfileStatus;
 import raven.messenger.component.StringIcon;
-import raven.messenger.models.other.ModelImage;
 import raven.messenger.models.response.ModelMember;
 import raven.messenger.util.NetworkDataUtil;
 
@@ -33,11 +31,6 @@ public class ItemMember extends JButton {
         setLayout(new MigLayout("wrap,fill,insets 3", "[fill]"));
         panelLabel = new PanelLabel();
         if (data.getProfile() != null) {
-            PictureBox picture = new PictureBox();
-            picture.setRadius(999);
-            picture.setBoxFit(PictureBox.BoxFit.COVER);
-            ModelImage image = data.getProfile();
-            picture.setImageHash(image.getHash(), 180, 180, image.getImage());
             profile = new ProfileStatus(NetworkDataUtil.getNetworkIcon(data.getProfile(), data.getName().getProfileString(), 50, 50, 999));
         } else {
             profile = new ProfileStatus(new StringIcon(data.getName().getProfileString(), 50, 50));

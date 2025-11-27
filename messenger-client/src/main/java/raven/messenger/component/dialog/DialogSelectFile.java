@@ -125,7 +125,7 @@ public class DialogSelectFile extends JPanel {
             boolean isImage = MethodUtil.isImageFile(fileName);
             if (isImage) {
                 ItemPhoto pictureBox = new ItemPhoto(file);
-                pictureBox.setImage(new ImageIcon(file.getAbsolutePath()));
+                pictureBox.setIcon(new ImageIcon(file.getAbsolutePath()));
                 pictureBox.setBoxFit(PictureBox.BoxFit.COVER);
                 pictureBox.setRadius(8);
                 panelFiles.add(pictureBox, "height 120");
