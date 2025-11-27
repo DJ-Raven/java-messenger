@@ -64,16 +64,15 @@ public class AudioUtil {
         int sampleSizeInBits = format.getSampleSizeInBits();
         WaveFormData waveFormData = createDefaultWaveFormData(null);
         int framesPerPixel = audioBytesLength / frameSize / waveFormData.getWidth();
-        int numChannels = channels;
         List<Float> data = new ArrayList<>();
         float max = 0;
         for (double i = 0; i < waveFormData.getWidth() && audioData != null; i++) {
-            int idx = (int) (framesPerPixel * numChannels * i);
+            int idx = (int) (framesPerPixel * channels * i);
             float value;
             if (sampleSizeInBits == 8) {
-                value =  audioData[idx] / (waveFormData.getHeight()*0.3f);
+                value = audioData[idx] / (waveFormData.getHeight() * 0.3f);
             } else {
-                value =  audioData[idx] / (waveFormData.getHeight()*2.5f);
+                value = audioData[idx] / (waveFormData.getHeight() * 2.5f);
             }
             max = Math.max(max, value);
             if (i % (waveFormData.getLineSize() + waveFormData.getSpace()) == 0) {

@@ -2,6 +2,7 @@ package raven.messenger.plugin.sound;
 
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.util.ColorFunctions;
+import com.formdev.flatlaf.util.HiDPIUtils;
 import com.formdev.flatlaf.util.UIScale;
 
 import javax.swing.*;
@@ -25,8 +26,10 @@ public class WaveFormPanel extends JPanel {
     private boolean dragged;
 
     private boolean updated = false;
-    private int oldWidth;
-    private int oldHeight;
+    private int lastWidth;
+    private int lastHeight;
+    private double lastSystemScaleFactor;
+    private float lastUserScaleFactor;
 
     public WaveFormPanel() {
         init();
@@ -83,39 +86,52 @@ public class WaveFormPanel extends JPanel {
             int width = scale(waveFormData.getWidth());
             int height = scale(waveFormData.getHeight());
             if ((width > 0 && height > 0)) {
-                if (!updated || width != oldWidth || height != oldHeight) {
-                    bufferedImage = createBufferedImage(width, height);
+                Graphics2D g2 = (Graphics2D) g.create();
+                float userScaleFactor = UIScale.getUserScaleFactor();
+                double systemScaleFactor = UIScale.getSystemScaleFactor(g2);
+                if (!updated || width != lastWidth || height != lastHeight
+                        || lastSystemScaleFactor != systemScaleFactor || lastUserScaleFactor != userScaleFactor
+                ) {
+                    bufferedImage = createBufferedImage(width, height, systemScaleFactor);
                     progressBufferedImage = copyBufferedImage(bufferedImage, getProgressColor());
-                    oldWidth = width;
-                    oldHeight = height;
+                    lastWidth = width;
+                    lastHeight = height;
+                    lastSystemScaleFactor = systemScaleFactor;
+                    lastUserScaleFactor = userScaleFactor;
                     updated = true;
                 }
-                Graphics2D g2 = (Graphics2D) g.create();
-                g2.drawImage(bufferedImage, x, y, null);
-                if (progress > 0) {
-                    double progressValue = progress * width;
-                    g2.setClip(new Rectangle2D.Double(x, y, progressValue, height));
-                    g2.drawImage(progressBufferedImage, x, y, null);
-                }
+                HiDPIUtils.paintAtScale1x(g2, x, y, width, height, this::paintImpl);
                 g2.dispose();
             }
         }
     }
 
-    private BufferedImage createBufferedImage(int width, int height) {
-        int lineSize = scale(waveFormData.getLineSize());
-        int space = scale(waveFormData.getSpace());
-        int center = scale(waveFormData.getHeight()) / 2;
+    private void paintImpl(Graphics2D g2, int x, int y, int width, int height, double systemScaleFactor) {
+        g2.drawImage(bufferedImage, x, y, null);
+        if (progress > 0) {
+            double progressValue = progress * width;
+            g2.setClip(new Rectangle2D.Double(x, y, progressValue, height));
+            g2.drawImage(progressBufferedImage, x, y, null);
+        }
+    }
+
+    private BufferedImage createBufferedImage(int width, int height, double systemScaleFactor) {
+        width = (int) Math.ceil(width * systemScaleFactor);
+        height = (int) Math.ceil(height * systemScaleFactor);
+        int lineSize = (int) scale(waveFormData.getLineSize(), systemScaleFactor);
+        float lineSizeNoCeil = scaleNoFloor(waveFormData.getLineSize(), systemScaleFactor);
+        float space = scaleNoFloor(waveFormData.getSpace(), systemScaleFactor);
+        float center = scaleNoFloor(waveFormData.getHeight(), systemScaleFactor) / 2f;
         BufferedImage buffImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = buffImage.createGraphics();
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        int x = 0;
+        float x = 0;
         g.setColor(getForeground());
-        int h = UIScale.scale(waveFormData.getHeight());
+        float h = scale(waveFormData.getHeight(), systemScaleFactor);
         for (float v : waveFormData.getData()) {
-            float value = Math.min(Math.max(lineSize, scale(v)), h);
+            float value = Math.min(Math.max(lineSize, scale(v, systemScaleFactor)), h);
             g.fill(new RoundRectangle2D.Double(x, center - value / 2, lineSize, value, lineSize, lineSize));
-            x += lineSize + space;
+            x += (lineSizeNoCeil + space);
         }
         g.dispose();
         return buffImage;
@@ -176,7 +192,11 @@ public class WaveFormPanel extends JPanel {
         return UIScale.scale(v);
     }
 
-    private float scale(float v) {
-        return UIScale.scale(v);
+    private float scale(float value, double scaleFactor) {
+        return (int) Math.floor(UIScale.scale(value) * scaleFactor);
+    }
+
+    private float scaleNoFloor(float value, double scaleFactor) {
+        return (float) (UIScale.scale(value) * scaleFactor);
     }
 }
