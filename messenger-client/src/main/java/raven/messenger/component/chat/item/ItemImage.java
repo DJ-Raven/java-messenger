@@ -78,6 +78,8 @@ public class ItemImage extends ChatItem implements ProgressChat {
                 resource = new NetworkIcon.IconResource(photo.getHash(), photo.getWidth(), photo.getHeight());
             }
             networkIcon = new NetworkIcon(resource, 240, -1);
+            photo.setWidth(UIScale.unscale(networkIcon.getIconWidth()));
+            photo.setHeight(UIScale.unscale(networkIcon.getIconHeight()));
             networkIcon.setShape(this::createShape);
             button.setIcon(networkIcon);
             if (photo.getPath() == null) {
