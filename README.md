@@ -1,38 +1,61 @@
 # Java Messenger
 
-This is a simple messenger app built using Java Swing for the client-side GUI, Node.js for the server-side API, and Socket-IO for real-time communication. The graphical user interface (GUI) is styled using FlatLaf.
+This is a simple messenger application built with Java Swing for the client, Node.js for the API server, and Socket.IO
+for real-time communication. The client interface is styled using FlatLaf to provide a modern desktop UI.
 
-**This project is still in development.**
+> **Note:** This project is still in development.
 
-<img src="https://github.com/DJ-Raven/java-messenger/blob/main/screenshot/sample-2.png?raw=true" alt="sample 2" width="400"/>&nbsp;
-<img src="https://github.com/DJ-Raven/java-messenger/blob/main/screenshot/sample-3.png?raw=true" alt="sample 3" width="400"/>&nbsp;
+![Simple 1](screenshot/simple-1.png)
+![Simple 2](screenshot/simple-2.png)
 
-## Demo
-[Download Demo Test](messenger-client/demo/messenger-test-1.4.0.jar?raw=true)
+## Messenger Server (Node.js)
 
-Run demo with `java -jar messenger-test-<version>.jar` or `double-click` (Requires Java 8 or newer)
+Folder contents:
 
-### Client libraries used (Java)
-| Name | GitHub |
-| ------------ | ------------ |
-| FlatLaf | https://github.com/JFormDesigner/FlatLaf |
-| MiG Layout | https://github.com/mikaelgrev/miglayout |
-| REST Assured | https://github.com/rest-assured/rest-assured |
-| Socket.IO Java client | https://github.com/socketio/socket.io-client-java |
-| JSON-Java | https://github.com/stleary/JSON-java?tab=readme-ov-file |
-| JLayer | https://github.com/umjammer/jlayer |
-| mp3agic | https://github.com/mpatric/mp3agic |
-| Thumbnailator | https://github.com/coobird/thumbnailator |
-| Swing Modal Dialog | https://github.com/DJ-Raven/swing-modal-dialog |
-### Server libraries used (Nodejs)
-| Name | GitHub |
-| ------------ | ------------ |
-| Express | https://github.com/expressjs/express |
-| socket.io | https://github.com/socketio/socket.io |
-| jsonwebtoken | https://github.com/auth0/node-jsonwebtoken |
-| bcrypt.js | https://github.com/dcodeIO/bcrypt.js |
-| BlurHash | https://github.com/woltapp/blurhash/tree/master |
-| Multer | https://github.com/expressjs/multer |
-| MySQL2 | https://github.com/sidorares/node-mysql2 |
-| nodemon `dev`| https://github.com/remy/nodemon |
-| and more ... |  |
+```text
+.
+└── messenger-server/
+    ├── src
+    ├── Dockerfile
+    ├── docker-compose.yml
+    ├── .env
+    └── db/
+        └── messenger_db.sql
+```
+
+## Running the Server with Docker
+
+#### **1. Make sure Docker is installed**
+
+```bash
+docker --version
+```
+
+#### **2. Navigate to the server folder**
+
+```bash
+cd messenger-server
+```
+
+#### **3. Build and start the server + MySQL**
+
+```bash
+docker compose up --build
+```
+
+This will:
+
+- Build the Node.js server from `Dockerfile`
+- Start a MySQL 8.0 database
+- Import the SQL file from `db/messenger_db.sql`
+
+#### **4. Wait for MySQL to finish starting**
+
+The first startup may take a few seconds.
+watch the terminal until both containers show ready messages.
+
+## Library Resources (Client)
+
+- [FlatLaf](https://github.com/JFormDesigner/FlatLaf) - Modern cross-platform look and feel for Java Swing.
+- [MigLayout](https://github.com/mikaelgrev/miglayout) - Flexible layout management.
+- [Swing Modal Dialog](https://github.com/DJ-Raven/swing-modal-dialog) - Modal and toast notification.
