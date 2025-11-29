@@ -4,13 +4,13 @@ import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
 import raven.messenger.api.exception.ResponseException;
 import raven.messenger.component.chat.AutoWrapText;
-import raven.messenger.component.left.Item;
 import raven.messenger.manager.ErrorManager;
 import raven.messenger.models.response.ModelGroup;
 import raven.messenger.models.response.ModelMember;
 import raven.messenger.plugin.swing.scroll.ScrollRefresh;
 import raven.messenger.plugin.swing.scroll.ScrollRefreshModel;
 import raven.messenger.socket.SocketService;
+import raven.messenger.util.ComponentUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -43,20 +43,20 @@ public class PanelGroup extends JPanel {
 
     private void createDescription() {
         panelDescription = new JPanel(new MigLayout("wrap,fillx,insets 0", "[fill]"));
-        createSeparator(panelDescription);
+        ComponentUtil.addSeparatorTo(panelDescription);
         textPane = new JTextPane();
         textPane.setEditable(false);
         textPane.setEditorKit(new AutoWrapText());
 
         textPane.putClientProperty(FlatClientProperties.STYLE, "" +
-                "foreground:$Text.upperForeground");
+                "foreground:$Text.lowForeground;");
         panelDescription.add(textPane);
         add(panelDescription);
     }
 
     private void createMember() {
         panelMember = new JPanel(new MigLayout("wrap,fillx,insets 3,gapy 3", "[fill]"));
-        createSeparator(this);
+        ComponentUtil.addSeparatorTo(this);
 
         scrollRefresh = new ScrollRefresh(getScrollModel(), panelMember);
         scrollRefresh.setBorder(BorderFactory.createEmptyBorder());
@@ -65,7 +65,7 @@ public class PanelGroup extends JPanel {
         scrollRefresh.getScrollRefreshModel().stop();
 
         scrollRefresh.getVerticalScrollBar().putClientProperty(FlatClientProperties.STYLE, "" +
-                "width:3");
+                "width:3;");
 
         add(scrollRefresh);
     }
@@ -106,14 +106,6 @@ public class PanelGroup extends JPanel {
         scrollRefresh.getScrollRefreshModel().resetPage();
     }
 
-    private void createSeparator(JPanel panel) {
-        JPanel separator = new JPanel();
-        separator.putClientProperty(FlatClientProperties.STYLE, "" +
-                "[light]background:darken(@background,3%);" +
-                "[dark]background:lighten(@background,3%)");
-        panel.add(separator, "height 7!");
-    }
-
     public boolean loadData() {
         try {
             List<ModelMember> response = SocketService.getInstance().getServiceGroup().getGroupMember(data.getGroupId(), scrollRefresh.getScrollRefreshModel().getPage());
@@ -133,11 +125,18 @@ public class PanelGroup extends JPanel {
         }
     }
 
+    public void addGroupMember(ModelMember member) {
+        ItemMember item = new ItemMember(member, false);
+        panelMember.add(item);
+        panelMember.repaint();
+        panelMember.revalidate();
+    }
+
     private boolean isNotExist(ModelMember data) {
         int count = panelMember.getComponentCount();
         for (int i = 0; i < count; i++) {
             Component component = panelMember.getComponent(i);
-            if (component instanceof Item) {
+            if (component instanceof ItemMember) {
                 ItemMember item = (ItemMember) component;
                 if (item.getData().getUserId() == data.getUserId()) {
                     return false;

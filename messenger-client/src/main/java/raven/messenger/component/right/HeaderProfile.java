@@ -24,14 +24,14 @@ public class HeaderProfile extends JPanel {
     private void init() {
         setLayout(new ProfileLayout());
         putClientProperty(FlatClientProperties.STYLE, "" +
-                "border:10,10,10,10");
+                "border:10,10,10,10;");
         labelProfile = new JButton();
         labelProfile.setContentAreaFilled(false);
         labelName = new JLabel();
         labelStatus = new JLabel();
 
         labelStatus.putClientProperty(FlatClientProperties.STYLE, "" +
-                "foreground:$Text.middleForeground");
+                "foreground:$Text.mediumForeground;");
 
         labelProfile.addActionListener(e -> {
             if (profile != null) {
@@ -43,15 +43,16 @@ public class HeaderProfile extends JPanel {
         });
 
         labelProfile.putClientProperty(FlatClientProperties.STYLE, "" +
-                "font:+10 bold");
+                "font:bold +10;" +
+                "background:$Component.accentColor;" +
+                "foreground:$Profile.foreground;");
         labelName.putClientProperty(FlatClientProperties.STYLE, "" +
-                "font:+5 bold");
+                "font:+5 bold;");
 
         add(labelProfile);
         add(labelName);
         add(labelStatus);
     }
-
 
     public void setData(ModelImage image, String name, String status) {
         if (image == null) {

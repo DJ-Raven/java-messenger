@@ -3,8 +3,8 @@ package raven.messenger.component.chat;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatSVGIcon;
 import raven.messenger.component.chat.item.ItemFile;
-import raven.messenger.component.chat.item.ItemMessage;
 import raven.messenger.component.chat.item.ItemImage;
+import raven.messenger.component.chat.item.ItemMessage;
 import raven.messenger.component.chat.item.ItemSound;
 import raven.messenger.component.chat.model.ChatFileData;
 import raven.messenger.component.chat.model.ChatPhotoData;
@@ -162,15 +162,15 @@ public class DefaultChatComponentBuilder implements ChatComponentBuilder {
     protected JLabel buildTime(String time) {
         JLabel label = new JLabel(time);
         label.putClientProperty(FlatClientProperties.STYLE, "" +
-                "foreground:$Text.lowForeground;" +
-                "font:-1");
+                "foreground:$Text.mediumForeground;" +
+                "font:-1;");
         return label;
     }
 
     protected void changeLabelTimeStyle(JLabel label) {
         label.putClientProperty(FlatClientProperties.STYLE, "" +
-                "foreground:$Text.upperForeground;" +
-                "font:-1");
+                "foreground:$Text.lowForeground;" +
+                "font:-1;");
     }
 
     protected JLabel buildSent(boolean act) {

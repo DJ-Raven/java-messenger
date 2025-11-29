@@ -4,23 +4,20 @@ import java.util.EventObject;
 
 public class PlayerEvent extends EventObject {
 
-    private Mp3Player player;
+    private final int currentInSeconds;
+    private final float currentInPercent;
 
-    public PlayerEvent(Mp3Player source) {
+    public PlayerEvent(Object source, int currentInSeconds, float currentInPercent) {
         super(source);
-        this.player = source;
+        this.currentInSeconds = currentInSeconds;
+        this.currentInPercent = currentInPercent;
     }
 
     public int getCurrentInSeconds() {
-        int seconds = (int) (player.currentFrame / player.frameRatePerMilliseconds + player.position) / 1000;
-        return seconds;
+        return currentInSeconds;
     }
 
     public float getCurrentInPercent() {
-        long lengthInMilliseconds = player.getMp3File().getLengthInMilliseconds();
-        double current = player.currentFrame / player.frameRatePerMilliseconds / lengthInMilliseconds;
-        double value = (double) player.position / lengthInMilliseconds;
-        float percent = Math.round((current + value) * 100f) / 100f;
-        return percent;
+        return currentInPercent;
     }
 }

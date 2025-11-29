@@ -1,5 +1,5 @@
 const express = require("express");
-const VERSION = process.env.VERSION || 1;
+const VERSION = process.env.APP_VERSION || 1;
 
 const router = express.Router();
 

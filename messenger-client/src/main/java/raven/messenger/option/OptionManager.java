@@ -7,6 +7,7 @@ import raven.messenger.manager.ErrorManager;
 import raven.messenger.manager.FormsManager;
 import raven.messenger.option.group.DialogGroup;
 import raven.messenger.option.profile.DialogProfile;
+import raven.messenger.option.setting.DialogSetting;
 import raven.messenger.option.storage.DialogStorage;
 import raven.messenger.socket.SocketService;
 import raven.modal.ModalDialog;
@@ -45,18 +46,24 @@ public class OptionManager {
                 } else {
                     callback.consume();
                 }
+            } else if (action == SimpleModalBorder.OPENED) {
+                dialogGroup.open();
             }
         });
         Option option = ModalDialog.createOption();
-        option.getLayoutOption().setSize(430, -1);
+        option.getLayoutOption().setSize(410, -1);
         ModalDialog.showModal(FormsManager.getInstance().getMainFrame(), modalBorder, option, "group");
     }
 
     public void showProfile() {
         DialogProfile dialogProfile = new DialogProfile();
-        SimpleModalBorder modalBorder = new SimpleModalBorder(dialogProfile, "Edit Profile", new ModalBorderOption().setUseScroll(true));
+        ModalBorderCustom modalBorder = new ModalBorderCustom(dialogProfile, "Edit Profile", new ModalBorderOption().setUseScroll(true), null, (controller, action) -> {
+            if (action == SimpleModalBorder.OPENED) {
+                dialogProfile.open();
+            }
+        });
         Option option = ModalDialog.createOption();
-        option.getLayoutOption().setSize(430, -1);
+        option.getLayoutOption().setSize(410, -1);
         ModalDialog.showModal(FormsManager.getInstance().getMainFrame(), modalBorder, option, "profile");
     }
 
@@ -64,7 +71,18 @@ public class OptionManager {
         DialogStorage dialogStorage = new DialogStorage();
         SimpleModalBorder modalBorder = new SimpleModalBorder(dialogStorage, "Local storage", new ModalBorderOption().setUseScroll(true));
         Option option = ModalDialog.createOption();
-        option.getLayoutOption().setSize(430, -1);
+        option.getLayoutOption().setSize(410, -1);
         ModalDialog.showModal(FormsManager.getInstance().getMainFrame(), modalBorder, option, "storage");
+    }
+
+    public void showSetting() {
+        DialogSetting dialogStorage = new DialogSetting();
+        SimpleModalBorder modalBorder = new SimpleModalBorder(dialogStorage, "Setting", new ModalBorderOption().setUseScroll(true), null, (controller, action) -> {
+            if (action == SimpleModalBorder.OPENED) {
+                dialogStorage.open();
+            }
+        });
+        Option option = ModalDialog.createOption();
+        ModalDialog.showModal(FormsManager.getInstance().getMainFrame(), modalBorder, option, "setting");
     }
 }

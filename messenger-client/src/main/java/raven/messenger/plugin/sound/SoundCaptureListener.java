@@ -2,9 +2,9 @@ package raven.messenger.plugin.sound;
 
 public interface SoundCaptureListener {
 
-    public void capturing(long millisecond);
+    void capturing(long millisecond);
 
-    public void start();
+    void start();
 
-    public void stop();
+    void stop();
 }

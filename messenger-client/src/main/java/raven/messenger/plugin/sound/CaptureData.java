@@ -18,9 +18,9 @@ public class CaptureData {
         return duration;
     }
 
-    private byte[] audioData;
-    private AudioFormat audioFormat;
-    private double duration;
+    private final byte[] audioData;
+    private final AudioFormat audioFormat;
+    private final double duration;
 
     protected CaptureData(byte[] audioData, AudioFormat audioFormat, double duration) {
         this.audioData = audioData;

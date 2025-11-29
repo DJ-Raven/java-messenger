@@ -77,7 +77,7 @@ public class ChatLayout implements LayoutManager {
     }
 
 
-    private class LayoutSize {
+    private static class LayoutSize {
 
         private int space;
         private int maxWidth;

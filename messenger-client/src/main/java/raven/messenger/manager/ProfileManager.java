@@ -2,11 +2,10 @@ package raven.messenger.manager;
 
 import net.coobird.thumbnailator.Thumbnails;
 import raven.messenger.api.exception.ResponseException;
-import raven.messenger.drawer.MenuDrawer;
 import raven.messenger.models.other.ModelGender;
+import raven.messenger.models.other.ModelImage;
 import raven.messenger.models.other.ModelName;
 import raven.messenger.models.response.ModelProfile;
-import raven.messenger.models.other.ModelImage;
 import raven.messenger.service.ServiceProfile;
 
 import java.awt.image.BufferedImage;
@@ -18,7 +17,7 @@ import java.nio.file.Path;
 
 public class ProfileManager {
     private static ProfileManager instance;
-    private ServiceProfile serviceProfile;
+    private final ServiceProfile serviceProfile;
     private ModelProfile profile;
 
     public static ProfileManager getInstance() {
@@ -34,7 +33,7 @@ public class ProfileManager {
 
     public void initProfile() throws ResponseException, ConnectException {
         profile = serviceProfile.getProfile();
-        MenuDrawer.getInstance().setDrawerHeader(profile);
+        FormsManager.getInstance().updateProfile(profile);
     }
 
     public ModelImage updateProfileImage(BufferedImage image) throws IOException, ResponseException {
@@ -53,7 +52,6 @@ public class ProfileManager {
         serviceProfile.updateProfileUser(name);
         if (profile != null) {
             profile.setName(name);
-            MenuDrawer.getInstance().setDrawerHeader(profile);
         }
     }
 
@@ -61,7 +59,7 @@ public class ProfileManager {
         serviceProfile.updateProfileGender(gender);
         if (profile != null) {
             profile.setGender(gender);
-            MenuDrawer.getInstance().setDrawerHeader(profile);
+            FormsManager.getInstance().updateProfile(profile);
         }
     }
 
@@ -69,7 +67,6 @@ public class ProfileManager {
         serviceProfile.updateProfilePhoneNumber(phoneNumber);
         if (profile != null) {
             profile.setPhoneNumber(phoneNumber);
-            MenuDrawer.getInstance().setDrawerHeader(profile);
         }
     }
 
@@ -77,7 +74,6 @@ public class ProfileManager {
         serviceProfile.updateProfileBio(bio);
         if (profile != null) {
             profile.setBio(bio);
-            MenuDrawer.getInstance().setDrawerHeader(profile);
         }
     }
 

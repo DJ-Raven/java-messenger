@@ -8,7 +8,7 @@ import java.util.List;
 
 public class SoundCapture {
 
-    private List<SoundCaptureListener> events = new ArrayList<>();
+    private final List<SoundCaptureListener> events = new ArrayList<>();
     private AudioFormat audioFormat;
     private byte[] audioData;
     private Thread thread;
@@ -28,7 +28,7 @@ public class SoundCapture {
     }
 
     public void start() {
-        thread = new Thread(() -> run());
+        thread = new Thread(this::run);
         thread.start();
     }
 
@@ -43,7 +43,7 @@ public class SoundCapture {
             try {
                 thread.join();
             } catch (InterruptedException e) {
-                System.err.println(e);
+                System.err.println(e.getMessage());
             }
         }
     }
@@ -62,7 +62,7 @@ public class SoundCapture {
             line = (TargetDataLine) AudioSystem.getLine(info);
             line.open(format, line.getBufferSize());
         } catch (LineUnavailableException e) {
-            throw new RuntimeException("Unable to open the line " + e);
+            throw new RuntimeException("Unable to open the line " + e.getMessage());
         } catch (Exception e) {
             throw new RuntimeException(e.toString());
         }
@@ -91,13 +91,13 @@ public class SoundCapture {
         } catch (IOException e) {
             throw new RuntimeException(e.toString());
         }
-        byte audioBytes[] = out.toByteArray();
-        audioData = audioBytes;
+        audioData = out.toByteArray();
     }
 
     private void initEvent(TargetDataLine line) {
         new Thread(new Runnable() {
             private long milliseconds;
+            private double lastFramePosition = 0;
 
             @Override
             public void run() {
@@ -106,7 +106,11 @@ public class SoundCapture {
                     long milliseconds = line.getMicrosecondPosition() / 1000;
                     if (this.milliseconds != milliseconds) {
                         this.milliseconds = milliseconds;
-                        duration = milliseconds / 1000f;
+                        double position = line.getLongFramePosition() / audioFormat.getFrameRate();
+                        if (position > lastFramePosition) {
+                            lastFramePosition = position;
+                            duration = lastFramePosition;
+                        }
                         runEventCapturing(milliseconds);
                     }
                 }
@@ -118,7 +122,7 @@ public class SoundCapture {
         try {
             Thread.sleep(l);
         } catch (InterruptedException e) {
-            System.err.println(e);
+            System.err.println(e.getMessage());
         }
     }
 

@@ -117,8 +117,11 @@ public class MethodUtil {
     }
 
     public static Icon createIcon(String path, float scale) {
-        return createIcon(path, scale, null);
+        return createIcon(path, scale, (Color) null);
+    }
 
+    public static Icon createIcon(String path, float scale, JComponent component) {
+        return new FlatSVGIcon(path, scale).setColorFilter(new FlatSVGIcon.ColorFilter(color -> component.getForeground()));
     }
 
     public static Icon createIcon(String path, float scale, Color color) {

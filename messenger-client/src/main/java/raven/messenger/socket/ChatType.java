@@ -4,7 +4,7 @@ public enum ChatType {
 
     USER("user"), GROUP("group");
 
-    private String value;
+    private final String value;
 
     private ChatType(String value) {
         this.value = value;

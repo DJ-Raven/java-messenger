@@ -3,6 +3,7 @@ package raven.messenger.component.profile;
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
 import raven.extras.AvatarIcon;
+import raven.messenger.component.AvatarBorder;
 import raven.messenger.component.ModalBorderCustom;
 import raven.messenger.component.StringIcon;
 import raven.messenger.manager.DialogManager;
@@ -48,19 +49,23 @@ public class ProfilePanel extends JPanel {
     private void init() {
         setLayout(new MigLayout("wrap,fillx"));
         labelProfile = new JLabel();
-        labelProfile.putClientProperty(FlatClientProperties.STYLE, "" + "font:bold +10");
-        add(createEditProfile(), "pos 1al 1al");
+        labelProfile.putClientProperty(FlatClientProperties.STYLE, "" +
+                "font:bold +10;" +
+                "background:$Component.accentColor;" +
+                "foreground:$Profile.foreground;");
+        labelProfile.setBorder(new AvatarBorder(3f).alpha(0.6f));
+        add(createEditProfile(), "pos 1al 1al,pad -3 -3 -3 -3");
         add(labelProfile);
     }
 
     private JButton createEditProfile() {
-        JButton button = new JButton(MethodUtil.createIcon("raven/messenger/icon/edit.svg", 0.75f));
+        JButton button = new JButton(MethodUtil.createIcon("raven/messenger/icon/edit.svg", 0.35f));
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         button.addActionListener(e -> {
             editProfile();
         });
         button.putClientProperty(FlatClientProperties.STYLE_CLASS, "emptyButton");
-        button.putClientProperty(FlatClientProperties.STYLE, "" + "arc:999;");
+        button.putClientProperty(FlatClientProperties.STYLE, "arc:999;");
         return button;
     }
 
@@ -100,7 +105,7 @@ public class ProfilePanel extends JPanel {
     public void setIconProfileString(String profileString) {
         String st = MethodUtil.getProfileString(profileString);
         if (!this.profileString.equals(st)) {
-            stringIcon = new StringIcon(st, UIManager.getColor("Component.accentColor"), 100, 100);
+            stringIcon = new StringIcon(st, 100, 100);
             this.profileString = st;
         }
         labelProfile.setIcon(stringIcon);

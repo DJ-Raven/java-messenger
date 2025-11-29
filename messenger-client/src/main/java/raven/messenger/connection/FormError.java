@@ -19,7 +19,7 @@ public class FormError extends JPanel {
         JLabel labelMessage = new JLabel("Server Error");
         JLabel labelDescription = new JLabel("Sorry, something went technically wrong");
         labelMessage.putClientProperty(FlatClientProperties.STYLE, "" +
-                "font:bold +10");
+                "font:bold +10;");
         FlatSVGIcon icon = new FlatSVGIcon("raven/messenger/icon/server_error.svg", 2f);
         add(new JLabel(icon));
         panel = new JPanel(new MigLayout("wrap", "", "[]3[]10[]"));

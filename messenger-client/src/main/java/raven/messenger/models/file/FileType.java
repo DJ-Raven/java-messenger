@@ -4,7 +4,7 @@ public enum FileType {
 
     VOICE("v"), FILE("f"), PHOTO("p");
 
-    private String value;
+    private final String value;
 
     private FileType(String value) {
         this.value = value;

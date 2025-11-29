@@ -2,11 +2,18 @@ package raven.messenger.home;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import raven.messenger.api.exception.ResponseException;
+import raven.messenger.component.Menu;
 import raven.messenger.component.StringIcon;
+import raven.messenger.component.chat.ChatActionListener;
+import raven.messenger.component.chat.ChatModel;
+import raven.messenger.component.chat.ChatPanel;
 import raven.messenger.component.chat.Myself;
 import raven.messenger.component.chat.model.ChatFileData;
 import raven.messenger.component.chat.model.ChatPhotoData;
 import raven.messenger.component.chat.model.ChatSoundData;
+import raven.messenger.component.left.LeftActionListener;
+import raven.messenger.component.left.LeftPanel;
+import raven.messenger.component.right.RightPanel;
 import raven.messenger.connection.ConnectionManager;
 import raven.messenger.event.GlobalEvent;
 import raven.messenger.event.GroupCreateEvent;
@@ -14,12 +21,6 @@ import raven.messenger.manager.ErrorManager;
 import raven.messenger.manager.FormsManager;
 import raven.messenger.manager.ProfileManager;
 import raven.messenger.models.file.*;
-import raven.messenger.component.chat.ChatActionListener;
-import raven.messenger.component.chat.ChatModel;
-import raven.messenger.component.chat.ChatPanel;
-import raven.messenger.component.left.LeftActionListener;
-import raven.messenger.component.left.LeftPanel;
-import raven.messenger.component.right.RightPanel;
 import raven.messenger.models.other.ModelImage;
 import raven.messenger.models.other.ModelName;
 import raven.messenger.models.other.ModelProfileData;
@@ -53,7 +54,7 @@ public class Home extends JPanel {
     private ScrollRefreshModel scrollRefreshModel;
     private LeftActionListener eventLeft;
     private ModelChatListItem user;
-    private Map<Integer, ModelProfileData> userImages = new HashMap<>();
+    private final Map<Integer, ModelProfileData> userImages = new HashMap<>();
 
     public Home() {
         initEvent();
@@ -62,6 +63,7 @@ public class Home extends JPanel {
 
     private void init() {
         setLayout(new BorderLayout());
+        menu = new Menu();
         mainSplit = new JSplitPane();
         subSplit = new JSplitPane();
         chatBody = new JPanel(new BorderLayout());
@@ -70,16 +72,18 @@ public class Home extends JPanel {
         rightPanel = new RightPanel();
         mainSplit.putClientProperty(FlatClientProperties.STYLE, "" +
                 "style:plain;" +
-                "continuousLayout:false");
+                "continuousLayout:false;");
         subSplit.putClientProperty(FlatClientProperties.STYLE, "" +
                 "style:plain;" +
-                "continuousLayout:false");
+                "continuousLayout:false;");
         subSplit.setLeftComponent(chatBody);
         subSplit.setRightComponent(rightPanel);
         mainSplit.setLeftComponent(leftPanel);
         mainSplit.setRightComponent(subSplit);
         subSplit.setResizeWeight(1);
-        add(mainSplit);
+
+        add(menu, BorderLayout.WEST);
+        add(mainSplit, BorderLayout.CENTER);
         initChatEvent();
     }
 
@@ -197,6 +201,7 @@ public class Home extends JPanel {
         try {
             ProfileManager.getInstance().initProfile();
             leftPanel.initData();
+            initAndClear();
         } catch (ConnectException e) {
             // do not show reconnect button because it auto from the socket
             ConnectionManager.getInstance().showError(() -> callBackConnection(), false);
@@ -230,7 +235,7 @@ public class Home extends JPanel {
                 return null;
             }
         } catch (ResponseException e) {
-            return new StringIcon(name.getProfileString(), Color.decode("#41AED7"), 35, 35);
+            return new StringIcon(name.getProfileString(), 35, 35);
         }
     }
 
@@ -272,7 +277,7 @@ public class Home extends JPanel {
             }
 
             @Override
-            public void onSendFileMessage(ModelFileWithType files[], String text) {
+            public void onSendFileMessage(ModelFileWithType[] files, String text) {
                 Myself myself;
                 Map<ModelFileWithType, Myself> myselfMap = new HashMap<>();
                 if (!text.isEmpty()) {
@@ -348,7 +353,7 @@ public class Home extends JPanel {
             @Override
             public void onMicrophoneCapture(CaptureData captureData) {
                 WaveFormData waveFormData = AudioUtil.getWaveFormData(captureData.getAudioData(), captureData.getAudioFormat());
-                ChatSoundData chatSoundData = new ChatSoundData(waveFormData.getData(), "", 0, captureData.getDuration());
+                ChatSoundData chatSoundData = new ChatSoundData(waveFormData.getData(), "", captureData.getAudioData().length, captureData.getDuration());
                 Myself myself = chatPanel.getChatModel().myself()
                         .setVoice(chatSoundData)
                         .setSeen(true)
@@ -378,19 +383,29 @@ public class Home extends JPanel {
                 try {
                     ModelGroup group = SocketService.getInstance().getServiceGroup().joinGroup(user.getId());
                     chatPanel.userMessageInput();
+                    rightPanel.addGroupMember(new ModelMember(ProfileManager.getInstance().getProfile()));
                     leftPanel.createNew(ChatType.GROUP, group.getGroupId());
                 } catch (ResponseException e) {
                     ErrorManager.getInstance().showError(e);
                 }
             }
         };
-        eventLeft = data -> {
-            if (chatBody.getComponentCount() == 0) {
-                chatBody.add(chatPanel);
-                chatBody.repaint();
-                chatBody.revalidate();
+        eventLeft = new LeftActionListener() {
+            @Override
+            public void onUserSelected(ModelChatListItem user) {
+                if (chatBody.getComponentCount() == 0) {
+                    chatPanel.checkUpdateUI();
+                    chatBody.add(chatPanel);
+                    chatBody.repaint();
+                    chatBody.revalidate();
+                }
+                changeUser(user);
             }
-            changeUser(data);
+
+            @Override
+            public ModelChatListItem getSelectedListItem() {
+                return user;
+            }
         };
         scrollRefreshModel = new ScrollRefreshModel(1, SwingConstants.TOP) {
             @Override
@@ -417,6 +432,14 @@ public class Home extends JPanel {
 
             }
         };
+    }
+
+    private void initAndClear() {
+        chatBody.removeAll();
+        chatBody.repaint();
+        chatBody.revalidate();
+        rightPanel.setUser(null);
+        user = null;
     }
 
     /*
@@ -529,6 +552,11 @@ public class Home extends JPanel {
         return socketEvent;
     }
 
+    public void updateProfile(ModelProfile profile) {
+        menu.updateProfile(profile);
+    }
+
+    private Menu menu;
     private JSplitPane mainSplit;
     private JSplitPane subSplit;
     private JPanel chatBody;

@@ -11,10 +11,9 @@ import java.util.List;
 
 public class ChatComponent extends JPanel {
 
-    private String userName;
+    private final String userName;
+    private final int id;
     private int type;
-
-    private int id;
     private ChatProfile chatProfile;
     private boolean added;
 
@@ -27,7 +26,7 @@ public class ChatComponent extends JPanel {
 
     private void init() {
         putClientProperty(FlatClientProperties.STYLE, "" +
-                "background:null");
+                "background:null;");
         if (type == 1) {
             setLayout(new MigLayout("wrap,insets 0,gapy 3"));
         } else if (type == 2) {
@@ -74,7 +73,7 @@ public class ChatComponent extends JPanel {
     protected void setChatProfile(ChatProfile chatProfile) {
         this.chatProfile = chatProfile;
         chatProfile.putClientProperty(FlatClientProperties.STYLE, "" +
-                "background:null");
+                "background:null;");
         add(chatProfile, "dock west,width 35!,height 35::");
     }
 

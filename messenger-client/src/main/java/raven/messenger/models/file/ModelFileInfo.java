@@ -2,7 +2,7 @@ package raven.messenger.models.file;
 
 public interface ModelFileInfo {
 
-    public String toJsonString();
+    String toJsonString();
 
-    public FileType getType();
+    FileType getType();
 }

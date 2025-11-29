@@ -1,5 +1,6 @@
 package raven.messenger.component.chat.item;
 
+import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.MigLayout;
 import raven.messenger.component.ButtonProgressTransparent;
 import raven.messenger.component.EmptyIcon;
@@ -16,15 +17,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.geom.Area;
-import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.nio.file.Files;
 
 public class ItemImage extends ChatItem implements ProgressChat {
 
+    private final ChatPhotoData photo;
     private JPopupMenu popupMenu;
-    private ChatPhotoData photo;
     private NetworkIcon networkIcon;
     private ButtonProgressTransparent buttonProgress;
     private PanelTransparent timePanel;
@@ -79,9 +78,9 @@ public class ItemImage extends ChatItem implements ProgressChat {
                 resource = new NetworkIcon.IconResource(photo.getHash(), photo.getWidth(), photo.getHeight());
             }
             networkIcon = new NetworkIcon(resource, 240, -1);
-            photo.setWidth(networkIcon.getIconWidth());
-            photo.setHeight(networkIcon.getIconHeight());
-            networkIcon.setShape(createShape());
+            photo.setWidth(UIScale.unscale(networkIcon.getIconWidth()));
+            photo.setHeight(UIScale.unscale(networkIcon.getIconHeight()));
+            networkIcon.setShape(this::createShape);
             button.setIcon(networkIcon);
             if (photo.getPath() == null) {
                 createDownloadButton();
@@ -101,7 +100,7 @@ public class ItemImage extends ChatItem implements ProgressChat {
     }
 
     private void createDownloadButton() {
-        buttonProgress = new ButtonProgressTransparent(MethodUtil.createIcon("raven/messenger/icon/download.svg", 0.8f, new Color(220, 220, 220)));
+        buttonProgress = new ButtonProgressTransparent(MethodUtil.createIcon("raven/messenger/icon/download.svg", 0.35f));
         buttonProgress.addActionListener(e -> {
             if (photo.getPath() == null) {
                 eventClick();
@@ -173,16 +172,14 @@ public class ItemImage extends ChatItem implements ProgressChat {
     public void setLevel(int level) {
         super.setLevel(level);
         if (networkIcon != null) {
-            networkIcon.setShape(createShape());
+            networkIcon.setShape(this::createShape);
         }
     }
 
     private Shape createShape() {
-        int width = photo.getWidth();
-        int height = photo.getHeight();
-        Area area = new Area(new Rectangle2D.Double(0, 0, width, height));
-        area.subtract(new Area(GraphicsUtil.getShape(0, 0, width, height, level, type, true, labelName != null)));
-        return area;
+        int width = UIScale.scale(photo.getWidth());
+        int height = UIScale.scale(photo.getHeight());
+        return GraphicsUtil.getShape(0, 0, width, height, level, type, true, labelName != null);
     }
 
     @Override

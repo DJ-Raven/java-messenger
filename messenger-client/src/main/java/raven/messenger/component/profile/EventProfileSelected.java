@@ -4,5 +4,5 @@ import java.awt.image.BufferedImage;
 
 public interface EventProfileSelected {
 
-    public void selected(BufferedImage image);
+    void selected(BufferedImage image);
 }

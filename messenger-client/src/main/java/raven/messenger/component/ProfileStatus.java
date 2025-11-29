@@ -13,10 +13,11 @@ public class ProfileStatus extends JLabel {
 
     public ProfileStatus(Icon icon) {
         super(icon);
-        setForeground(Color.WHITE);
         setHorizontalAlignment(SwingConstants.CENTER);
         putClientProperty(FlatClientProperties.STYLE, "" +
-                "font:bold +5");
+                "font:bold +4;" +
+                "background:$Component.accentColor;" +
+                "foreground:$Profile.foreground;");
     }
 
     @Override

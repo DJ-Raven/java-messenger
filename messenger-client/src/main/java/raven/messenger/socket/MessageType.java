@@ -4,7 +4,7 @@ public enum MessageType {
 
     TEXT("t"), VOICE("v"), FILE("f"), PHOTO("p");
 
-    private String value;
+    private final String value;
 
     private MessageType(String value) {
         this.value = value;

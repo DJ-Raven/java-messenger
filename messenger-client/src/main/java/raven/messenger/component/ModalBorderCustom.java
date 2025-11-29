@@ -1,6 +1,7 @@
 package raven.messenger.component;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import raven.messenger.util.StyleUtil;
 import raven.modal.component.SimpleModalBorder;
 import raven.modal.listener.ModalCallback;
 import raven.modal.option.ModalBorderOption;
@@ -20,20 +21,17 @@ public class ModalBorderCustom extends SimpleModalBorder {
 
     @Override
     protected JButton createButtonOption(Option option) {
-        JButton button = super.createButtonOption(option);
-        if (button.isDefaultButton()) {
+        JButton button;
+        if (option.getType() != 0) {
+            button = super.createButtonOption(option);
+            button.putClientProperty(FlatClientProperties.STYLE_CLASS, StyleUtil.BUTTON_SIMPLE);
             button.putClientProperty(FlatClientProperties.STYLE, "" +
-                    "arc:999;" +
-                    "borderWidth:0;" +
-                    "focusWidth:0;" +
-                    "innerFocusWidth:0;");
+                    "[light]background:shade($Panel.background,5%);" +
+                    "[dark]background:tint($Panel.background,3%);");
         } else {
-            button.putClientProperty(FlatClientProperties.STYLE, "" +
-                    "arc:999;" +
-                    "borderWidth:0;" +
-                    "focusWidth:0;" +
-                    "innerFocusWidth:0;" +
-                    "background:null;");
+            button = new JButton(option.getText());
+            button.addActionListener(e -> doAction(option.getType()));
+            button.putClientProperty(FlatClientProperties.STYLE_CLASS, StyleUtil.BUTTON_DEFAULT);
         }
         return button;
     }

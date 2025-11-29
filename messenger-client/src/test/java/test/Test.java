@@ -25,10 +25,10 @@ public class Test extends JFrame {
             // panelTimePicker.set24HourView(!panelTimePicker.is24HourView());
         });
         add(change);
-        Icon icon=new StringIcon("RV", Color.decode("#40AD18"), 35, 35);
-        ChatProfile p=new ChatProfile();
+        Icon icon = new StringIcon("RV", 35, 35);
+        ChatProfile p = new ChatProfile();
         p.setImage(icon);
-        add(p,"width 35!,height 35::");
+        add(p, "width 35!,height 35::");
         add(new JLabel(new ImageIcon("C:\\Users\\RAVEN\\AppData\\Local\\Temp\\temp_15319939312760975989_photo.jpg")));
     }
 

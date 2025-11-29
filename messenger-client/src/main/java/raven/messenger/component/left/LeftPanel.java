@@ -3,7 +3,6 @@ package raven.messenger.component.left;
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
 import raven.messenger.api.exception.ResponseException;
-import raven.messenger.drawer.MenuDrawer;
 import raven.messenger.manager.ErrorManager;
 import raven.messenger.models.response.ModelChatListItem;
 import raven.messenger.models.response.ModelLastMessage;
@@ -14,6 +13,7 @@ import raven.messenger.service.ServiceUser;
 import raven.messenger.socket.ChatType;
 import raven.messenger.util.Debounce;
 import raven.messenger.util.MethodUtil;
+import raven.messenger.util.StyleUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,15 +31,15 @@ public class LeftPanel extends JPanel {
     }
 
     private void init() {
-        setLayout(new MigLayout("wrap,fill,insets 0 0 3 0", "[fill,270::]", "[grow 0]0[fill]"));
-        panel = new JPanel(new MigLayout("wrap,fillx,gapy 3", "[fill]"));
+        setLayout(new MigLayout("wrap,fill,insets 10 0 n 0", "[fill,270::]", "[grow 0]3[fill]"));
+        panel = new JPanel(new MigLayout("wrap,fillx,gapy 3,insets 3 3 3 5", "[fill]"));
         scroll = new ScrollRefresh(createScrollRefreshModel(), panel);
         scroll.setBorder(BorderFactory.createEmptyBorder());
         scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scroll.getVerticalScrollBar().setUnitIncrement(10);
 
         scroll.getVerticalScrollBar().putClientProperty(FlatClientProperties.STYLE, "" +
-                "width:4");
+                "width:4;");
         createHeader();
         add(scroll);
     }
@@ -66,36 +66,21 @@ public class LeftPanel extends JPanel {
 
             @Override
             public void onFinishData() {
-
             }
 
             @Override
             public void onError(Exception e) {
-
             }
         };
         return model;
     }
 
     private void createHeader() {
-        header = new JPanel(new MigLayout("fill", "[grow 0][fill]"));
-        JButton button = new JButton(MethodUtil.createIcon("raven/messenger/icon/menu.svg", 1f));
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        header = new JPanel(new MigLayout("fill,insets 3 3 3 5", "[fill]"));
         JTextField text = new JTextField();
-        button.addActionListener(e -> {
-            MenuDrawer.getInstance().showDrawer();
-        });
-        button.putClientProperty(FlatClientProperties.STYLE_CLASS, "myButton");
-        button.putClientProperty(FlatClientProperties.STYLE, "" +
-                "arc:999;" +
-                "background:null");
         text.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Search ...");
-        text.putClientProperty(FlatClientProperties.STYLE, "" +
-                "arc:999;" +
-                "margin:5,10,5,10;" +
-                "borderWidth:0;" +
-                "background:darken($Panel.background,2%);");
-
+        StyleUtil.applyStyleTextFieldWithClear(text);
+        text.putClientProperty(FlatClientProperties.TEXT_FIELD_LEADING_ICON, MethodUtil.createIcon("raven/messenger/icon/search.svg", 0.35f));
         Debounce.add(text, (ke, search) -> {
             search = search.trim();
             if (search.isEmpty()) {
@@ -104,8 +89,7 @@ public class LeftPanel extends JPanel {
                 textSearch = search;
             }
             initData();
-        }, 300);
-        header.add(button);
+        });
         header.add(text);
         add(header);
     }
@@ -116,7 +100,7 @@ public class LeftPanel extends JPanel {
             Component component = panel.getComponent(i);
             if (component instanceof Item) {
                 Item item = (Item) component;
-                if (item.getData().isGroup() == false && item.getData().getId() == userId) {
+                if (!item.getData().isGroup() && item.getData().getId() == userId) {
                     item.setActiveStatus(status);
                     break;
                 }
@@ -155,8 +139,13 @@ public class LeftPanel extends JPanel {
             ModelChatListItem user = serviceUser.findById(chatType, id);
             if (message != null) {
                 user.setLastMessage(new ModelLastMessage(message));
+            } else {
+                if (chatType == ChatType.GROUP) {
+                    user.setLastMessage(ModelLastMessage.createAsJoined());
+                }
             }
             Item item = new Item(user);
+            item.setSelected(true);
             item.addActionListener(e -> event.onUserSelected(user));
             removeItem(chatType, id);
             panel.add(item, 0);
@@ -211,6 +200,12 @@ public class LeftPanel extends JPanel {
                 if (isNotExist(d)) {
                     Item item = new Item(d);
                     item.addActionListener(e -> event.onUserSelected(d));
+                    ModelChatListItem select = event.getSelectedListItem();
+                    if (select != null) {
+                        if (select.isGroup() == d.isGroup() && select.getId() == d.getId()) {
+                            item.setSelected(true);
+                        }
+                    }
                     panel.add(item);
                 }
             }

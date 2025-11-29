@@ -16,6 +16,7 @@ public class ApiService {
 
     public static final String API_VERSION = "6";
 
+    public static final int PORT = 5000;
     public static final String IP = "http://localhost";
 
     // Enable this for connect to online server
@@ -44,7 +45,7 @@ public class ApiService {
                 .setBaseUri(IP)
                 .addHeader("VERSION", API_VERSION)
                 .setBasePath("api")
-                .setPort(5000)
+                .setPort(PORT)
                 .setAuth(RestAssured.preemptive().basic("user", "raven-messenger-server"))
                 .addFilter(new GlobalErrorHandler())
                 .build();

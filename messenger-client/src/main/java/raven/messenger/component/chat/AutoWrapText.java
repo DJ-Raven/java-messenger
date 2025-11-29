@@ -66,7 +66,7 @@ public class AutoWrapText extends StyledEditorKit {
         }
     }
 
-    private class WarpLabelView extends LabelView {
+    private static class WarpLabelView extends LabelView {
 
         public WarpLabelView(Element elem) {
             super(elem);

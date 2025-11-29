@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 
 public class JoinGroupButton extends JPanel {
 
+    private LookAndFeel oldTheme = UIManager.getLookAndFeel();
     private final ActionListener event;
 
     public JoinGroupButton(ActionListener event) {
@@ -27,8 +28,15 @@ public class JoinGroupButton extends JPanel {
                 "[dark]background:lighten(@background,10%);" +
                 "borderWidth:0;" +
                 "focusWidth:0;" +
-                "innerFocusWidth:0");
+                "innerFocusWidth:0;");
 
         add(button);
+    }
+
+    public final void checkUpdateUI() {
+        if (oldTheme != UIManager.getLookAndFeel()) {
+            oldTheme = UIManager.getLookAndFeel();
+            SwingUtilities.updateComponentTreeUI(this);
+        }
     }
 }

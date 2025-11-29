@@ -36,9 +36,9 @@ public class WaveFormData {
         this.data = data;
     }
 
-    private int width;
-    private int height;
-    private int lineSize;
-    private int space;
+    private final int width;
+    private final int height;
+    private final int lineSize;
+    private final int space;
     private List<Float> data;
 }

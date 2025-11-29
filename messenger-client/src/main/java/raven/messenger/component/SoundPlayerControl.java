@@ -19,8 +19,6 @@ public class SoundPlayerControl extends JPanel {
 
     private void init() {
         setLayout(new MigLayout("wrap 4", "[grow 0][fill,grow][][]", "[center]3[]3"));
-        putClientProperty(FlatClientProperties.STYLE, "" +
-                "background:$Chat.background;");
         labelText = new JTextField("Player name");
         labelText.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
         labelText.setBorder(BorderFactory.createEmptyBorder());
@@ -39,7 +37,7 @@ public class SoundPlayerControl extends JPanel {
     }
 
     private JButton createPlayButton() {
-        JButton button = new JButton(new FlatSVGIcon("raven/messenger/icon/play.svg", 0.7f));
+        JButton button = new JButton(new FlatSVGIcon("raven/messenger/icon/play.svg", 0.28f));
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         button.addActionListener(e -> {
             if (SoundManager.getInstance().isRunning()) {
@@ -50,16 +48,16 @@ public class SoundPlayerControl extends JPanel {
         });
         button.putClientProperty(FlatClientProperties.STYLE, "" +
                 "arc:999;" +
-                "margin:2,2,2,2;" +
+                "margin:3,3,3,3;" +
                 "background:null;" +
                 "borderWidth:0;" +
                 "focusWidth:0;" +
-                "innerFocusWidth:0");
+                "innerFocusWidth:0;");
         return button;
     }
 
     private JButton createCloseButton() {
-        JButton button = new JButton(new FlatSVGIcon("raven/messenger/icon/close.svg", 0.55f));
+        JButton button = new JButton(new FlatSVGIcon("raven/messenger/icon/close.svg", 0.28f));
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         button.addActionListener(e -> {
             SoundManager.getInstance().stop();
@@ -70,7 +68,7 @@ public class SoundPlayerControl extends JPanel {
                 "background:null;" +
                 "borderWidth:0;" +
                 "focusWidth:0;" +
-                "innerFocusWidth:0");
+                "innerFocusWidth:0;");
         return button;
     }
 
@@ -78,15 +76,14 @@ public class SoundPlayerControl extends JPanel {
         JProgressBar progressBar = new JProgressBar();
         progressBar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         progressBar.putClientProperty(FlatClientProperties.STYLE, "" +
-                "arc:0;" +
-                "[dark]background:lighten($Chat.background,2%);" +
-                "[light]background:darken($Chat.background,2%);" +
-                "[dark]foreground:lighten($Chat.background,8%);" +
-                "[light]foreground:darken($Chat.background,8%);");
+                "[dark]background:tint(@background,8%);" +
+                "[light]background:shade(@background,8%);" +
+                "[dark]foreground:tint(@background,25%);" +
+                "[light]foreground:shade(@background,25%);");
         progressBar.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                float f = (float) e.getX() / getWidth();
+                float f = (float) e.getX() / progressBar.getWidth();
                 SoundManager.getInstance().skip(f);
             }
         });
@@ -103,11 +100,11 @@ public class SoundPlayerControl extends JPanel {
     }
 
     public void playButton() {
-        buttonPlay.setIcon(MethodUtil.createIcon("raven/messenger/icon/pause.svg", 0.7f));
+        buttonPlay.setIcon(MethodUtil.createIcon("raven/messenger/icon/pause.svg", 0.28f));
     }
 
     public void stopButton() {
-        buttonPlay.setIcon(MethodUtil.createIcon("raven/messenger/icon/play.svg", 0.7f));
+        buttonPlay.setIcon(MethodUtil.createIcon("raven/messenger/icon/play.svg", 0.28f));
     }
 
     private String formatDuration(long lengthInSeconds) {

@@ -26,7 +26,7 @@ group.check = (user, id) => {
             total_member: d.total_member,
             profile: JSON.parse(d.profile),
             description: d.description,
-            create_by:d.create_by,
+            create_by: d.create_by,
             create_date: d.create_date,
             join_date: join_date,
           });
@@ -163,7 +163,7 @@ function getGroup(user, id) {
           total_member: d.total_member,
           profile: JSON.parse(d.profile),
           description: d.description,
-          create_by:d.create_by,
+          create_by: d.create_by,
           create_date: d.create_date,
           join_date: d.join_date,
         });
@@ -195,7 +195,7 @@ function toListMember(data) {
       user_id: e.user_id,
       user_uuid: e.user_uuid,
       first_name: e.first_name,
-      last_name:e.last_name,
+      last_name: e.last_name,
       profile: JSON.parse(e.profile),
     };
   });

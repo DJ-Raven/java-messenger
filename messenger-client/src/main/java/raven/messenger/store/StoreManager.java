@@ -11,7 +11,7 @@ public class StoreManager {
     private final static String USER_PATH = System.getProperty("user.home");
     private final static String SYSTEM_PATH = "/.rv/ms/data";
     private static StoreManager instance;
-    private final ModelFolder folders[] = {
+    private final ModelFolder[] folders = {
             new ModelFolder("files", new String[]{"file"}),
             new ModelFolder("photos", new String[]{"photo", "profile"}),
             new ModelFolder("voices", new String[]{"voice"}),
@@ -51,7 +51,7 @@ public class StoreManager {
             Files.copy(file.toPath(), out);
             out.close();
         } catch (Exception e) {
-            System.err.println(e);
+            System.err.println(e.getMessage());
         }
     }
 
@@ -107,8 +107,8 @@ public class StoreManager {
             this.folder = folder;
         }
 
-        private String name;
-        private String folder[];
+        private final String name;
+        private final String[] folder;
     }
 
     public static class ModelFile {

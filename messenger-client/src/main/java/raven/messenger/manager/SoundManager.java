@@ -54,8 +54,7 @@ public class SoundManager {
             }
         });
         mp3Player = new Mp3Player();
-        mp3Player.addPlayerListener(new PlayerListener() {
-
+        PlayerListener playerListener = new PlayerListener() {
             @Override
             public void lengthChanged(PlayerEvent event) {
                 soundPlayerControl.lengthChanged(event.getCurrentInPercent(), event.getCurrentInSeconds());
@@ -88,7 +87,9 @@ public class SoundManager {
                     soundPlayerControl.setVisible(false);
                 }
             }
-        });
+        };
+        mp3Player.addPlayerListener(playerListener);
+        soundPlayback.addPlayerListener(playerListener);
     }
 
     public void setSoundPlayerControl(SoundPlayerControl soundPlayerControl) {
@@ -168,7 +169,13 @@ public class SoundManager {
 
     public void skip(float f) {
         if (isMusic) {
-            mp3Player.skip(f);
+            if (mp3Player != null) {
+                mp3Player.skip(f);
+            }
+        } else {
+            if (soundPlayback != null) {
+                soundPlayback.skip(f);
+            }
         }
     }
 }

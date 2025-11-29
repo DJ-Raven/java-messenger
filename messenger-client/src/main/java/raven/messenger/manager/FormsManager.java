@@ -2,14 +2,14 @@ package raven.messenger.manager;
 
 import com.formdev.flatlaf.FlatClientProperties;
 import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
+import com.formdev.flatlaf.util.SystemFileChooser;
+import raven.messenger.Application;
 import raven.messenger.api.ApiService;
+import raven.messenger.auth.Login;
 import raven.messenger.connection.ConnectionManager;
 import raven.messenger.connection.FormUpdate;
-import raven.messenger.drawer.MenuDrawer;
 import raven.messenger.home.Home;
-import raven.messenger.login.Login;
-import raven.messenger.Application;
-import raven.modal.Drawer;
+import raven.messenger.models.response.ModelProfile;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,6 +18,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.prefs.Preferences;
 
 public class FormsManager {
     private Application application;
@@ -35,6 +36,7 @@ public class FormsManager {
     }
 
     public void init() {
+        initSystemFileChooserStateStorage();
         boolean signed = ApiService.getInstance().init();
         if (signed) {
             showHome();
@@ -45,13 +47,38 @@ public class FormsManager {
             } else if (type == ConnectionManager.Type.CLIENT_REQUIRED_UPDATE) {
                 showForm(new FormUpdate());
             } else {
-                ConnectionManager.getInstance().showError(() -> showLogin(), true);
+                ConnectionManager.getInstance().showError(this::showLogin, true);
             }
         }
     }
 
+    private void initSystemFileChooserStateStorage() {
+        SystemFileChooser.setStateStore(new SystemFileChooser.StateStore() {
+            private static final String KEY_PREFIX = "fileChooser.";
+
+            private final Preferences state = Preferences.userRoot().node("java-messenger-client");
+
+            @Override
+            public String get(String key, String def) {
+                return state.get(KEY_PREFIX + key, def);
+            }
+
+            @Override
+            public void put(String key, String value) {
+                if (value != null)
+                    state.put(KEY_PREFIX + key, value);
+                else
+                    state.remove(KEY_PREFIX + key);
+            }
+        });
+    }
+
     private void showLogin() {
         showForm(new Login(null));
+    }
+
+    public void updateProfile(ModelProfile profile) {
+        home.updateProfile(profile);
     }
 
     public void initApplication(Application application) {
@@ -63,7 +90,6 @@ public class FormsManager {
         if (home == null) {
             home = new Home();
         }
-        MenuDrawer.getInstance().setVisible(true);
         showForm(home);
         home.initHome();
     }
@@ -76,24 +102,38 @@ public class FormsManager {
             application.repaint();
             application.revalidate();
             FlatAnimatedLafChange.hideSnapshotWithAnimation();
+            checkFormActionForOpen(form);
         });
     }
 
-    public void applyWarningOutline(JComponent... components) {
-        applyOutline(FlatClientProperties.OUTLINE_WARNING, components);
+    public void applyWarning(JComponent... components) {
+        applyField("warning", components);
     }
 
-    public void applyErrorOutline(JComponent... components) {
-        applyOutline(FlatClientProperties.OUTLINE_ERROR, components);
+    public void applyError(JComponent... components) {
+        applyField("error", components);
     }
 
-    public void clearOutline(JComponent... components) {
-        applyOutline(null, components);
+    public void clear(JComponent... components) {
+        applyField(null, components);
     }
 
-    public void applyOutline(String keyStyle, JComponent... components) {
+    private void applyField(String keyStyle, JComponent... components) {
         for (int i = 0; i < components.length; i++) {
-            components[i].putClientProperty(FlatClientProperties.OUTLINE, keyStyle);
+            JComponent com = components[i];
+            Object oldStyle = com.getClientProperty(FlatClientProperties.STYLE_CLASS);
+            if (keyStyle == null) {
+                String st = oldStyle == null ? null : (oldStyle.toString().replace(" error", "").replace("warning", "")).trim();
+                com.putClientProperty(FlatClientProperties.STYLE_CLASS, st);
+            } else {
+                if (oldStyle != null) {
+                    if (!oldStyle.toString().contains(keyStyle)) {
+                        com.putClientProperty(FlatClientProperties.STYLE_CLASS, (oldStyle + " " + keyStyle).trim());
+                    }
+                } else {
+                    com.putClientProperty(FlatClientProperties.STYLE_CLASS, keyStyle);
+                }
+            }
         }
     }
 
@@ -102,30 +142,21 @@ public class FormsManager {
         for (int i = 0; i < textFields.length; i++) {
             JTextField textField = textFields[i];
             if (textField != null) {
-                if (textField instanceof JTextField) {
-                    if (textField.getText().trim().isEmpty()) {
-                        components.add(textField);
-                    } else {
-                        clearOutline(textField);
-                    }
-                } else if (textField instanceof JPasswordField) {
-                    JPasswordField passwordField = (JPasswordField) textField;
-                    if (String.valueOf(passwordField.getPassword()).isEmpty()) {
-                        components.add(textField);
-                    } else {
-                        clearOutline(textField);
-                    }
+                if (textField.getText().trim().isEmpty()) {
+                    components.add(textField);
+                } else {
+                    clear(textField);
                 }
             }
         }
         if (!components.isEmpty()) {
-            applyErrorOutline(components.toArray(new JComponent[components.size()]));
+            applyError(components.toArray(new JComponent[0]));
             components.get(0).grabFocus();
         }
         return components.isEmpty();
     }
 
-    public void autoFocus(Consumer consumer, JComponent... components) {
+    public void autoFocus(Consumer<Object> consumer, JComponent... components) {
         for (int i = 0; i < components.length; i++) {
             final int index = i;
             components[i].addKeyListener(new KeyAdapter() {
@@ -149,5 +180,16 @@ public class FormsManager {
 
     public JFrame getMainFrame() {
         return application;
+    }
+
+    private void checkFormActionForOpen(JComponent form) {
+        if (form instanceof FormAction) {
+            SwingUtilities.invokeLater(() -> ((FormAction) form).formOpen());
+        }
+    }
+
+    public static abstract class FormAction extends JPanel {
+        public void formOpen() {
+        }
     }
 }

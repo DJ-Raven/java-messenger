@@ -8,7 +8,7 @@ import java.util.Set;
 
 public abstract class RequestFileMonitor {
 
-    private static Set<String> fileSets = new HashSet<>();
+    private static final Set<String> fileSets = new HashSet<>();
 
     public String getFileName() {
         return fileName;
@@ -117,7 +117,7 @@ public abstract class RequestFileMonitor {
         try {
             Thread.sleep(l);
         } catch (InterruptedException e) {
-            System.err.println(e);
+            System.err.println(e.getMessage());
         }
     }
 }
