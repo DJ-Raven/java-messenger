@@ -12,15 +12,3 @@ updates:
         update-types:
           - "minor"
           - "patch"
-
-  # Java client dependencies
-  - package-ecosystem: "maven"
-    directory: "/messenger-client"
-    schedule:
-      interval: "weekly"
-
-  # Keep GitHub Actions versions up to date (if workflows are added later)
-  - package-ecosystem: "github-actions"
-    directory: "/"
-    schedule:
-      interval: "weekly"
