@@ -24,7 +24,7 @@
     "mysql2": "^3.6.5",
     "sharp": "^0.32.6",
     "socket.io": "^4.7.2",
-    "uuid": "^9.0.1"
+    "uuid": "^14.0.3"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
