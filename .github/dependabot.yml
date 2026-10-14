@@ -1,0 +1,26 @@
+version: 2
+updates:
+  # Node.js server dependencies
+  - package-ecosystem: "npm"
+    directory: "/messenger-server"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    groups:
+      # Bundle minor and patch updates into one PR to keep the noise down
+      npm-minor-patch:
+        update-types:
+          - "minor"
+          - "patch"
+
+  # Java client dependencies
+  - package-ecosystem: "maven"
+    directory: "/messenger-client"
+    schedule:
+      interval: "weekly"
+
+  # Keep GitHub Actions versions up to date (if workflows are added later)
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
